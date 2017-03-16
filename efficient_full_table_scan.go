@@ -114,19 +114,7 @@ func main() {
         wg.Add(NumberOfParallelClientThreads)
         sessionCreationWaitGroup.Add(NumberOfParallelClientThreads)
 		
-		// List of returned values from the queries
-        printOutChannel := make(chan int64)
-        go func() {
-                if f, err := os.Create("/tmp/output.txt"); err == nil {
-                        defer f.Close()
-
-                        for tokenKey := range printOutChannel {
-                                f.Write([]byte(fmt.Sprintf("%d\n", tokenKey)))
-                        }
-
-                }
-        }()
-
+		
         // Output file to see full list of queries per token range
 		selectStatementOutChannel := make(chan string)
         go func() {
@@ -186,12 +174,8 @@ func main() {
         wg.Wait()
 
         // We are done, close the printOut channel
-        close(printOutChannel)
         close(selectStatementOutChannel)
-
-        // Sleep for 10 seconds to make sure the goroutine completes writing all lines to the output file
-        time.Sleep(time.Second * 10)
-
+        
         totalRowsFinal := atomic.LoadUint64(&totalRows)
 
         fmt.Printf("Done!\n\n")
