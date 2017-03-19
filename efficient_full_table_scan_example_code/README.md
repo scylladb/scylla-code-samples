@@ -15,7 +15,10 @@ Following setup was used in this example:
 
 Instructions
 ============
-Make sure to adjust the query tamplate to the [keyspace].[table_name] and token(key) you wish to scan.
+Use the following Cassandra stress test to populate a table:
+nohup cassandra-stress write n=47500000 cl=QUORUM -schema "replication(factor=3)" -mode native cql3 -pop seq=1..47500000 -node 10.240.0.29,10.240.0.30,10.240.0.35 -rate threads=500 -log file=output.txt
+
+In order to use this code to scan a table of your own, make sure to adjust the query template to the [keyspace].[table_name] and token(key) you wish to scan.
 
 In order to run the code and/or see the usage (--help), run the following:
 go run $GOPATH/[full path to the go code]/efficient_full_table_scan.go [<flags>] <hosts>
