@@ -1,3 +1,5 @@
+General info and prerequisites
+==============================
 In this example we demonstrate an efficient parallel full table scan, that utilizes ScyllaDB architecture
 to gain servers and cores parallelism optimization.
 
@@ -10,13 +12,18 @@ Following setup was used in this example:
 	- Install gocql driver: "go get github.com/gocql/gocql"
 	- Install kingpin pkg: "go get gopkg.in/alecthomas/kingpin.v2"
 
-In order to run the code and see the usage, run the following:
+
+Instructions
+============
+Make sure to adjust the query tamplate to the [keyspace].[table_name] and token(key) you wish to scan.
+
+In order to run the code and/or see the usage (--help), run the following:
 go run $GOPATH/[full path to the go code]/efficient_full_table_scan.go [<flags>] <hosts>
 
 Mandatory param: <hosts> = your Scylla nodes IP addresses
-The rest of the params have default value, which you can decide to adjust according to your setup and dataset
+The rest of the params have a default value, which you can decide to adjust according to your setup and dataset.
 
--d flag (default=false) prints all the rows into a file for debugging purpose. This loads the client CPU, hence use with caution.
+Note: -d flag (default=false) prints all the rows into a file for debugging purpose. This loads the client CPU, hence use with caution.
 
 
 --help usage output
