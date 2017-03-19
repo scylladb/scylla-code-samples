@@ -7,8 +7,8 @@ Following setup was used in this example:
 - Client: Centos7.2 node deployed on GCE (4 vCPU and 15GB memory) will run our golang code using gocql driver
 - Client prerequisites:
 	- Install go 1.7: https://www.digitalocean.com/community/tutorials/how-to-install-go-1-7-on-centos-7
-	- Install gocql driver: go get github.com/gocql/gocql
-	- Install kingping pkg: "go get gopkg.in/alecthomas/kingpin.v2"
+	- Install gocql driver: "go get github.com/gocql/gocql"
+	- Install kingpin pkg: "go get gopkg.in/alecthomas/kingpin.v2"
 
 In order to run the code and see the usage, run the following:
 go run $GOPATH/[full path to the go code]/efficient_full_table_scan.go [<flags>] <hosts>
