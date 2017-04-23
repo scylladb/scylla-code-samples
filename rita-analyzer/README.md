@@ -29,7 +29,7 @@ The next step is load previously downloaded data from /tmp/2008.csv file to Scyl
 ./bin/spark-submit --properties-file /path/to/rita-analyzer/spark-scylla.conf --class Loader /path/to/rita-analyzer/target/scala-2.11/rita-analyzer-assembly-1.0.jar
 ```
 
-To run the application execut the following command in Spark directory in terminal:
+To run the application execute the following command in Spark directory in terminal:
 ```
 ./bin/spark-submit --properties-file /path/to/rita-analyzer/spark-scylla.conf --class Extractor /path/to/rita-analyzer/target/scala-2.11/rita-analyzer-assembly-1.0.jar
 ```
