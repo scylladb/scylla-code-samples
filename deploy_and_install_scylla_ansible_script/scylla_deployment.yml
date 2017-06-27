@@ -21,7 +21,8 @@
     - name: Install epel-release and wget pkgs on CentOS / RHEL
       yum: name={{ item }} state=latest
       with_items:
-       - prereq
+       - epel-release
+       - wget    
       when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
       tags:
        - prereq
