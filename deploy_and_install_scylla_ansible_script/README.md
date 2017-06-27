@@ -19,9 +19,25 @@ Instructions
 This playbook assumes you are installing Scylla using the same disks and NIC for all nodes
 
 
-Running all tasks all host group: ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook scylla_deployment.yml -i servers.ini
+Edit the 'hosts' and 'vars' in the yml file - for example:
+- hosts: [scylla] (host group name from ini file)
+- release: 1.7
+- cluster_name: cluster_name_example (use unique cluster name)
+- seeds: ip/s of to-be seed node/s (comma seperated)
+Note: need at least 1 live seed node for new nodes to join the cluster, ratio of seeds:scylla_cluster_nodes should be 1:3
+- disks: /dev/sdb,/dev/sdc (disk names for raid0 creation, comma seperated)
+- NIC: eth0 / ens5 / bond1
+
+
+Running the playbook on all host group: ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook scylla_deployment.yml -i servers.ini
  -t / --tags only runs plays and tasks tagged with these values
  --skip-tags only runs plays and tasks whose tags do not match these values
+
+For example, use '--skip-tags=conf,reboot' for the following purposes:
+- Install ScyllaDB on a client (loader), so to have access to Cassandra-stress tool
+- Install ScyllaDB on an intermediate node, so to have access to the ScyllaDB sstableloader tool
+
+Another example is to use '--tags=prereq,java' if you only wish to install java8 on Ubuntu14 / Debian.
 
 
 List all tasks: ansible-playbook scylla_deployment.yml --list-tasks
@@ -29,29 +45,29 @@ List all tasks: ansible-playbook scylla_deployment.yml --list-tasks
 playbook: scylla_deployment.yml
  play #1 (host_group_name_from_ini_file): host_group_name_from_ini_file                        TAGS: []
    tasks:
-     Remove 'abrt' pkg from CentOS / RHEL                                                      TAGS: [1_prereq]
-     Install epel-release and wget pkgs on CentOS / RHEL                                       TAGS: [1_prereq]
-     Update apt cache on Debian / Ubuntu                                                       TAGS: [1_prereq]
-     Install add-apt-repository command utility on Debian / Ubuntu14                           TAGS: [1_prereq]
-     Add openjdk PPA to Ubuntu14 (prereq for Java 8)                                           TAGS: [2_java]
-     Add openjdk PPA to Debian (prereq for Java 8)                                             TAGS: [2_java]
-     Add Jessie-backports repo to Debian (prereq for Java 8)                                   TAGS: [2_java]
-     Update apt cache on Debian / Ubuntu                                                       TAGS: [2_java]
-     Install Java 8 on Ubuntu14, needed for Scylla release 1.7                                 TAGS: [2_java]
-     Install Java 8 on Debian, needed for Scylla release 1.7                                   TAGS: [2_java]
-     Select correct java version on Debian / Ubuntu14                                          TAGS: [2_java]
-     Download Scylla {{ release }} repo for Centos 7 / RHEL 7                                  TAGS: [3_repo]
-     Download Scylla {{ release }} repo for Ubuntu 14.04 (Trusty)                              TAGS: [3_repo]
-     Download Scylla {{ release }} repo for Ubuntu 16.04 (Xenial)                              TAGS: [3_repo]
-     Download Scylla {{ release }} repo for Debian 8 (Jessie)                                  TAGS: [3_repo]
-     Install scylla {{ release }} on Debian / Ubuntu                                           TAGS: [4_install]
-     Install scylla {{ release }} on CentOS / RHEL                                             TAGS: [4_install]
-     Configure Cluster name in yaml file                                                       TAGS: [5_conf]
-     Configure seeds in yaml file                                                              TAGS: [5_conf]
-     Configure listen address + rpc address in yaml file                                       TAGS: [5_conf]
-     Run Scylla Setup (RAID-0, XFS format, NIC queue, disk IOtune), this may take a while      TAGS: [5_conf]
-     Reboot server/s (required by Scylla)                                                      TAGS: [6_reboot]
-     Wait for server/s to come up from boot                                                    TAGS: [6_reboot]
+     Remove 'abrt' pkg from CentOS / RHEL                                                      TAGS: [prereq]
+     Install epel-release and wget pkgs on CentOS / RHEL                                       TAGS: [prereq]
+     Update apt cache on Debian / Ubuntu                                                       TAGS: [prereq]
+     Install add-apt-repository command utility on Debian / Ubuntu14                           TAGS: [prereq]
+     Add openjdk PPA to Ubuntu14 (prereq for Java 8)                                           TAGS: [java]
+     Add openjdk PPA to Debian (prereq for Java 8)                                             TAGS: [java]
+     Add Jessie-backports repo to Debian (prereq for Java 8)                                   TAGS: [java]
+     Update apt cache on Debian / Ubuntu                                                       TAGS: [java]
+     Install Java 8 on Ubuntu14, needed for Scylla release 1.7                                 TAGS: [java]
+     Install Java 8 on Debian, needed for Scylla release 1.7                                   TAGS: [java]
+     Select correct java version on Debian / Ubuntu14                                          TAGS: [java]
+     Download Scylla {{ release }} repo for Centos 7 / RHEL 7                                  TAGS: [repo]
+     Download Scylla {{ release }} repo for Ubuntu 14.04 (Trusty)                              TAGS: [repo]
+     Download Scylla {{ release }} repo for Ubuntu 16.04 (Xenial)                              TAGS: [repo]
+     Download Scylla {{ release }} repo for Debian 8 (Jessie)                                  TAGS: [repo]
+     Install scylla {{ release }} on Debian / Ubuntu                                           TAGS: [install]
+     Install scylla {{ release }} on CentOS / RHEL                                             TAGS: [install]
+     Configure Cluster name in yaml file                                                       TAGS: [conf]
+     Configure seeds in yaml file                                                              TAGS: [conf]
+     Configure listen address + rpc address in yaml file                                       TAGS: [conf]
+     Run Scylla Setup (RAID-0, XFS format, NIC queue, disk IOtune), this may take a while      TAGS: [conf]
+     Reboot server/s (required by Scylla)                                                      TAGS: [reboot]
+     Wait for server/s to come up from boot                                                    TAGS: [reboot]
 
 
 List all facts collected by ansible, on the host group: ansible -i servers.ini servers -m setup | less
