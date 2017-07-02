@@ -33,6 +33,7 @@ Note: need at least 1 live seed node for new nodes to join the cluster, ratio of
 
 
 3. Running the playbook on all host group: ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook scylla_deployment.yml -i servers_example.ini
+
 -t / --tags only runs plays and tasks tagged with these values
 - use  '--tags=prereq,java'  if you only wish to install java8 on Ubuntu14 / Debian.
 
