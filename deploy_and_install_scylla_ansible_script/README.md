@@ -1,4 +1,4 @@
-General info and prerequisites
+General Info and Prerequisites
 ==============================
 
 This ansible script will deploy, install and configure ScyllaDB on all supported OS.
@@ -13,8 +13,8 @@ Prerequisites:
 - Python 2.7
 
 
-Instructions
-============
+Instructions and Usage Examples
+===============================
 
 This playbook assumes you are installing Scylla using the same disks and NIC for all nodes
 
@@ -41,7 +41,13 @@ Note: need at least 1 live seed node for new nodes to join the cluster, ratio of
 - Install ScyllaDB on a client (loader), so to have access to Cassandra-stress tool
 - Install ScyllaDB on an intermediate node, so to have access to the ScyllaDB sstableloader tool (for migration process)
 
+4. List all facts collected by ansible, on the host group: "ansible -i servers_example.ini scylla -m setup | less"
+- To filter specific facts use: -a "filter=ansible_distribution*"
 
+
+
+List of Tasks in Playbook
+========================
 
 List all tasks: "ansible-playbook scylla_deployment.yml --list-tasks"
 
@@ -72,8 +78,4 @@ tasks:
 -    Reboot server/s (required by Scylla)                                                      TAGS: [reboot]
 -    Wait for server/s to come up from boot                                                    TAGS: [reboot]
 
-
-
-List all facts collected by ansible, on the host group: "ansible -i servers_example.ini scylla -m setup | less"
-- To filter specific facts use: -a "filter=ansible_distribution*"
 
