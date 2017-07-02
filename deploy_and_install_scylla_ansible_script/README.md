@@ -58,11 +58,10 @@ ansible -i servers_example.ini scylla -m setup | less
 List of Tasks (and tags) in Playbook
 ====================================
 
-*List all tasks*
+**List all tasks and tags**
 ```
 ansible-playbook scylla_deployment.yml --list-tasks
-```
-```
+
 playbook: scylla_deployment.yml
 play #1 (host_group_name_from_ini_file): host_group_name_from_ini_file                        TAGS: []
 tasks:
