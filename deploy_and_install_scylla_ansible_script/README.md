@@ -51,7 +51,7 @@ For example, use *--skip-tags=conf,reboot* for the following purposes:
 ```
 ansible -i servers_example.ini scylla -m setup | less
 ```
-- To filter specific facts use: *-a "filter=ansible_distribution*"*
+- To filter specific facts use: *-a "filter=ansible_distribution**"*
 
 
 
