@@ -9,8 +9,8 @@ General Info and Prerequisites
 - Debian 8
 
 **Prerequisites**
-- Ansible 2.3
-- Python 2.7
+- [Ansible 2.3](http://docs.ansible.com/ansible/intro_installation.html)
+- [Python 2.7](https://www.python.org/download/releases/2.7/)
 
 
 Instructions and Usage Examples
@@ -39,7 +39,7 @@ This playbook assumes you are installing ScyllaDB using the same disks and NIC f
 ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook scylla_deployment.yml -i servers_example.ini
 ```
 
-- If you are using a vagrant machine, read more on [how to SSH into a Vagrant machine with Ansible](https://stackoverflow.com/questions/32748585/ssh-into-a-vagrant-machine-with-ansible?rq=1)
+- Using a vagrant machine? read more on [how to SSH into a Vagrant machine with Ansible](https://stackoverflow.com/questions/32748585/ssh-into-a-vagrant-machine-with-ansible?rq=1)
 
 
 
