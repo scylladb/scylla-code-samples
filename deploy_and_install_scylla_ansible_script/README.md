@@ -19,7 +19,7 @@ Instructions
 This playbook assumes you are installing Scylla using the same disks and NIC for all nodes
 
 
-Edit the 'hosts' and 'vars' in the yml file - for example:
+1. Edit the 'hosts' and 'vars' in the yml file - for example:
 - hosts: [scylla] (host group name from ini file)
 - release: 1.7
 - cluster_name: cluster_name_example (use unique cluster name)
@@ -29,16 +29,18 @@ Note: need at least 1 live seed node for new nodes to join the cluster, ratio of
 - NIC: eth0 / ens5 / bond1
 
 
+2. Edit the servers_example.ini file to contain the IP/s of the hosts you wish to deploy on and name the host group.
 
-Running the playbook on all host group:   ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook scylla_deployment.yml -i servers.ini
- -t / --tags only runs plays and tasks tagged with these values
- --skip-tags only runs plays and tasks whose tags do not match these values
+
+3. Running the playbook on all host group: ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook scylla_deployment.yml -i servers_example.ini
+- -t / --tags only runs plays and tasks tagged with these values
+- --skip-tags only runs plays and tasks whose tags do not match these values
 
 For example, use  '--skip-tags=conf,reboot'  for the following purposes:
 - Install ScyllaDB on a client (loader), so to have access to Cassandra-stress tool
 - Install ScyllaDB on an intermediate node, so to have access to the ScyllaDB sstableloader tool (for migration process)
 
-Another example:   use  '--tags=prereq,java'  if you only wish to install java8 on Ubuntu14 / Debian.
+- use  '--tags=prereq,java'  if you only wish to install java8 on Ubuntu14 / Debian.
 
 
 
@@ -75,5 +77,5 @@ tasks:
 
 List all facts collected by ansible, on the host group:   ansible -i servers.ini servers -m setup | less
 
-To filter specific facts use:   -a "filter=ansible_distribution*"
+- To filter specific facts use:   -a "filter=ansible_distribution*"
 
