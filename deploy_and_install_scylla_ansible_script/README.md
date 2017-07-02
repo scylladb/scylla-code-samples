@@ -46,8 +46,8 @@ Note: need at least 1 live seed node for new nodes to join the cluster, ratio of
 
 
 
-List of Tasks in Playbook
-========================
+List of Tasks (and tags) in Playbook
+====================================
 
 List all tasks: "ansible-playbook scylla_deployment.yml --list-tasks"
 
