@@ -39,8 +39,7 @@ This playbook assumes you are installing ScyllaDB using the same disks and NIC f
 ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook scylla_deployment.yml -i servers_example.ini
 ```
 
-- If you are using a vagrant machine, read more in this link on how to SSH into a Vagrant machine with Ansible
-https://stackoverflow.com/questions/32748585/ssh-into-a-vagrant-machine-with-ansible?rq=1
+- If you are using a vagrant machine, read more on [how to SSH into a Vagrant machine with Ansible](https://stackoverflow.com/questions/32748585/ssh-into-a-vagrant-machine-with-ansible?rq=1)
 
 
 
