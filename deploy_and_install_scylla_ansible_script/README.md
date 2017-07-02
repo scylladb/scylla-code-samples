@@ -25,7 +25,7 @@ hosts: [scylla] (host group name from ini file)
 release: 1.7
 cluster_name: cluster_name_example (use unique cluster name)
 seeds: ip/s of to-be seed node/s (comma seperated)
-Note: need at least 1 live seed node for new nodes to join the cluster, ratio of seeds:scylla_cluster_nodes should be 1:3
+# Need at least 1 live seed node for new nodes to join the cluster, ratio of seeds:scylla_cluster_nodes should be 1:3#
 disks: /dev/sdb,/dev/sdc (disk names for raid0 creation, comma seperated)
 NIC: eth0 / ens5 / bond1
 ```
@@ -36,7 +36,7 @@ NIC: eth0 / ens5 / bond1
 
 **3. Running the playbook on all hosts, part of the group specified**
 ```
-ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook scylla_deployment.yml -i servers_example.ini"
+ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook scylla_deployment.yml -i servers_example.ini
 ```
 
 *-t / --tags* only runs plays and tasks tagged with these values
@@ -51,7 +51,7 @@ For example, use *--skip-tags=conf,reboot* for the following purposes:
 ```
 ansible -i servers_example.ini scylla -m setup | less
 ```
-- To filter specific facts use: -a "filter=ansible_distribution*"
+- To filter specific facts use: *-a "filter=ansible_distribution*"*
 
 
 
