@@ -19,22 +19,22 @@ Instructions and Usage Examples
 This playbook assumes you are installing ScyllaDB using the same disks and NIC for all nodes.
 
 
-**1. Edit the 'hosts' and 'vars' in the yml file - for example:**
+**1. Edit the 'hosts' and 'vars' in the yml file**
 ```
-hosts: [scylla] (host group name from ini file)
-release: 1.7
-cluster_name: cluster_name_example (use unique cluster name)
-seeds: ip/s of to-be seed node/s (comma seperated)
-# Need at least 1 live seed node for new nodes to join the cluster, ratio of seeds:scylla_cluster_nodes should be 1:3#
-disks: /dev/sdb,/dev/sdc (disk names for raid0 creation, comma seperated)
-NIC: eth0 / ens5 / bond1
+- hosts: [host_group_name_from_ini_file]   # e.g. 'scylla'
+  become: yes                              # Run all tasks as root
+  vars:
+    release: 1.7                           # Scylla release to be installed
+    cluster_name: cluster_name             # Use a unique cluster name
+    seeds: IP/s of to-be seed_node/s       # Need at least 1 live seed node for new nodes to join the cluster (use 1:3 ratio)
+    disks: /dev/sdb,/dev/sdc               # Disk names for raid0 creation, comma seperated
+    NIC: eth0 / ens5 / bond1               # NIC to be used with optimized queue
 ```
-
 
 **2. Edit the servers_example.ini file, add the IP/s of the hosts you wish to deploy on and name the host group**
 
 
-**3. Running the playbook on all hosts, part of the group specified**
+**3. Run playbook on all hosts part of the group specified**
 ```
 ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook scylla_deployment.yml -i servers_example.ini
 ```
