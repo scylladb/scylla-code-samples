@@ -74,6 +74,6 @@ tasks:
 
 
 
-List all facts collected by ansible, on the host group: "ansible -i servers.ini servers -m setup | less"
+List all facts collected by ansible, on the host group: "ansible -i servers_example.ini servers -m setup | less"
 - To filter specific facts use: -a "filter=ansible_distribution*"
 
