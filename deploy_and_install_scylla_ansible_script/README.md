@@ -32,19 +32,18 @@ Note: need at least 1 live seed node for new nodes to join the cluster, ratio of
 2. Edit the servers_example.ini file to contain the IP/s of the hosts you wish to deploy on and name the host group.
 
 
-3. Running the playbook on all host group: ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook scylla_deployment.yml -i servers_example.ini
+3. Running the playbook on all host group: "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook scylla_deployment.yml -i servers_example.ini"
 
 -t / --tags only runs plays and tasks tagged with these values
 - use  '--tags=prereq,java'  if you only wish to install java8 on Ubuntu14 / Debian.
 
---skip-tags only runs plays and tasks whose tags do not match these values
-For example, use  '--skip-tags=conf,reboot'  for the following purposes:
+--skip-tags only runs plays and tasks whose tags do not match these values. For example, use "--skip-tags=conf,reboot" for the following purposes:
 - Install ScyllaDB on a client (loader), so to have access to Cassandra-stress tool
 - Install ScyllaDB on an intermediate node, so to have access to the ScyllaDB sstableloader tool (for migration process)
 
 
 
-List all tasks:   ansible-playbook scylla_deployment.yml --list-tasks
+List all tasks: "ansible-playbook scylla_deployment.yml --list-tasks"
 
 playbook: scylla_deployment.yml
 play #1 (host_group_name_from_ini_file): host_group_name_from_ini_file                        TAGS: []
@@ -75,7 +74,6 @@ tasks:
 
 
 
-List all facts collected by ansible, on the host group:   ansible -i servers.ini servers -m setup | less
-
-- To filter specific facts use:   -a "filter=ansible_distribution*"
+List all facts collected by ansible, on the host group: "ansible -i servers.ini servers -m setup | less"
+- To filter specific facts use: -a "filter=ansible_distribution*"
 
