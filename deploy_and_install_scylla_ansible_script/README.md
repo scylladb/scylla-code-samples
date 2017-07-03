@@ -12,7 +12,7 @@ General Info and Prerequisites
 Instructions and Usage Examples
 ===============================
 
-**Note: This playbook assumes you are installing ScyllaDB using the same disks and NIC for all nodes.**
+**Note:** This playbook assumes you are installing ScyllaDB using the same disks and NIC for all nodes.
 
 
 **1. Edit the 'hosts' and 'vars' in the yml file**
@@ -40,7 +40,7 @@ Using a vagrant machine? read more on [how to SSH into a Vagrant machine with An
 
 
 - *-t / --tags* only runs plays and tasks tagged with these values, 
-use  *--tags=prereq,java*  if you only wish to install java8 on Ubuntu14 / Debian.
+for example, use *--tags=prereq,java* if you only wish to install java8 on Ubuntu14 / Debian.
 
 - *--skip-tags* only runs plays and tasks whose tags do not match these values, 
 for example, use *--skip-tags=conf,reboot* for the following purposes:
@@ -60,7 +60,6 @@ ansible -i servers_example.ini scylla -m setup | less
 List of Tasks (and tags) in Playbook
 ====================================
 
-**List all tasks and tags**
 ```
 ansible-playbook scylla_deployment.yml --list-tasks
 
