@@ -2,11 +2,7 @@ General Info and Prerequisites
 ==============================
 
 **This ansible script will deploy, install and configure ScyllaDB on all supported OS**
-- RHEL7
-- Centos7
-- Ubuntu 14.04
-- Ubuntu 16.04
-- Debian 8
+- RHEL7 / CentOS7 / Ubuntu 14.04 / Ubuntu 16.04 / Debian 8
 
 **Prerequisites**
 - [Ansible 2.3](http://docs.ansible.com/ansible/intro_installation.html)
@@ -16,7 +12,7 @@ General Info and Prerequisites
 Instructions and Usage Examples
 ===============================
 
-This playbook assumes you are installing ScyllaDB using the same disks and NIC for all nodes.
+**Note: This playbook assumes you are installing ScyllaDB using the same disks and NIC for all nodes.**
 
 
 **1. Edit the 'hosts' and 'vars' in the yml file**
@@ -39,24 +35,26 @@ This playbook assumes you are installing ScyllaDB using the same disks and NIC f
 ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook scylla_deployment.yml -i servers_example.ini
 ```
 
-- Using a vagrant machine? read more on [how to SSH into a Vagrant machine with Ansible](https://stackoverflow.com/questions/32748585/ssh-into-a-vagrant-machine-with-ansible?rq=1)
+Using a vagrant machine? read more on [how to SSH into a Vagrant machine with Ansible](https://stackoverflow.com/questions/32748585/ssh-into-a-vagrant-machine-with-ansible?rq=1)
 
 
 
-*-t / --tags* only runs plays and tasks tagged with these values
-- use  *--tags=prereq,java*  if you only wish to install java8 on Ubuntu14 / Debian.
+- *-t / --tags* only runs plays and tasks tagged with these values, 
+use  *--tags=prereq,java*  if you only wish to install java8 on Ubuntu14 / Debian.
 
-*--skip-tags* only runs plays and tasks whose tags do not match these values.
-For example, use *--skip-tags=conf,reboot* for the following purposes:
-- Install ScyllaDB on a client (loader), so to have access to Cassandra-stress tool
-- Install ScyllaDB on an intermediate node, so to have access to the ScyllaDB sstableloader tool (for migration process)
+- *--skip-tags* only runs plays and tasks whose tags do not match these values, 
+for example, use *--skip-tags=conf,reboot* for the following purposes:
+	- Install ScyllaDB on a client (loader), so to have Cassandra-stress tool available.
+	- Install ScyllaDB on an intermediate node, as part of migration process, so to have ScyllaDB sstableloader tool available.
 
 **4. List all facts collected by ansible, on all hosts, part of the group specified**
 ```
 ansible -i servers_example.ini scylla -m setup | less
 ```
-- To filter specific facts use: *-a "filter=ansible_distribution**"
-
+- To filter specific facts, for example ansible distribution, add -a flag
+```
+-a "filter=ansible_distribution*"
+```
 
 
 List of Tasks (and tags) in Playbook
