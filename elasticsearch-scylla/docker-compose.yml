@@ -1,0 +1,88 @@
+version: "3"
+
+services:
+
+  scylla-node1:
+    build: ./scylla
+    restart: always
+    networks:
+      web:
+        ipv4_address: 10.10.10.1
+    environment:
+      - DC1=DC1
+      - SEEDS=10.10.10.1,10.10.10.2,10.10.10.3
+      - CQLSH_HOST=10.10.10.1
+
+  scylla-node2:
+    build: ./scylla
+    restart: always
+    networks:
+      web:
+        ipv4_address: 10.10.10.2
+    environment:
+      - DC1=DC1
+      - SEEDS=10.10.10.1,10.10.10.2,10.10.10.3
+      - CQLSH_HOST=10.10.10.2
+
+  scylla-node3:
+    build: ./scylla
+    restart: always
+    networks:
+      web:
+        ipv4_address: 10.10.10.3
+    environment:
+      - DC1=DC1
+      - SEEDS=10.10.10.1,10.10.10.2,10.10.10.3
+      - CQLSH_HOST=10.10.10.3
+
+  elasticsearch-master:
+    build: ./elasticsearch
+    restart: always
+    environment:
+      - mode=master
+      - nodes=["elasticsearch-master", "elasticsearch-slave1"]
+    networks:
+      - web
+    ports:
+      - 9200:9200
+
+
+  elasticsearch-slave1:
+    build: ./elasticsearch
+    restart: always
+    environment:
+      - mode=slave
+      - nodes=["elasticsearch-master", "elasticsearch-slave1"]
+    networks:
+      - web
+
+  kibana:
+    build: ./kibana
+    restart: always
+    ports:
+      - 5601:5601
+    networks:
+      - web
+
+  twitter:
+    build: ./twitter
+    restart: always
+    networks:
+      - web
+    environment:
+      - consumer_key=foo
+      - consumer_secret=foo
+      - access_token_key=foo
+      - access_token_secret=foo
+      - twitter_topic=docker
+      - elasticsearch_url=http://elasticsearch-master:9200
+      - SCYLLADB_SERVER=scylla-node1
+    ports:
+      - 8080:8080
+
+networks:
+  web:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.10.10.0/16
