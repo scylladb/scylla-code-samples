@@ -15,7 +15,7 @@ Two Elasticsearch nodes (Master, data).
 ### Prerequisites
 
 1. Docker for [Mac](https://download.docker.com/mac/stable/Docker.dmg) or [Windows](https://download.docker.com/win/stable/InstallDocker.msi).
-2. This Git [Repo](https://github.com/rusher81572/elasticsearch-scylla/archive/master.zip)
+2. This Git repository
 3. 3GB of RAM or greater for Docker
 4. (Optional) [Twitter API credentials](https://dev.twitter.com/)
 
