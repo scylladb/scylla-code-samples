@@ -6,11 +6,11 @@ if [ ! -f "$FILE" ]
 then
   sed -i "s/seeds: \"127.0.0.1\"/seeds: \"$SEEDS\"/g" /etc/scylla/scylla.yaml
 
-  if [ -z "${DC1}" ]; then
+  if [ -n "${DC1}" ]; then
   echo 'dc=DC1' > /etc/scylla/cassandra-rackdc.properties
   fi
 
-  if [ -z "${DC2}" ]; then
+  if [ -n "${DC2}" ]; then
   echo 'dc=DC2' > /etc/scylla/cassandra-rackdc.properties
   fi
  echo 'prefer_local=true' >> /etc/scylla/cassandra-rackdc.properties
