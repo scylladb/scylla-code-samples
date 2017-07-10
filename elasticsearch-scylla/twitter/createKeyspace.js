@@ -6,7 +6,7 @@ var createKeyspace = function() {
   var client = new cassandra.Client({
     contactPoints: [scylladb_server]
   });
-  client.execute("CREATE KEYSPACE twitter WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy','DC1' : 2, 'DC2': 1 };", function(err, result) {
+  client.execute("CREATE KEYSPACE twitter WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy','DC1' : 3};", function(err, result) {
     if (err) {
       console.log('\n' + err);
     }
