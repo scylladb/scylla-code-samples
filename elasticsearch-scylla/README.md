@@ -17,12 +17,13 @@ Two Elasticsearch nodes (Master, data).
 1. Docker for [Mac](https://download.docker.com/mac/stable/Docker.dmg) or [Windows](https://download.docker.com/win/stable/InstallDocker.msi).
 2. This Git repository
 3. 3GB of RAM or greater for Docker
-4. (Optional) [Twitter API credentials](https://dev.twitter.com/)
+4. Twitter API credentials. After signing up for a developer [account](https://dev.twitter.com/), go to the Twitter Apps [page](https://apps.twitter.com/) and click on “Create New App”. The API credentials are provided after the application is created. 
+5. If you are using Linux, you will need [docker-compose](https://docs.docker.com/compose/install/).
 
 ### Building the images
 ```
-unzip elasticsearch-scylla-master.zip
-cd elasticsearch-scylla
+git clone https://github.com/scylladb/scylla-code-samples.git
+cd scylla-code-samples/elasticsearch-scylla
 docker-compose build
 ```
 
