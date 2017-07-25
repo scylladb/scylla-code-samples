@@ -77,7 +77,7 @@ curl http://127.0.0.1:8080/start
 ```
 
 ### Accessing Kibana to view the Twitter data
-1. Goto https://0.0.0.0:5601 in your web browser
+1. Goto http://0.0.0.0:5601 in your web browser
 2. Enter logstash for the index name and then click the create button
 3. Start analyzing data
 
