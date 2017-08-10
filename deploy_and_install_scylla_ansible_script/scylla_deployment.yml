@@ -9,8 +9,8 @@
   vars:
     release: 1.7                                # Scylla release to be installed
     cluster_name: cluster_name                  # Unique cluster name
-    seeds: seed_node/s_ip/s                     # Need at least 1 live seed node for new nodes to join the cluster (use 1:3 ratio)
-    disks: /dev/nvme0n1,/dev/nvme0n2            # Disk names for raid0 creation (comma seperated)
+    seeds: seed_IP/s                            # Need at least 1 live seed node for new nodes to join the cluster (use 1:3 ratio)
+    disks: /dev/sdb,/dev/sdc                    # Disk names for raid0 creation (comma seperated)
     NIC: eth0 / ens5 / bond1                    # NIC to be used with optimized queue
   tasks:
     - name: Remove 'abrt' pkg from CentOS / RHEL
@@ -22,13 +22,8 @@
       yum: name={{ item }} state=latest
       with_items:
        - epel-release
-       - wget    
+       - wget           
       when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
-      tags:
-       - prereq
-    - name: Update apt cache on Debian / Ubuntu
-      apt: update_cache=true
-      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
       tags:
        - prereq
     - name: Install add-apt-repository command utility on Debian / Ubuntu14
@@ -36,6 +31,26 @@
       when: ansible_distribution == 'Debian' or (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty')
       tags:
        - prereq
+    - name: Download Scylla {{ release }} repo for Centos 7 / RHEL 7
+      get_url: url=http://downloads.scylladb.com/rpm/centos/scylla-{{release}}.repo dest=/etc/yum.repos.d/scylla.repo
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+      tags:
+       - repo
+    - name: Download Scylla {{ release }} repo for Ubuntu 14.04 (Trusty)
+      get_url: url=http://downloads.scylladb.com/deb/ubuntu/scylla-{{release}}-trusty.list dest=/etc/apt/sources.list.d/scylla.list
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+      tags:
+       - repo
+    - name: Download Scylla {{ release }} repo for Ubuntu 16.04 (Xenial)
+      get_url: url=http://downloads.scylladb.com/deb/ubuntu/scylla-{{release}}-xenial.list dest=/etc/apt/sources.list.d/scylla.list
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'
+      tags:
+       - repo
+    - name: Download Scylla {{ release }} repo for Debian 8 (Jessie)
+      get_url: url=http://downloads.scylladb.com.s3.amazonaws.com/deb/debian/scylla-{{release}}-jessie.list dest=/etc/apt/sources.list.d/scylla.list
+      when: ansible_distribution == 'Debian'
+      tags:
+       - repo
     - name: Add openjdk PPA to Ubuntu14 (prereq for Java 8)
       apt_repository: repo="ppa:openjdk-r/ppa"
       when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
@@ -66,33 +81,13 @@
       when: ansible_distribution == 'Debian'
       tags:
        - java
-    - name: Select correct java version on Debian / Ubuntu14
-      alternatives: name=java path=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
-      when: ansible_distribution == 'Debian' or (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty')
+    - name: Update apt cache on Debian / Ubuntu
+      apt: update_cache=true
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
       tags:
-       - java
-    - name: Download Scylla {{ release }} repo for Centos 7 / RHEL 7
-      get_url: url=http://downloads.scylladb.com/rpm/centos/scylla-{{release}}.repo dest=/etc/yum.repos.d/scylla.repo
-      when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
-      tags:
-       - repo
-    - name: Download Scylla {{ release }} repo for Ubuntu 14.04 (Trusty)
-      get_url: url=http://downloads.scylladb.com/deb/ubuntu/scylla-{{release}}-trusty.list dest=/etc/apt/sources.list.d/scylla.list
-      when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
-      tags:
-       - repo
-    - name: Download Scylla {{ release }} repo for Ubuntu 16.04 (Xenial)
-      get_url: url=http://downloads.scylladb.com/deb/ubuntu/scylla-{{release}}-xenial.list dest=/etc/apt/sources.list.d/scylla.list
-      when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'
-      tags:
-       - repo
-    - name: Download Scylla {{ release }} repo for Debian 8 (Jessie)
-      get_url: url=http://downloads.scylladb.com.s3.amazonaws.com/deb/debian/scylla-{{release}}-jessie.list dest=/etc/apt/sources.list.d/scylla.list
-      when: ansible_distribution == 'Debian'
-      tags:
-       - repo
+       - install
     - name: Install scylla {{ release }} on Debian / Ubuntu 
-      package: name=scylla state=present force=yes
+      apt: name=scylla state=present allow_unauthenticated=yes force=yes
       when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
       tags:
        - install
@@ -101,6 +96,11 @@
       when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
       tags:
        - install
+    - name: Select correct java version on Debian / Ubuntu14
+      alternatives: name=java path=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+      when: ansible_distribution == 'Debian' or (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty')
+      tags:
+       - conf
     - name: Configure Cluster name in yaml file
       shell: sed -i -- 's/Test Cluster/{{ cluster_name }}/g' /etc/scylla/scylla.yaml
       tags:
