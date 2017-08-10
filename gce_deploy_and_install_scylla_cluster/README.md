@@ -39,7 +39,7 @@ Usage:
 Select VM Image (default: CentOS7):
 -u   Deploy VMs with Ubuntu 16 image
 -d   Deploy VMs with Debian 8 image
--r    Deploy VMs with RHEL 7 image
+-r   Deploy VMs with RHEL 7 image
 -b   Deploy VMs with Ubuntu 14 image
 
 -h   Display this help and exit
@@ -47,9 +47,9 @@ Select VM Image (default: CentOS7):
 
 **Examples**
 - Example1: ./gce_deploy_and_install_scylla_cluster.sh -t8 -n -v1.6
-This will deploy 3 VMs (n1-standard-8) with CentOS7 image and 2 NVMe drives per node, each 375GB, then it will install and configure the latest Scylla 1.6 (1.6.6)
+- This will deploy 3 VMs (n1-standard-8) with CentOS7 image and 2 NVMe drives per node, each 375GB, then it will install and configure the latest Scylla 1.6 (1.6.6)
 
 - Example2: ./gce_deploy_and_install_scylla_cluster.sh -t4 -s100 -u
-This will deploy 3 VMs (n1-standard-4) with Ubuntu16 image and 2 SSD drives per node, each 100GB, then it will install and configure the latest Scylla 1.7 (1.7.4)
+- This will deploy 3 VMs (n1-standard-4) with Ubuntu16 image and 2 SSD drives per node, each 100GB, then it will install and configure the latest Scylla 1.7 (1.7.4)
 
 
