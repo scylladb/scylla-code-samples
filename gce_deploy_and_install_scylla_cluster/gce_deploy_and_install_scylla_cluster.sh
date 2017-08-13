@@ -14,8 +14,8 @@ VM_NUM="3"
 RELEASE="1.7"
 VER=`echo $RELEASE | sed s/\\\./-/g`
 CENTOS7="--image "centos-7-v20170719" --image-project "centos-cloud""
-U16="--image "ubuntu-1604-xenial-v20170803" --image-project "ubuntu-os-cloud""
-U14="--image "ubuntu-1404-trusty-v20170807" --image-project "ubuntu-os-cloud""
+UB16="--image "ubuntu-1604-xenial-v20170803" --image-project "ubuntu-os-cloud""
+UB14="--image "ubuntu-1404-trusty-v20170807" --image-project "ubuntu-os-cloud""
 DEB8="--image "debian-8-jessie-v20170717" --image-project "debian-cloud""
 RH7="--image "rhel-7-v20170719" --image-project "rhel-cloud""
 VM_OS="$CENTOS7"
@@ -62,10 +62,10 @@ while getopts ":hnudrbp:c:z:v:s:t:" opt; do
 		t)  VM_TYPE=$OPTARG ;;
 		v)  RELEASE=$OPTARG ;;
 		n)  SSD=NO ;;
-		u)  VM_OS=$U16 ;;
+		u)  VM_OS=$UB16 ;;
 		d)  VM_OS=$DEB8 ;;
 		r)  VM_OS=$RH7 ;;
-		b)  VM_OS=$U14 ;; 
+		b)  VM_OS=$UB14 ;; 
 		\?)  echo "Invalid option: -$OPTARG"
 		    exit 2
 		    ;;
@@ -152,7 +152,7 @@ sed -i s/seedIP/$NEW/g scylla_install_new.yml
 
 
 # Update NIC to ens5 (Ubuntu16) in playbook yml file vars
-if [ "$VM_OS" == "$U16" ]; then
+if [ "$VM_OS" == "$UB16" ]; then
 	echo ""
 	echo "### Installing on Ubuntu 16, updating NIC value in playbook yml file to 'ens5'"
 	echo ""
