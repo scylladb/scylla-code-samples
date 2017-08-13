@@ -31,16 +31,19 @@ Cloud API access scopes: Allow full access to all Cloud APIs (can be set only wh
 ./gce_deploy_and_install_scylla_cluster.sh -h
 
 Usage:
--t   Set VM type (default: n1-standard-2). Example: to set n1-standard-4, type '4'
--s   Set SSD size in GB (default: 40), each VM has 2 SSD drives
--n   Use 2 local NVMe drives (NVMe size: 375GB) per node, instead of 2 SSD drives
--v   Scylla release to be installed (default: 1.7). Example: to set 1.6, type '1.6'
+-p   GCP project in which Scylla will be deployed (default: skilled-adapter-452). Usage: type '-p [MyProject]'
+-z   Zone in which Scylla VMs will be deployed (default: us-east1-b). Usage: type '-z [Zone]'
+-t   VM type (default: n1-standard-2). Example: to set n1-standard-8, type '-t8'
+-s   SSD size in GB (default: 40), each VM has 2 SSD drives
+-n   Use NVMe drives instead of SSD drives
+-c   Number of NVMe drives (NVMe size: 375GB) to deploy per node (default: 2). Example: toםdeploy 4 drives, type '-c4'
+-v   Scylla release to be installed (default: 1.7). Example: to set 1.6, type '-v1.6'
 
 Select VM Image (default: CentOS7):
--u   Deploy VMs with Ubuntu 16 image
--d   Deploy VMs with Debian 8 image
--r   Deploy VMs with RHEL 7 image
--b   Deploy VMs with Ubuntu 14 image
+-u   Ubuntu 16
+-d   Debian 8
+-r   RHEL 7
+-b   Ubuntu 14
 
 -h   Display this help and exit
 ```
