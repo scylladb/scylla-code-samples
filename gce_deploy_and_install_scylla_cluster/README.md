@@ -33,7 +33,7 @@ Usage:
 -p   GCP project which you are using (default: skilled-adapter-452). Usage: type '-p [MyProject]'
 -z   Zone in which Scylla VMs and SSD drives will be deployed (default: us-east1-b). Usage: type '-z [Zone]'
 -t   VM type (default: n1-standard-2). Example: to set n1-standard-8, type '-t8'
--s   SSD size in GB (default: 40), each VM has 2 SSD drives. Example: to set 100GB, type -s100
+-s   SSD size in GB (default: 40), each VM has 2 SSD drives. Example: to set 100GB, type '-s100'
 -n   Use NVMe drives instead of SSD drives
 -c   Number of NVMe drives (NVMe size: 375GB) to deploy per node (default: 2). Example: to deploy 4 drives, type '-c4'
 -v   Scylla release to be installed (default: 1.7). Example: to set 1.6, type '-v1.6'
