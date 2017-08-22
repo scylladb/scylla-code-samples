@@ -1,0 +1,132 @@
+
+## This playbook assumes you are installing Scylla using the same disks and NIC for all nodes ##
+
+
+---
+
+- hosts: [scylla]                               # Host group name from ini file
+  become: yes                                   # Run all tasks as root
+  vars:
+    release: 1.7                                # Scylla release to be installed
+    cluster_name: cluster_name                  # Unique cluster name
+    seeds: seed_IP/s                            # Need at least 1 live seed node for new nodes to join the cluster (use 1:3 ratio)
+    disks: /dev/sdb,/dev/sdc                    # Disk names for raid0 creation (comma seperated)
+    NIC: eth0 / ens5 / bond1                    # NIC to be used with optimized queue
+  tasks:
+    - name: Remove 'abrt' pkg from CentOS / RHEL
+      yum: name=abrt state=absent
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+      tags:
+       - prereq
+    - name: Install epel-release and wget pkgs on CentOS / RHEL
+      yum: name={{ item }} state=latest
+      with_items:
+       - epel-release
+       - wget           
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+      tags:
+       - prereq
+    - name: Install add-apt-repository command utility on Debian / Ubuntu14
+      package: name=software-properties-common state=present
+      when: ansible_distribution == 'Debian' or (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty')
+      tags:
+       - prereq
+    - name: Download Scylla {{ release }} repo for Centos 7 / RHEL 7
+      get_url: url=http://downloads.scylladb.com/rpm/centos/scylla-{{release}}.repo dest=/etc/yum.repos.d/scylla.repo
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+      tags:
+       - repo
+    - name: Download Scylla {{ release }} repo for Ubuntu 14.04 (Trusty)
+      get_url: url=http://downloads.scylladb.com/deb/ubuntu/scylla-{{release}}-trusty.list dest=/etc/apt/sources.list.d/scylla.list
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+      tags:
+       - repo
+    - name: Download Scylla {{ release }} repo for Ubuntu 16.04 (Xenial)
+      get_url: url=http://downloads.scylladb.com/deb/ubuntu/scylla-{{release}}-xenial.list dest=/etc/apt/sources.list.d/scylla.list
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'
+      tags:
+       - repo
+    - name: Download Scylla {{ release }} repo for Debian 8 (Jessie)
+      get_url: url=http://downloads.scylladb.com.s3.amazonaws.com/deb/debian/scylla-{{release}}-jessie.list dest=/etc/apt/sources.list.d/scylla.list
+      when: ansible_distribution == 'Debian'
+      tags:
+       - repo
+    - name: Add openjdk PPA to Ubuntu14 (prereq for Java 8)
+      apt_repository: repo="ppa:openjdk-r/ppa"
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+      tags:
+       - java
+    - name: Add openjdk PPA to Debian (prereq for Java 8)
+      apt_repository: repo="ppa:openjdk-r/ppa" codename='trusty'
+      when: ansible_distribution == 'Debian'
+      tags:
+       - java
+    - name: Add Jessie-backports repo to Debian (prereq for Java 8)
+      apt_repository: repo="deb http://http.debian.net/debian jessie-backports main"
+      when: ansible_distribution == 'Debian'
+      tags:
+       - java
+    - name: Update apt cache on Debian / Ubuntu
+      apt: update_cache=true
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+      tags:
+       - java
+    - name: Install Java 8 on Ubuntu14, needed for Scylla release 1.7
+      apt: name=openjdk-8-jre-headless state=latest
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+      tags:
+       - java
+    - name: Install Java 8 on Debian, needed for Scylla release 1.7
+      apt: name=openjdk-8-jre-headless state=latest default_release=jessie-backports
+      when: ansible_distribution == 'Debian'
+      tags:
+       - java
+    - name: Update apt cache on Debian / Ubuntu
+      apt: update_cache=true
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+      tags:
+       - install
+    - name: Install scylla {{ release }} on Debian / Ubuntu 
+      apt: name=scylla state=present allow_unauthenticated=yes force=yes
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+      tags:
+       - install
+    - name: Install scylla {{ release }} on CentOS / RHEL
+      package: name=scylla state=present
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+      tags:
+       - install
+    - name: Select correct java version on Debian / Ubuntu14
+      alternatives: name=java path=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+      when: ansible_distribution == 'Debian' or (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty')
+      tags:
+       - conf
+    - name: Configure Cluster name in yaml file
+      shell: sed -i -- 's/Test Cluster/{{ cluster_name }}/g' /etc/scylla/scylla.yaml
+      tags:
+       - conf
+    - name: Configure seeds in yaml file
+      shell: sed -i -- '/seeds/s/127.0.0.1/{{ seeds }}/g' /etc/scylla/scylla.yaml
+      tags:
+       - conf
+    - name: Configure listen address + rpc address in yaml file
+      shell: sed -i -- "s/localhost/$(hostname -i)/g" /etc/scylla/scylla.yaml
+      tags:
+       - conf
+    - name: Run Scylla Setup (RAID-0, XFS format, NIC queue, disk IOtune), this may take a while
+      shell: scylla_setup --disks {{ disks }} --nic {{ NIC }} --setup-nic
+      tags:
+       - conf
+    - name: Reboot server/s (required by Scylla)
+      become: yes
+      shell: sleep 2 && shutdown -r now "Ansible reboot"
+      async: 1
+      poll: 0
+      ignore_errors: true
+      tags:
+       - reboot
+    - name: Wait for server/s to come up from boot
+      local_action: wait_for host={{ inventory_hostname }} state=started port=22 delay=30 timeout=300 connect_timeout=60
+      become: false
+      tags:
+       - reboot
