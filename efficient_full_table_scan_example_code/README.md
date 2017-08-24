@@ -27,8 +27,7 @@ In order to run the code and/or see the usage (--help), run the following:
 go run $GOPATH/[full path to the go code]/efficient_full_table_scan.go [<flags>] <hosts>
 ```
 
-Mandatory param: hosts = your Scylla nodes IP addresses
-The rest of the params have a default value, which you can decide to adjust according to your setup and dataset.
+Mandatory param: `<hosts>` = your Scylla nodes IP addresses. The rest of the params have defaults, which you can decide to adjust according to your setup and dataset.
 
 Note: `-d` flag (default=false) prints all the rows into a file for debugging purpose. This loads the client CPU, hence use with caution.
 
