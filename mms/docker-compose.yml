@@ -7,37 +7,31 @@ services:
     restart: always
     networks:
       web:
-        ipv4_address: 10.10.10.1
     environment:
       - DC1=DC1
-      - SEEDS=10.10.10.1,10.10.10.2,10.10.10.3
-      - CQLSH_HOST=10.10.10.1
+      - SEEDS=scylla-node1,scylla-node2,scylla-node3
+      - CQLSH_HOST=scylla-node1
 
   scylla-node2:
     build: ./scylla
     restart: always
     networks:
       web:
-        ipv4_address: 10.10.10.2
     environment:
       - DC1=DC1
-      - SEEDS=10.10.10.1,10.10.10.2,10.10.10.3
-      - CQLSH_HOST=10.10.10.2
+      - SEEDS=scylla-node1,scylla-node2,scylla-node3
+      - CQLSH_HOST=scylla-node2
 
   scylla-node3:
     build: ./scylla
     restart: always
     networks:
       web:
-        ipv4_address: 10.10.10.3
     environment:
       - DC1=DC1
-      - SEEDS=10.10.10.1,10.10.10.2,10.10.10.3
-      - CQLSH_HOST=10.10.10.3
+      - SEEDS=scylla-node1,scylla-node2,scylla-node3
+      - CQLSH_HOST=scylla-node3
 
 networks:
   web:
     driver: bridge
-    ipam:
-     config:
-       - subnet: 10.10.10.0/16
