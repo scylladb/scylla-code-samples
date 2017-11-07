@@ -5,7 +5,7 @@
 ```
 cd mms
 docker-compose up -d
-docker exec -it docker exec -it mms_scylla-node1_1 sh
+docker exec -it mms_scylla-node1_1 sh
 ```
 ### Destroying the Scylla Cluster 
 ```
