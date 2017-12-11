@@ -48,7 +48,7 @@ This example uses Scylla 2.0.0. It assumes that the Kubernetes management tools 
   
 - Create the `ConfigMap`, for the readiness-checking file:
   ```bash
-  $ kubectl create -f scylla-configmpa.yaml
+  $ kubectl create -f scylla-configmap.yaml
   ```
   
 - Finally, we're ready to instantiate our Scylla cluster with three nodes:
