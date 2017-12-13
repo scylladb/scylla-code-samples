@@ -1,6 +1,6 @@
 FROM alpine
 WORKDIR /opt
-RUN apk update;apk add shadow less py-pip bash openjdk8-jre-base tar wget
+RUN apk update;apk add shadow less bash openjdk8-jre-base tar wget
 RUN wget -q -O presto.tar.gz https://repo1.maven.org/maven2/com/facebook/presto/presto-server/0.190/presto-server-0.190.tar.gz
 RUN tar xvf presto.tar.gz
 ADD resources /opt/presto-server-0.190/
