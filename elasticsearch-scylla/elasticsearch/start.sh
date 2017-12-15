@@ -6,8 +6,7 @@ then
   echo 'network.host: ' `echo ${HOSTNAME}` >> /opt/elasticsearch*/config/elasticsearch.yml
   echo 'node.name: ' `echo ${HOSTNAME}` >> /opt/elasticsearch*/config/elasticsearch.yml
   echo 'discovery.zen.ping.unicast.hosts:' `echo $nodes` >> /opt/elasticsearch*/config/elasticsearch.yml
-  sed -i 's/2g/300m/g' /opt/elasticsearch*/config/jvm.options
-  # Format ["rpi-5", "rpi-2", "rpi-6"\]
+  sed -i 's/2g/200m/g' /opt/elasticsearch*/config/jvm.options
 
   if [ "$mode" == "master" ]; then
   echo 'node.master: true' >> /opt/elasticsearch*/config/elasticsearch.yml
