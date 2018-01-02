@@ -13,3 +13,6 @@ cd mms
 docker-compose kill
 docker-compose rm -f
 ```
+
+### Using Presto to Run Queries from the Scylla Cluster
+See our guide [here](https://github.com/scylladb/scylla-code-samples/tree/master/mms/presto)

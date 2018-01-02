@@ -6,7 +6,7 @@ The purpose of this demo is to show how to feed data from Twitter into Elasticse
 ### Architecture
 
 ##### Scylla Architecture
-Three Scylla 1.7 nodes
+Three Scylla 2.x nodes
 
 ##### Elasticsearch Architecture
 Two Elasticsearch nodes (Master, data).
@@ -15,15 +15,14 @@ Two Elasticsearch nodes (Master, data).
 ### Prerequisites
 
 1. Docker for [Mac](https://download.docker.com/mac/stable/Docker.dmg) or [Windows](https://download.docker.com/win/stable/InstallDocker.msi).
-2. This Git repository
+2. This Git [Repo](https://github.com/rusher81572/elasticsearch-scylla/archive/master.zip)
 3. 3GB of RAM or greater for Docker
-4. Twitter API credentials. After signing up for a developer [account](https://dev.twitter.com/), go to the Twitter Apps [page](https://apps.twitter.com/) and click on “Create New App”. The API credentials are provided after the application is created. 
-5. If you are using Linux, you will need [docker-compose](https://docs.docker.com/compose/install/).
+4. (Optional) [Twitter API credentials](https://dev.twitter.com/)
 
 ### Building the images
 ```
-git clone https://github.com/scylladb/scylla-code-samples.git
-cd scylla-code-samples/elasticsearch-scylla
+unzip elasticsearch-scylla-master.zip
+cd elasticsearch-scylla
 docker-compose build
 ```
 
@@ -77,7 +76,7 @@ curl http://127.0.0.1:8080/start
 ```
 
 ### Accessing Kibana to view the Twitter data
-1. Goto http://0.0.0.0:5601 in your web browser
+1. Goto https://0.0.0.0:5601 in your web browser
 2. Enter logstash for the index name and then click the create button
 3. Start analyzing data
 
