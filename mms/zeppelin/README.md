@@ -58,6 +58,7 @@ Click save
 click on Notebook -> Create a new Note
 Type scylla under Note name
 Change the default interpreter to cassandra
+Click Create Note
 
 In the text box type the following:
 ```
