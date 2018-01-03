@@ -43,7 +43,7 @@ docker build -t zeppelin .
 docker run --name zeppelin --network mms_web -p 9080:8080 -d zeppelin
 ```
 
-### Accessing the Presto Web Interface
+### Accessing the Zeppelin Web Interface
 
 Navigate to [http://127.0.0.1:9080](http://127.0.0.1:9080) in your web browser.
 
