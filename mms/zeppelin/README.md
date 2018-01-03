@@ -49,21 +49,21 @@ Navigate to [http://127.0.0.1:9080](http://127.0.0.1:9080) in your web browser.
 
 ### Configuring Zeppelin to access Scylla
 
-1. Once in the web interface, click on anonymous -> Interpreter
-2. Find cassandra and then click edit
-3. Change the value of cassandra.cluster to scylla-node1
-4. Change the value of cassandra.hosts	to scylla-node1,scylla-node2,scylla-node3
-5. Click save
+1. Once in the web interface, click on ```anonymous``` -> ```Interpreter```
+2. Find cassandra and then click ```edit```
+3. Change the value of ```cassandra.cluster``` to scylla-node1
+4. Change the value of ```cassandra.hosts```	to scylla-node1,scylla-node2,scylla-node3
+5. Click ```save```
 
 ### Running Queries against Scylla from Zeppelin
-1. Click on Notebook -> Create a new Note
-2. Type scylla under Note name
+1. Click on Notebook -> ```Create a new Note```
+2. Type scylla under ```Note name```
 3. Change the default interpreter to cassandra
-4. Click Create Note
-5. In the text box type the following:
+4. Click ```Create Note```
+5. In the ```text box``` type the following:
 ```
 select * from catalog.mutant_data;
 ```
-6. Click the play button to see the results.
+6. Click the ```play``` button to see the results.
 
 
