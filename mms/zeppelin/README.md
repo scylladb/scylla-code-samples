@@ -53,7 +53,7 @@ Once in the web interface, click on anonymous -> Interpreter
 Find cassandra and then click edit
 Change the value of cassandra.cluster to scylla-node1
 Change the value of cassandra.hosts	to scylla-node1,scylla-node2,scylla-node3
-Click sasve
+Click save
 
 click on Notebook -> Create a new Note
 Type scylla under Note name
