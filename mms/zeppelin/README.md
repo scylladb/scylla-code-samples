@@ -54,6 +54,7 @@ Navigate to [http://127.0.0.1:9080](http://127.0.0.1:9080) in your web browser.
 3. Change the value of ```cassandra.cluster``` to scylla-node1
 4. Change the value of ```cassandra.hosts```	to scylla-node1,scylla-node2,scylla-node3
 5. Click ```save```
+6. Click ```ok``` in the proceeding dialog window to update the interpreter and restart with new settings.
 
 ### Running Queries against Scylla from Zeppelin
 1. Click on Notebook -> ```Create a new Note```
