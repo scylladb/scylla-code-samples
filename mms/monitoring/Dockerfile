@@ -9,10 +9,10 @@ RUN cp /opt/scylla-grafana-monitoring/prometheus/* /opt/prometheus-2.0.0.linux-a
 
 WORKDIR /opt/prometheus-2.0.0.linux-amd64
 RUN sed -i 's/\/etc\/scylla.d\/prometheus/\/opt\/prometheus-2.0.0.linux-amd64/g' prometheus.yml
-RUN sed -i 's/- 172.17.0.2:9180//' scylla_servers.yml
-RUN echo "- 'scylla-node1:9100'" >> scylla_servers.yml
-RUN echo "  - 'scylla-node2:9100'" >> scylla_servers.yml
-RUN echo "  - 'scylla-node3:9100'" >> scylla_servers.yml
+RUN sed -i 's/- 172.17.0.2:9180//' scylla_servers.yml;sed -i '/172.17.0.2/c\' node_exporter_servers.yml
+RUN echo "- 'scylla-node1:9100'" >> scylla_servers.yml;echo "  - 'scylla-node1:9100'" >> node_exporter_servers.yml
+RUN echo "  - 'scylla-node2:9100'" >> scylla_servers.yml;echo "  - 'scylla-node2:9100'" >> node_exporter_servers.yml
+RUN echo "  - 'scylla-node3:9100'" >> scylla_servers.yml; echo "  - 'scylla-node3:9100'" >> node_exporter_servers.yml
 RUN mkdir /opt/prometheus-2.0.0.linux-amd64/mydata
 
-CMD ./prometheus --config.file=prometheus.yml --storage.tsdb.path /opt/prometheus-2.0.0.linux-amd64/mydata& service grafana-server start;/opt/scylla-grafana-monitoring/load-grafana.sh -p 127.0.0.1:9090 -g 3000 -a admin -v 2.0&sleep infinity
+CMD ./prometheus --config.file=prometheus.yml --storage.tsdb.path /opt/prometheus-2.0.0.linux-amd64/mydata& service grafana-server start;cd /opt/scylla-grafana-monitoring/;./load-grafana.sh -p 127.0.0.1:9090 -g 3000 -a admin -v 2.0&sleep infinity
