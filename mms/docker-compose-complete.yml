@@ -1,0 +1,62 @@
+version: "3"
+
+services:
+
+  scylla-node1:
+    build: ./scylla
+    restart: always
+    networks:
+      web:
+    environment:
+      - DC1=DC1
+      - IMPORT=true
+      - SEEDS=scylla-node1,scylla-node2,scylla-node3
+      - CQLSH_HOST=scylla-node1
+
+  scylla-node2:
+    build: ./scylla
+    restart: always
+    networks:
+      web:
+    environment:
+      - DC1=DC1
+      - SEEDS=scylla-node1,scylla-node2,scylla-node3
+      - CQLSH_HOST=scylla-node2
+
+  scylla-node3:
+    build: ./scylla
+    restart: always
+    networks:
+      web:
+    environment:
+      - DC1=DC1
+      - SEEDS=scylla-node1,scylla-node2,scylla-node3
+      - CQLSH_HOST=scylla-node3
+      
+  monitoring:
+    build: ./monitoring
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      web:
+        
+  presto:
+    build: ./presto
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      web:  
+      
+  zeppelin:
+    build: ./zeppelin
+    restart: always
+    ports:
+      - 9080:8080
+    networks:
+      web: 
+            
+networks:
+  web:
+    driver: bridge
