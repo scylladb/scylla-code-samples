@@ -29,7 +29,7 @@ export SCYLLA_CONF='/etc/scylla'
 
 if [ -n "${IMPORT}" ];
 then
-  sleep 20
+  sleep 30
   cqlsh -f /mutant-data.txt
 fi
 sleep infinity
