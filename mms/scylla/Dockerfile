@@ -6,4 +6,5 @@ RUN apt-get update;apt-get install -y scylla-server scylla-jmx scylla-tools --fo
 RUN sed -i 's/listen_address:/#listen_address:/i' /etc/scylla/scylla.yaml
 RUN sed -i 's/endpoint_snitch:/#endpoint_snitch:/i' /etc/scylla/scylla.yaml
 RUN sed -i 's/rpc_address:/#rpc_address:/i' /etc/scylla/scylla.yaml
+ADD mutant-data.txt /
 CMD bash /start.sh
