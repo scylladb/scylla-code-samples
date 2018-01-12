@@ -27,9 +27,9 @@ export SCYLLA_CONF='/etc/scylla'
 /usr/bin/scylla --developer-mode 1 --options-file /etc/scylla/scylla.yaml&
 /usr/lib/scylla/jmx/scylla-jmx -l /usr/lib/scylla/jmx&
 
-if [ -f "/mutant-data.txt" ]
-then
+if [ -n "${IMPORT}" ]; then
   sleep 60
   cqlsh -f /mutant-data.txt
 fi
+
 sleep infinity
