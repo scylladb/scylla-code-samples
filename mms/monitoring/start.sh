@@ -1,4 +1,5 @@
 #!/bin/bash
+sleep 60
 cd /opt/prometheus-2.0.0.linux-amd64
 ./prometheus --config.file=prometheus.yml --storage.tsdb.path /opt/prometheus-2.0.0.linux-amd64/mydata& 
 service grafana-server start;

@@ -43,6 +43,7 @@ cd scylla-code-samples/mms/monitoring
 docker build -t monitoring .
 docker run --name monitoring --network mms_web -p 3000:3000 -d monitoring
 ```
+There is a 60 second delay after the container is run before you can view the web interface.
 
 ### Accessing the Scylla Monitoring Web Interface
 
