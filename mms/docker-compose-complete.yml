@@ -9,7 +9,6 @@ services:
       web:
     environment:
       - DC1=DC1
-      - IMPORT=true
       - SEEDS=scylla-node1,scylla-node2,scylla-node3
       - CQLSH_HOST=scylla-node1
 
