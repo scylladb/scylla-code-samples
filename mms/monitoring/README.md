@@ -12,6 +12,21 @@ cd scylla-code-samples/mms
 docker-compose up -d
 ```
 
+### Building and Running the Scylla Monitoring Container
+
+```
+cd scylla-code-samples/mms/scylla-grafana-monitoring
+cp ../monitoring/scylla_servers.yml prometheus/
+cp ../monitoring/node_exporter_servers.yml prometheus/
+./start-all.sh -s my_scylla_server.yml -n my_node_exporter_servers.yml -d .
+```
+
+### Accessing the Scylla Monitoring Web Interface
+
+Navigate to [http://127.0.0.1:3000](http://127.0.0.1:3000) in your web browser.
+
+Login with ```admin``` as the username and password.
+
 ### Create a keyspace and Add the Mutant Data
 
 ```
@@ -36,19 +51,6 @@ insert into mutant_data ("first_name","last_name","address","picture_location") 
 ```
 
 
-### Building and Running the Scylla Monitoring Container
 
-```
-cd scylla-code-samples/mms/monitoring
-docker build -t monitoring .
-docker run --name monitoring --network mms_web -p 3000:3000 -d monitoring
-```
-There is a 60 second delay after the container is run before you can view the web interface.
-
-### Accessing the Scylla Monitoring Web Interface
-
-Navigate to [http://127.0.0.1:3000](http://127.0.0.1:3000) in your web browser.
-
-Login with ```admin``` as the username and password.
 
 
