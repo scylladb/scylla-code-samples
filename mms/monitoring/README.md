@@ -18,6 +18,8 @@ docker-compose up -d
 cd scylla-code-samples/mms/scylla-grafana-monitoring
 cp ../monitoring/scylla_servers.yml prometheus/
 cp ../monitoring/node_exporter_servers.yml prometheus/
+cp ../monitoring/start-all.sh .
+cp ../monitoring/start-grafana.sh .
 mkdir data
 ./start-all.sh -d data
 ```
