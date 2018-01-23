@@ -1,0 +1,6 @@
+# List Scylla end points
+
+- targets:
+  - scylla-node1:9180
+  - scylla-node2:9180
+  - scylla-node3:9180

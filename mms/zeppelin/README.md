@@ -48,7 +48,7 @@ docker run --name zeppelin --network mms_web -p 9080:8080 -d zeppelin
 Navigate to [http://127.0.0.1:9080](http://127.0.0.1:9080) in your web browser.
 
 ### Configuring Zeppelin to access Scylla
-
+(This is used as a reference. The Docker image automatically does this for you)
 1. Once in the web interface, click on ```anonymous``` -> ```Interpreter```
 2. Find cassandra and then click ```edit```
 3. Change the value of ```cassandra.cluster``` to scylla-node1

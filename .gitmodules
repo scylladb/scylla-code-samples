@@ -1,0 +1,3 @@
+[submodule "mms/scylla-grafana-monitoring"]
+	path = mms/scylla-grafana-monitoring
+	url = https://github.com/scylladb/scylla-grafana-monitoring.git
