@@ -11,11 +11,11 @@ SSD_SIZE="40"
 SSD=YES
 NVME_NUM="2"
 VM_NUM="3"
-RELEASE="1.7"
+RELEASE="2.0"
 VER=`echo $RELEASE | sed s/\\\./-/g`
-CENTOS7="--image "centos-7-v20170719" --image-project "centos-cloud""
-UB16="--image "ubuntu-1604-xenial-v20170803" --image-project "ubuntu-os-cloud""
-UB14="--image "ubuntu-1404-trusty-v20170807" --image-project "ubuntu-os-cloud""
+CENTOS7="--image "centos-7-v20170816" --image-project "centos-cloud""
+U16="--image "ubuntu-1604-xenial-v20170803" --image-project "ubuntu-os-cloud""
+U14="--image "ubuntu-1404-trusty-v20170807" --image-project "ubuntu-os-cloud""
 DEB8="--image "debian-8-jessie-v20170717" --image-project "debian-cloud""
 RH7="--image "rhel-7-v20170719" --image-project "rhel-cloud""
 VM_OS="$CENTOS7"
@@ -43,7 +43,7 @@ while getopts ":hnudrbp:c:z:v:s:t:" opt; do
 		    echo "-s   SSD size in GB (default: 40), each VM has 2 SSD drives"
 		    echo "-n   Use NVMe drives instead of SSD drives"
 		    echo "-c   Number of NVMe drives (NVMe size: 375GB) to deploy per node (default: $NVME_NUM). Example: toםdeploy 4 drives, type '-c4'"
-                    echo "-v   Scylla release to be installed (default: 1.7). Example: to set 1.6, type '-v1.6'"
+                    echo "-v   Scylla release to be installed (default: 2.0). Example: to set 1.7, type '-v1.7'"
 		    echo ""
 		    echo "Select VM Image (default: CentOS7):"
 		    echo "-u   Ubuntu 16"
@@ -62,10 +62,10 @@ while getopts ":hnudrbp:c:z:v:s:t:" opt; do
 		t)  VM_TYPE=$OPTARG ;;
 		v)  RELEASE=$OPTARG ;;
 		n)  SSD=NO ;;
-		u)  VM_OS=$UB16 ;;
+		u)  VM_OS=$U16 ;;
 		d)  VM_OS=$DEB8 ;;
 		r)  VM_OS=$RH7 ;;
-		b)  VM_OS=$UB14 ;; 
+		b)  VM_OS=$U14 ;; 
 		\?)  echo "Invalid option: -$OPTARG"
 		    exit 2
 		    ;;
@@ -121,9 +121,9 @@ fi
 # Allow VMs network to come-up before installing Scylla with Ansible
 echo ""
 echo ""
-echo "### Waiting 20 sec for VMs network to come up (sometime it lingers), prior to Scylla installation"
+echo "### Waiting 1 min for VMs network to come up (sometime it lingers), prior to Scylla installation"
 echo ""
-sleep 20
+sleep 60
 
 
 # Generate servers.ini file for Ansible
@@ -152,7 +152,7 @@ sed -i s/seedIP/$NEW/g scylla_install_new.yml
 
 
 # Update NIC to ens5 (Ubuntu16) in playbook yml file vars
-if [ "$VM_OS" == "$UB16" ]; then
+if [ "$VM_OS" == "$U16" ]; then
 	echo ""
 	echo "### Installing on Ubuntu 16, updating NIC value in playbook yml file to 'ens5'"
 	echo ""
@@ -178,6 +178,6 @@ echo "### Installing Scylla $RELEASE cluster using Ansible playbook"
 echo ""
 ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook scylla_install_new.yml -i servers.ini
 echo ""
-echo "### Your Scylla cluster should be up and running. Login to one of the node and run 'nodetool status'"
+echo "### Your Scylla cluster should be up and running. Login to one of the nodes and run 'nodetool status'"
 echo "### Note: it may take up to 1 min. for all nodes to join the ring"
 echo ""
