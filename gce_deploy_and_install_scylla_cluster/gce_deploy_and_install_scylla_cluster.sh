@@ -13,11 +13,11 @@ NVME_NUM="2"
 VM_NUM="3"
 RELEASE="2.0"
 VER=`echo $RELEASE | sed s/\\\./-/g`
-CENTOS7="--image "centos-7-v20170816" --image-project "centos-cloud""
-U16="--image "ubuntu-1604-xenial-v20170803" --image-project "ubuntu-os-cloud""
-U14="--image "ubuntu-1404-trusty-v20170807" --image-project "ubuntu-os-cloud""
-DEB8="--image "debian-8-jessie-v20170717" --image-project "debian-cloud""
-RH7="--image "rhel-7-v20170719" --image-project "rhel-cloud""
+CENTOS7="--image "centos-7-v20180104" --image-project "centos-cloud""
+U16="--image "ubuntu-1604-xenial-v20180122" --image-project "ubuntu-os-cloud""
+U14="--image "ubuntu-1404-trusty-v20180122" --image-project "ubuntu-os-cloud""
+DEB8="--image "debian-8-jessie-v20180109" --image-project "debian-cloud""
+RH7="--image "rhel-7-v20180104" --image-project "rhel-cloud""
 VM_OS="$CENTOS7"
 
 
