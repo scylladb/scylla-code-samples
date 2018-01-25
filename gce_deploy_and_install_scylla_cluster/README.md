@@ -2,7 +2,7 @@ General Info and Prerequisites
 ==============================
 
 **This script deploys 3 VMs on GCE and then installs and configures a Scylla cluster**
-- VM defaults: n1-standard-2 with CentOS7 image and 2 SSD drives, 80GB storage per node, installed with latest Scylla 1.7 release
+- VM defaults: n1-standard-2 with CentOS7 image and 2 SSD drives, 80GB storage per node, installed with latest Scylla 2.0 release
 - Supported OS: RHEL7 / CentOS7 / Ubuntu 14.04 / Ubuntu 16.04 / Debian8
 
 
@@ -36,7 +36,7 @@ Usage:
 -s   SSD size in GB (default: 40), each VM has 2 SSD drives. Example: to set 100GB SSD size, type '-s100'
 -n   Use NVMe drives instead of SSD drives
 -c   Number of NVMe drives (NVMe size: 375GB) to deploy per node (default: 2). Example: to deploy 4 drives, type '-c4'
--v   Scylla release to be installed (default: 1.7). Example: to set Scylla release 1.6, type '-v1.6'
+-v   Scylla release to be installed (default: 2.0). Example: to set Scylla release 1.7, type '-v1.7'
 
 Select VM Image (default: CentOS7):
 -u   Ubuntu16
