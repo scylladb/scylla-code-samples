@@ -71,18 +71,18 @@
       when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
       tags:
        - java
-    - name: Install Java 8 on Ubuntu14, needed for Scylla release 1.7
+    - name: Install Java 8 on Ubuntu14 (Scylla release > 1.6)
       apt: name=openjdk-8-jre-headless state=latest
       when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
       tags:
        - java
-    - name: Install Java 8 on Debian, needed for Scylla release 1.7
+    - name: Install Java 8 on Debian (Scylla release > 1.6)
       apt: name=openjdk-8-jre-headless state=latest default_release=jessie-backports
       when: ansible_distribution == 'Debian'
       tags:
        - java
     - name: Update apt cache on Debian / Ubuntu
-      apt: update_cache=true
+      apt: update_cache=true allow_unauthenticated=yes
       when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
       tags:
        - install
@@ -101,15 +101,15 @@
       when: ansible_distribution == 'Debian' or (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty')
       tags:
        - conf
-    - name: Configure Cluster name in yaml file
+    - name: Set cluster name in yaml file
       shell: sed -i -- 's/Test Cluster/{{ cluster_name }}/g' /etc/scylla/scylla.yaml
       tags:
        - conf
-    - name: Configure seeds in yaml file
+    - name: Set seed node IP in yaml file
       shell: sed -i -- '/seeds/s/127.0.0.1/{{ seeds }}/g' /etc/scylla/scylla.yaml
       tags:
        - conf
-    - name: Configure listen address + rpc address in yaml file
+    - name: Set listen address + rpc address in yaml file
       shell: sed -i -- "s/localhost/$(hostname -i)/g" /etc/scylla/scylla.yaml
       tags:
        - conf
