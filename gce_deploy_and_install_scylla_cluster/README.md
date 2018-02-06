@@ -22,7 +22,7 @@ Instructions and Usage Examples
 3. Note the prerequisites which are mentioned also in the HELP output (``-h`` flag)
 
 **Note:** For ease of use, run it from a GCE VM, as it comes with gcloud included and enables direct access to your GCP project.
-The VM **MUST** have Cloud API access scopes: Allow **full** access to all Cloud APIs (can be set only when VM is powered-off).
+The VM **must** have **full** Cloud API access (can be set only when VM is powered-off).
 
 **Usage**
 
@@ -49,7 +49,7 @@ Usage
 =====
 -p   GCP project in which Scylla will be deployed (default: skilled-adapter-452). Usage: type '-p [MyProject]'
 -z   Zone in which Scylla VMs will be deployed (default: us-east1-b). Usage: type '-z [Zone]'
--t   VM type (default: n1-standard-2). Example: to set n1-standard-8, type '-t8'
+-t   VM type (default: n1-standard-2). Example: to set n1-standard-8, type '-t n1-standard-8'
 -s   SSD size in GB (default: 40), each VM has 2 SSD drives
 -n   Use NVMe drives instead of SSD drives
 -c   Number of NVMe drives (NVMe size: 375GB) to deploy per node (default: 2). Example: toםdeploy 4 drives, type '-c4'
