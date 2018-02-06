@@ -52,7 +52,7 @@ Usage
 -t   VM type (default: n1-standard-2). Example: to set n1-standard-8, type '-t n1-standard-8'
 -s   SSD size in GB (default: 40), each VM has 2 SSD drives
 -n   Use NVMe drives instead of SSD drives
--c   Number of NVMe drives (NVMe size: 375GB) to deploy per node (default: 2). Example: toםdeploy 4 drives, type '-c4'
+-c   Number of NVMe drives (NVMe size: 375GB) to deploy per node (default: 2). Example: to deploy 4 drives, type '-c4'
 -v   Scylla release to be installed (default: 2.0). Example: to set 1.7, type '-v1.7'
 
 Select VM Image (default: CentOS 7)
