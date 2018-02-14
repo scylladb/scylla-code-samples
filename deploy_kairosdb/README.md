@@ -26,5 +26,5 @@ Instructions
  - ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook kairosdb_deploy.yml
 
 **Load kairos**
-Use the python file to emulate 25K sensors, each writting 2000 data points. You can clone it and change the start_range value to have multiple processes emulating more sensors.
- - Set the kairosdb IP in the file
+ - Use the python file to emulate 25K sensors, each writting 2000 data points. You can clone it and change the start_range value to have multiple processes emulating more sensors.
+ - Set the kairosdb IP in the file and run it: ```python [file_name.py] &``` (you need python 2.7 installed)
