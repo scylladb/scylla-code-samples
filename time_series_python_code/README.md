@@ -1,7 +1,7 @@
 General Info and Prerequisites
 ==============================
 
-This scripts emulates 200K sensors, each writing 2000 data points, while using prepared statements.
+These scripts emulate 200K sensors, each writing 2000 data points, while using prepared statements.
 
 
 **Pre-requisites**
