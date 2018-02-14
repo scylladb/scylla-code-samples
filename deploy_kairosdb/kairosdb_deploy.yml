@@ -1,0 +1,83 @@
+
+## This playbook deploys and configures KairosDB as a time series frontend with Scylla ##
+
+
+---
+
+- hosts: all                               
+  become: yes                       #Run all tasks as root
+  
+  vars:
+    kairosdb_version: 1.2.0
+    scylla_nodes_ip: IP1,IP2,...
+    scylla_shards: XX               #Check using cat /etc/scylla.d/cpuset.conf and set the value
+    
+  tasks:
+    - name: Install add-apt-repository command utility on Debian / Ubuntu14
+      package: name=software-properties-common state=present
+      when: ansible_distribution == 'Debian' or (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty')
+    - name: Add openjdk PPA to Ubuntu14 (prereq for Java 8)
+      apt_repository: repo="ppa:openjdk-r/ppa"
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+    - name: Add openjdk PPA to Debian (prereq for Java 8)
+      apt_repository: repo="ppa:openjdk-r/ppa" codename='trusty'
+      when: ansible_distribution == 'Debian'
+    - name: Add Jessie-backports repo to Debian (prereq for Java 8)
+      apt_repository: repo="deb http://http.debian.net/debian jessie-backports main"
+      when: ansible_distribution == 'Debian'
+    - name: Update apt cache on Debian / Ubuntu
+      apt: update_cache=true
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    - name: Install Java 8 on Ubuntu14
+      apt: name=openjdk-8-jre-headless state=latest
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+    - name: Install Java 8 on Debian
+      apt: name=openjdk-8-jre-headless state=latest default_release=jessie-backports
+      when: ansible_distribution == 'Debian'
+    - name: Update apt cache on Debian / Ubuntu
+      apt: update_cache=true allow_unauthenticated=yes
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    - name: Select correct java version on Debian / Ubuntu14
+      alternatives: name=java path=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+      when: ansible_distribution == 'Debian' or (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty')
+    - name: Get the KairosDB tarball
+      get_url: url=https://github.com/kairosdb/kairosdb/releases/download/v{{ kairosdb_version }}/kairosdb-{{ kairosdb_version }}-1.tar.gz
+        dest=~/kairosdb-{{ kairosdb_version }}-1.tar.gz
+        force=yes
+    - name: Extract KairosDB
+      shell: tar xvzf ~/kairosdb-{{ kairosdb_version }}-1.tar.gz
+    - name: Comment out the H2 module in kairosdb.properties file
+      lineinfile: path=./kairosdb/conf/kairosdb.properties
+        regexp='kairosdb.service.datastore=org.kairosdb.datastore.h2.H2Module'
+        line='#kairosdb.service.datastore=org.kairosdb.datastore.h2.H2Module'
+    - name: Uncomment the Cassandra module in kairosdb.properties file
+      lineinfile: path=./kairosdb/conf/kairosdb.properties
+        regexp='#kairosdb.service.datastore=org.kairosdb.datastore.cassandra.CassandraModule'
+        line='kairosdb.service.datastore=org.kairosdb.datastore.cassandra.CassandraModule'
+    - name: Set scylla nodes IPs in kairosdb.properties file
+      lineinfile: path=./kairosdb/conf/kairosdb.properties
+        regexp='kairosdb.datastore.cassandra.cql_host_list=localhost'
+        line='kairosdb.datastore.cassandra.cql_host_list={{ scylla_nodes_ip }}'
+    - name: Set replication factor to 3
+      lineinfile: path=./kairosdb/conf/kairosdb.properties
+        regexp='1}'
+        line='3}'
+    - name: Set read consistency level to QUORUM
+      lineinfile: path=./kairosdb/conf/kairosdb.properties
+        regexp='kairosdb.datastore.cassandra.read_consistency_level=ONE'
+        line='kairosdb.datastore.cassandra.read_consistency_level=QUORUM'
+    - name: Set write consistency level to ONE
+      lineinfile: path=./kairosdb/conf/kairosdb.properties
+        regexp='kairosdb.datastore.cassandra.write_consistency_level=QUORUM'
+        line='kairosdb.datastore.cassandra.write_consistency_level=ONE'
+    - name: Set connections per host to match num of shards
+      replace: path=./kairosdb/conf/kairosdb.properties
+        regexp='connections_.*'
+        replace='connections_per_host.local.core={{ scylla_shards }}'
+    - name: Set max requests per connection to a smaller value
+      replace: path=./kairosdb/conf/kairosdb.properties  
+        regexp='=128'
+        replace='=8'
+    - name: Start KairosDB as background process
+      shell: ./kairosdb/bin/kairosdb.sh start
+      
