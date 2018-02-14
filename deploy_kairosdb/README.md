@@ -6,8 +6,8 @@ This script deploys and configures KairosDB as a time series frontend for Scylla
 
 **Pre-requisites**
 - [Ansible site](http://docs.ansible.com/ansible/intro_installation.html)
-- [Install Ansible 2.3 (or higher)] (https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-ansible-on-ubuntu-16-04)
-- [Scylla cluster up and running] (https://www.scylladb.com/download/)
+- [Install Ansible 2.3 (or higher)](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-ansible-on-ubuntu-16-04)
+- [Scylla cluster up and running](https://www.scylladb.com/download/)
 
 
 Instructions
