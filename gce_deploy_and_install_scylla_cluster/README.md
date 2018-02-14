@@ -77,6 +77,6 @@ Example2:
 ```
 ./gce_deploy_and_install_scylla_cluster.sh -t4 -s100 -u
 ```
-- This will deploy 3 VMs (n1-standard-4) with Ubuntu16 image and 2 SSD drives per node, each 100GB. It will then then install and configure the latest Scylla 1.7 release
+- This will deploy 3 VMs (n1-standard-4) with Ubuntu16 image and 2 SSD drives per node, each 100GB. It will then then install and configure the latest Scylla 2.0 release
 
 See Scylla releases [here](http://www.scylladb.com/category/users-blog/releases/).
