@@ -21,6 +21,6 @@ Instructions
 
 
 **Run the playbook**
-	- Run locally: add ‘localhost ansible_connection=local’ entry in /etc/ansible/hosts file
-	- Run on remote nodes: add an entry of each node’s IP in /etc/ansible/hosts file
-	- ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook kairosdb_deploy.yml
+ - Run locally: add ‘localhost ansible_connection=local’ entry in /etc/ansible/hosts file
+ - Run on remote nodes: add an entry of each node’s IP in /etc/ansible/hosts file
+ - ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook kairosdb_deploy.yml
