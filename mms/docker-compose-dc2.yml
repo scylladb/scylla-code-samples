@@ -9,7 +9,7 @@ services:
       web:
     environment:
       - DC2=DC2
-      - SEEDS=scylla-node4,scylla-node5,scylla-node1
+      - SEEDS=scylla-node4,scylla-node1
       - CQLSH_HOST=scylla-node4
 
   scylla-node5:
@@ -19,7 +19,7 @@ services:
       web:
     environment:
       - DC2=DC2
-      - SEEDS=scylla-node4,scylla-node5,scylla-node1
+      - SEEDS=scylla-node4,scylla-node1
       - CQLSH_HOST=scylla-node5
 
   scylla-node6:
@@ -29,7 +29,7 @@ services:
       web:
     environment:
       - DC2=DC2
-      - SEEDS=scylla-node4,scylla-node5,scylla-node1
+      - SEEDS=scylla-node4,scylla-node1
       - CQLSH_HOST=scylla-node6
 
 networks:
