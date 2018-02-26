@@ -1,16 +1,19 @@
 
+#########################################################################################
 ## This playbook deploys and configures KairosDB as a time series frontend with Scylla ##
-
+#########################################################################################
 
 ---
 
 - hosts: all                               
-  become: yes                       #Run all tasks as root
+  become: yes                       	#Run all tasks as root
   
   vars:
     kairosdb_version: 1.2.0
     scylla_nodes_ip: IP1,IP2,...
-    scylla_shards: XX               #Check using cat /etc/scylla.d/cpuset.conf and set the value
+    scylla_shards: XX               	#Check using cat /etc/scylla.d/cpuset.conf and set the value
+    kairos_batch_size: XX         	#For single kairos node using Scylla, while Scylla runs on i3.8XL - set value to 50.
+                                        #When using multiple kairos nodes, or if Scylla runs on smaller instances, value should be lower
     
   tasks:
     - name: Install add-apt-repository command utility on Debian / Ubuntu14
@@ -78,6 +81,14 @@
       replace: path=./kairosdb/conf/kairosdb.properties  
         regexp='=128'
         replace='=8'
+    - name: Set batch size to {{ kairos_batch_size }}
+      replace: path=./kairosdb/conf/kairosdb.properties
+        regexp='kairosdb.queue_processor.batch_size=200'
+        replace='kairosdb.queue_processor.batch_size={{ kairos_batch_size }}'
+    - name: Set min. batch size to {{ kairos_batch_size }}
+      replace: path=./kairosdb/conf/kairosdb.properties
+        regexp='kairosdb.queue_processor.min_batch_size=100'
+        replace='kairosdb.queue_processor.min_batch_size={{ kairos_batch_size }}'
     - name: Start KairosDB as background process
       shell: ./kairosdb/bin/kairosdb.sh start
       

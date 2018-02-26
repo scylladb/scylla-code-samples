@@ -18,6 +18,7 @@ Instructions
 2. Set variables in kairosdb_deploy.yml file:
 	- Scylla node/s IP
 	- Number of shards per node that Scylla utilizes (```cat /etc/scylla.d/cpuset.conf```)
+	- Kairos batch size --> when using single kairos with Scylla, while Scylla runs on i3.8XL instance, value should be set to '50'. When using multiple kairos nodes, or when Scylla runs on smaller instances, value should be lower.
 
 
 **Run the playbook**
