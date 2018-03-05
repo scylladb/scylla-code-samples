@@ -108,7 +108,7 @@ if [ $SSD == "YES" ]; then
 # Create 3 CentOS7 VMs, boot disk 20GB, each VM with 2 SSD drives, 80GB storage
 	echo ""
 	echo ""
-	echo "### Creating 3 VMs (n1-standard-$VM_TYPE) in '$ZONE' zone | 20GB boot disk | $SSD_SIZE GB SSD drive x 2"
+	echo "### Creating 3 VMs ($VM_TYPE) in '$ZONE' zone | 20GB boot disk | $SSD_SIZE GB SSD drive x 2"
 	echo "### $VM_OS"
 	echo ""
 	gcloud compute --project "$PROJECT" instances create "`whoami`-$TIMESTAMP-scylla-$VER-ansible-1" --zone "$ZONE" --machine-type "$VM_TYPE" --network "default" --maintenance-policy "MIGRATE" --service-account "$PROJECT@appspot.gserviceaccount.com" --scopes "https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/monitoring.write","https://www.googleapis.com/auth/servicecontrol","https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" --tags "http-server","https-server" --disk "name=`whoami`-$TIMESTAMP-ansible-1-ssd-1,device-name=`whoami`-$TIMESTAMP-ansible-1-ssd-1,mode=rw,boot=no,auto-delete=yes" --disk "name=`whoami`-$TIMESTAMP-ansible-1-ssd-2,device-name=`whoami`-$TIMESTAMP-ansible-1-ssd-2,mode=rw,boot=no,auto-delete=yes" $VM_OS --boot-disk-size "20" --boot-disk-type "pd-ssd" --boot-disk-device-name "`whoami`-ansible-1"
