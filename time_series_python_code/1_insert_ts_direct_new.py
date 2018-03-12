@@ -22,16 +22,19 @@ opts = parser.parse_args()
 IP_C1 = opts.C1.split(',')
 
 create_ks = "create keyspace if not exists direct_ts with replication = {'class' : 'SimpleStrategy', 'replication_factor' : 3};"
-create_t1 = "create table if not exists direct_ts.data_points (sensor_id text, curr_epoch timestamp, value text, primary key (sensor_id,curr_epoch));"
+create_t1 = "create table if not exists direct_ts.data_points (rack_id text, sensor_id text, curr_epoch timestamp, value text, primary key (rack_id,sensor_id,curr_epoch));"
+create_2i = "CREATE INDEX data_points_sensor_id_idx ON direct_ts.data_points (sensor_id); CREATE INDEX data_points_curr_epoch_idx ON direct_ts.data_points (curr_epoch); CREATE INDEX data_points_value_idx ON direct_ts.data_points (value);"
+
 
 #connect to cluster
 db1 = cassandra.cluster.Cluster(IP_C1).connect()
 
 db1.execute(create_ks)
 db1.execute(create_t1)
+db1.execute(create_2i)
 
 insert_statement = []
-insert_statement.append("insert into direct_ts.data_points (sensor_id,curr_epoch,value) values (?,?,?) using TIMESTAMP ?")
+insert_statement.append("insert into direct_ts.data_points (rack_id,sensor_id,curr_epoch,value) values (?,?,?,?) using TIMESTAMP ?")
 
 insert_statement_prepared = []
 insert_statement_prepared.append(db1.prepare(insert_statement[0]))
@@ -41,7 +44,7 @@ def execute(values):
     
     #randomly set consistency level to quorum 
     #which will fail on a single node cluster
-    CL1 = ConsistencyLevel.QUORUM if random.random() < 0.2 else ConsistencyLevel.ONE
+    CL1 = ConsistencyLevel.ONE if random.random() < 0.2 else ConsistencyLevel.ONE
     insert_statement_prepared[0].consistency_level = CL1
 	
 	# put writes into a list
@@ -69,20 +72,24 @@ def execute(values):
     
 start_time = time.time()
 
-start_range = 125001
-num_sensors = 25000
+start_range1 = 1
+start_range2 = 1
+num_racks = 100
+num_sensors = 100
 num_repeat = 2001
 
 for x in range(1,num_repeat):
 #    str=""
-    time.sleep(1)
+#    time.sleep(1)
     curr_epoch = int(round(time.time() * 1000))
 #       print "======================"
 #       print x
 #       print "Current time " + time.strftime("%X")
 #       print "======================"
-    for y in range(start_range,start_range+num_sensors):
-        values = [ "SENSOR_"+str(y) , curr_epoch , str(random.randint(1,500)) , time.time()*1000000 ]
-    	execute( values )
+    for y in range(start_range1,start_range1+num_racks):
+        for z in range(start_range2,start_range2+num_sensors):
+            values = [ "rack__"+str(y) , "sensor__"+str(z) , curr_epoch , str(random.randint(1,500)) , time.time()*1000000 ]
+    	    execute( values )
+
 			
 print("--- %s seconds ---" % (time.time() - start_time))
