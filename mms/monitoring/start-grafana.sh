@@ -77,7 +77,7 @@ for val in "${GRAFANA_ENV_ARRAY[@]}"; do
         GRAFANA_ENV_COMMAND="$GRAFANA_ENV_COMMAND -e $val"
 done
 
-docker run -d $LOCAL -i -p $GRAFANA_PORT:3000 \
+docker run -d --network mms_web -i -p $GRAFANA_PORT:3000 \
      -e "GF_AUTH_BASIC_ENABLED=$GRAFANA_AUTH" \
      -e "GF_AUTH_ANONYMOUS_ENABLED=$GRAFANA_AUTH_ANONYMOUS" \
      -e "GF_AUTH_ANONYMOUS_ORG_ROLE=Admin" \
