@@ -65,8 +65,8 @@ curl http://127.0.0.1:9200/_cluster/health?pretty
 	- query_data_from_scylla+elastic.py
 
 5. Run the “insert_data” script. The script will perform the following:
-	- Create the Schema on Scylla (see Appendix-A)
-	- Create the Elasticsearch index (see Appendix-A)
+	- Create the Schema on Scylla
+	- Create the Elasticsearch index
 	- Dual write: insert the catalog items (csv file) to both DBs (using prepared statement for Scylla)
 
 Use the ```-s | -e``` flags to insert a comma-separated list of IPs for the Scylla and Elasticsearch (ES) nodes.
@@ -112,7 +112,7 @@ cqlsh> SELECT COUNT (*) FROM catalog.apparel ;
 Use the ```-s | -e``` flags to insert a comma-separated list of IPs for the Scylla and Elasticsearch nodes.
 If you are running Elasticsearch on the same node as the python scripts, no need to enter IP, default 127.0.0.1 will be used.
 
-Use the -n flag to select the query type. The optional values are:
+Use the ```-n``` flag to select the query type, the optional values are:
 	- **single**: using a single filter (by group) to query for *“pants”*
 	- **multiple (default)**: using multiple filters (by color and sub_group) to query for *"white softshell"*
 	- **none**: query without any filter = *match_all*
