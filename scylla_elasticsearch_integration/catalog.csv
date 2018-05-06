@@ -1,0 +1,161 @@
+SKU,brand,group,sub_group,color,size,gender
+nf-shr-ss-bk-s-m,North face,Shirts,short sleeve,black,Small,men
+pg-shr-ls-rd-m-m,Patagonia,Shirts,long sleeve,red,Medium,men
+mt-shr-uv-gy-l-m,Mammut,Shirts,UV_protection,grey,Large,men
+gm-shr-ls-gr-xl-m,Garmont,Shirts,long sleeve,green,XLarge,men
+cl-shr-ss-yw-s-n,Columbia,Shirts,short sleeve,yellow,Small,men
+nf-shr-ls-bl-m-m,North face,Shirts,long sleeve,blue,Medium,men
+pg-shr-ss-bk-l-m,Patagonia,Shirts,short sleeve,black,Large,men
+mt-shr-ls-rd-xl-m,Mammut,Shirts,long sleeve,red,XLarge,men
+gm-shr-uv-gy-s-m,Garmont,Shirts,UV_protection,grey,Small,men
+cl-shr-ls-gr-m-m,Columbia,Shirts,long sleeve,green,Medium,men
+nf-pan-hi-yw-l-m,North face,Pants,hiking,yellow,Large,men
+pg-pan-je-bl-xl-m,Patagonia,Pants,jeans,blue,XLarge,men
+mt-pan-hi-bk-s-m,Mammut,Pants,hiking,black,Small,men
+gm-pan-br-rd-m-m,Garmont,Pants,bermuda,red,Medium,men
+cl-pan-hi-gy-l-m,Columbia,Pants,hiking,grey,Large,men
+nf-pan-br-gr-xl-m,North face,Pants,bermuda,green,XLarge,men
+pg-pan-hi-yw-s-m,Patagonia,Pants,hiking,yellow,Small,men
+mt-pan-je-bl-m-m,Mammut,Pants,jeans,blue,Medium,men
+gm-pan-hi-bk-l-m,Garmont,Pants,hiking,black,Large,men
+cl-pan-br-rd-xl-m,Columbia,Pants,bermuda,red,XLarge,men
+nf-sho-gt-gy-s-m,North face,Shoes,gore-tex,grey,Small,men
+pg-sho-lt-gr-m-m,Patagonia,Shoes,leather,green,Medium,men
+mt-sho-gt-yw-l-m,Mammut,Shoes,gore-tex,yellow,Large,men
+gm-sho-lt-bl-xl-m,Garmont,Shoes,leather,blue,XLarge,men
+cl-sho-gt-bk-s-m,Columbia,Shoes,gore-tex,black,Small,men
+nf-sho-lt-rd-m-m,North face,Shoes,leather,red,Medium,men
+pg-sho-gt-gy-l-m,Patagonia,Shoes,gore-tex,grey,Large,men
+mt-sho-lt-gr-xl-m,Mammut,Shoes,leather,green,XLarge,men
+gm-sho-gt-yw-s-m,Garmont,Shoes,gore-tex,yellow,Small,men
+cl-sho-lt-bl-m-m,Columbia,Shoes,leather,blue,Medium,men
+nf-jac-lt-bk-l-m,North face,Jackets,leather,black,Large,men
+pg-jac-sf-rd-xl-m,Patagonia,Jackets,softshell,red,XLarge,men
+mt-jac-lt-gy-s-m,Mammut,Jackets,leather,grey,Small,men
+gm-jac-sf-gr-m-m,Garmont,Jackets,softshell,green,Medium,men
+cl-jac-lt-yw-l-m,Columbia,Jackets,leather,yellow,Large,men
+nf-jac-sf-bl-xl-m,North face,Jackets,softshell,blue,XLarge,men
+pg-jac-lt-wh-s-m,Patagonia,Jackets,leather,white,Small,men
+mt-jac-sf-wh-m-m,Mammut,Jackets,softshell,white,Medium,men
+gm-jac-lt-wh-l-m,Garmont,Jackets,leather,white,Large,men
+cl-jac-sf-wh-xl-m,Columbia,Jackets,softshell,white,XLarge,men
+nf-shr-ss-bk-s-w,North face,Shirts,short sleeve,Black,Small,women
+pg-shr-ls-rd-m-w,Patagonia,Shirts,long sleeve,red,Medium,women
+mt-shr-uv-gy-l-w,Mammut,Shirts,UV_protection,grey,Large,women
+gm-shr-ls-gr-xl-w,Garmont,Shirts,long sleeve,green,XLarge,women
+cl-shr-ss-yw-s-w,Columbia,Shirts,short sleeve,yellow,Small,women
+nf-shr-ls-bl-m-w,North face,Shirts,long sleeve,blue,Medium,women
+pg-shr-ss-bk-l-w,Patagonia,Shirts,short sleeve,black,Large,women
+mt-shr-ls-rd-xl-w,Mammut,Shirts,long sleeve,red,XLarge,women
+gm-shr-uv-gy-s-w,Garmont,Shirts,UV_protection,grey,Small,women
+cl-shr-ls-gr-m-w,Columbia,Shirts,long sleeve,green,Medium,women
+nf-pan-hi-yw-l-w,North face,Pants,hiking,yellow,Large,women
+pg-pan-je-bl-xl-w,Patagonia,Pants,jeans,blue,XLarge,women
+mt-pan-hi-bk-s-w,Mammut,Pants,hiking,black,Small,women
+gm-pan-je-rd-m-w,Garmont,Pants,jeans,red,Medium,women
+cl-pan-hi-gy-l-w,Columbia,Pants,hiking,grey,Large,women
+nf-pan-je-gr-xl-w,North face,Pants,jeans,green,XLarge,women
+pg-pan-hi-yw-s-w,Patagonia,Pants,hiking,yellow,Small,women
+mt-pan-je-bl-m-w,Mammut,Pants,jeans,blue,Medium,women
+gm-pan-hi-bk-l-w,Garmont,Pants,hiking,black,Large,women
+cl-pan-je-rd-xl-w,Columbia,Pants,jeans,red,XLarge,women
+nf-sho-gt-gy-s-w,North face,Shoes,gore-tex,grey,Small,women
+pg-sho-lt-gr-m-w,Patagonia,Shoes,leather,green,Medium,women
+mt-sho-gt-yw-l-w,Mammut,Shoes,gore-tex,yellow,Large,women
+gm-sho-lt-bl-xl-w,Garmont,Shoes,leather,blue,XLarge,women
+cl-sho-gt-bk-s-w,Columbia,Shoes,gore-tex,black,Small,women
+nf-sho-lt-rd-m-w,North face,Shoes,leather,red,Medium,women
+pg-sho-gt-gy-l-w,Patagonia,Shoes,gore-tex,grey,Large,women
+mt-sho-lt-gr-xl-w,Mammut,Shoes,leather,green,XLarge,women
+gm-sho-gt-yw-s-w,Garmont,Shoes,gore-tex,yellow,Small,women
+cl-sho-lt-bl-m-w,Columbia,Shoes,leather,blue,Medium,women
+nf-jac-lt-bk-l-w,North face,Jackets,leather,black,Large,women
+pg-jac-sf-rd-xl-w,Patagonia,Jackets,softshell,red,XLarge,women
+mt-jac-lt-gy-s-w,Mammut,Jackets,leather,grey,Small,women
+gm-jac-sf-gr-m-w,Garmont,Jackets,softshell,green,Medium,women
+cl-jac-lt-yw-l-w,Columbia,Jackets,leather,yellow,Large,women
+nf-jac-sf-bl-xl-w,North face,Jackets,softshell,blue,XLarge,women
+pg-jac-lt-wh-s-w,Patagonia,Jackets,leather,white,Small,women
+mt-jac-sf-wh-m-w,Mammut,Jackets,softshell,white,Medium,women
+gm-jac-lt-wh-l-w,Garmont,Jackets,leather,white,Large,women
+cl-jac-sf-wh-xl-w,Columbia,Jackets,softshell,white,XLarge,women
+nf-shr-ss-bk-s-b,North face,Shirts,short sleeve,Black,Small,boys
+pg-shr-ls-rd-m-b,Patagonia,Shirts,long sleeve,red,Medium,boys
+mt-shr-uv-gy-l-b,Mammut,Shirts,UV_protection,grey,Large,boys
+gm-shr-ls-gr-xl-b,Garmont,Shirts,long sleeve,green,XLarge,boys
+cl-shr-ss-yw-s-b,Columbia,Shirts,short sleeve,yellow,Small,boys
+nf-shr-ls-bl-m-b,North face,Shirts,long sleeve,blue,Medium,boys
+pg-shr-ss-bk-l-b,Patagonia,Shirts,short sleeve,black,Large,boys
+mt-shr-ls-rd-xl-b,Mammut,Shirts,long sleeve,red,XLarge,boys
+gm-shr-uv-gy-s-b,Garmont,Shirts,UV_protection,grey,Small,boys
+cl-shr-ls-gr-m-b,Columbia,Shirts,long sleeve,green,Medium,boys
+nf-pan-hi-yw-l-b,North face,Pants,hiking,yellow,Large,boys
+pg-pan-je-bl-xl-b,Patagonia,Pants,jeans,blue,XLarge,boys
+mt-pan-hi-bk-s-b,Mammut,Pants,hiking,black,Small,boys
+gm-pan-je-rd-m-b,Garmont,Pants,jeans,red,Medium,boys
+cl-pan-hi-gy-l-b,Columbia,Pants,hiking,grey,Large,boys
+nf-pan-je-gr-xl-b,North face,Pants,jeans,green,XLarge,boys
+pg-pan-hi-yw-s-b,Patagonia,Pants,hiking,yellow,Small,boys
+mt-pan-je-bl-m-b,Mammut,Pants,jeans,blue,Medium,boys
+gm-pan-hi-bk-l-b,Garmont,Pants,hiking,black,Large,boys
+cl-pan-je-rd-xl-b,Columbia,Pants,jeans,red,XLarge,boys
+nf-sho-gt-gy-s-b,North face,Shoes,gore-tex,grey,Small,boys
+pg-sho-lt-gr-m-b,Patagonia,Shoes,leather,green,Medium,boys
+mt-sho-gt-yw-l-b,Mammut,Shoes,gore-tex,yellow,Large,boys
+gm-sho-lt-bl-xl-b,Garmont,Shoes,leather,blue,XLarge,boys
+cl-sho-gt-bk-s-b,Columbia,Shoes,gore-tex,black,Small,boys
+nf-sho-lt-rd-m-b,North face,Shoes,leather,red,Medium,boys
+pg-sho-gt-gy-l-b,Patagonia,Shoes,gore-tex,grey,Large,boys
+mt-sho-lt-gr-xl-b,Mammut,Shoes,leather,green,XLarge,boys
+gm-sho-gt-yw-s-b,Garmont,Shoes,gore-tex,yellow,Small,boys
+cl-sho-lt-bl-m-b,Columbia,Shoes,leather,blue,Medium,boys
+nf-jac-lt-bk-l-b,North face,Jackets,leather,black,Large,boys
+pg-jac-sf-rd-xl-b,Patagonia,Jackets,softshell,red,XLarge,boys
+mt-jac-lt-gy-s-b,Mammut,Jackets,leather,grey,Small,boys
+gm-jac-sf-gr-m-b,Garmont,Jackets,softshell,green,Medium,boys
+cl-jac-lt-yw-l-b,Columbia,Jackets,leather,yellow,Large,boys
+nf-jac-sf-bl-xl-b,North face,Jackets,softshell,blue,XLarge,boys
+pg-jac-lt-wh-s-b,Patagonia,Jackets,leather,white,Small,boys
+mt-jac-sf-wh-m-b,Mammut,Jackets,softshell,white,Medium,boys
+gm-jac-lt-wh-l-b,Garmont,Jackets,leather,white,Large,boys
+cl-jac-sf-wh-xl-b,Columbia,Jackets,softshell,white,XLarge,boys
+nf-shr-ss-bk-s-g,North face,Shirts,short sleeve,Black,Small,girls
+pg-shr-ls-rd-m-g,Patagonia,Shirts,long sleeve,red,Medium,girls
+mt-shr-uv-gy-l-g,Mammut,Shirts,UV_protection,grey,Large,girls
+gm-shr-ls-gr-xl-g,Garmont,Shirts,long sleeve,green,XLarge,girls
+cl-shr-ss-yw-s-g,Columbia,Shirts,short sleeve,yellow,Small,girls
+nf-shr-ls-bl-m-g,North face,Shirts,long sleeve,blue,Medium,girls
+pg-shr-ss-bk-l-g,Patagonia,Shirts,short sleeve,black,Large,girls
+mt-shr-ls-rd-xl-g,Mammut,Shirts,long sleeve,red,XLarge,girls
+gm-shr-uv-gy-s-g,Garmont,Shirts,UV_protection,grey,Small,girls
+cl-shr-ls-gr-m-g,Columbia,Shirts,long sleeve,green,Medium,girls
+nf-pan-hi-yw-l-g,North face,Pants,hiking,yellow,Large,girls
+pg-pan-je-bl-xl-g,Patagonia,Pants,jeans,blue,XLarge,girls
+mt-pan-hi-bk-s-g,Mammut,Pants,hiking,black,Small,girls
+gm-pan-je-rd-m-g,Garmont,Pants,jeans,red,Medium,girls
+cl-pan-hi-gy-l-g,Columbia,Pants,hiking,grey,Large,girls
+nf-pan-je-gr-xl-g,North face,Pants,jeans,green,XLarge,girls
+pg-pan-hi-yw-s-g,Patagonia,Pants,hiking,yellow,Small,girls
+mt-pan-je-bl-m-g,Mammut,Pants,jeans,blue,Medium,girls
+gm-pan-hi-bk-l-g,Garmont,Pants,hiking,black,Large,girls
+cl-pan-je-rd-xl-g,Columbia,Pants,jeans,red,XLarge,girls
+nf-sho-gt-gy-s-g,North face,Shoes,gore-tex,grey,Small,girls
+pg-sho-lt-gr-m-g,Patagonia,Shoes,leather,green,Medium,girls
+mt-sho-gt-yw-l-g,Mammut,Shoes,gore-tex,yellow,Large,girls
+gm-sho-lt-bl-xl-g,Garmont,Shoes,leather,blue,XLarge,girls
+cl-sho-gt-bk-s-g,Columbia,Shoes,gore-tex,black,Small,girls
+nf-sho-lt-rd-m-g,North face,Shoes,leather,red,Medium,girls
+pg-sho-gt-gy-l-g,Patagonia,Shoes,gore-tex,grey,Large,girls
+mt-sho-lt-gr-xl-g,Mammut,Shoes,leather,green,XLarge,girls
+gm-sho-gt-yw-s-g,Garmont,Shoes,gore-tex,yellow,Small,girls
+cl-sho-lt-bl-m-g,Columbia,Shoes,leather,blue,Medium,girls
+nf-jac-lt-bk-l-g,North face,Jackets,leather,black,Large,girls
+pg-jac-sf-rd-xl-g,Patagonia,Jackets,softshell,red,XLarge,girls
+mt-jac-lt-gy-s-g,Mammut,Jackets,leather,grey,Small,girls
+gm-jac-sf-gr-m-g,Garmont,Jackets,softshell,green,Medium,girls
+cl-jac-lt-yw-l-g,Columbia,Jackets,leather,yellow,Large,girls
+nf-jac-sf-bl-xl-g,North face,Jackets,softshell,blue,XLarge,girls
+pg-jac-lt-wh-s-g,Patagonia,Jackets,leather,white,Small,girls
+mt-jac-sf-wh-m-g,Mammut,Jackets,softshell,white,Medium,girls
+gm-jac-lt-wh-l-g,Garmont,Jackets,leather,white,Large,girls
+cl-jac-sf-wh-xl-g,Columbia,Jackets,softshell,white,XLarge,girls
