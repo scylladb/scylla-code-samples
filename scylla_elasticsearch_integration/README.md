@@ -3,8 +3,8 @@ General Info and Prerequisites
 
 The following example creates an apparel catalog stored on Scylla, and searchable using Elasticsearch (ES).      
 We will be using two python scripts to demonstrate the integration of Scylla with Elasticsearch.
-- Dual writes using the “insert_data” script for data ingestion, in our case an apparel catalog csv file.
-- Textual search using the “query_data” script, a 2-hop query that will retrieve the unique product_id (SKU) from Elasticsearch and then use the SKU to retrieve all the other product attributes from Scylla.
+1. Dual writes using the “insert_data” script for data ingestion, in our case an apparel catalog csv file.
+2.  Textual search using the “query_data” script, a 2-hop query that will retrieve the unique product_id (SKU) from Elasticsearch and then use the SKU to retrieve all the other product attributes from Scylla.
 
 
 **Pre-requisites**
