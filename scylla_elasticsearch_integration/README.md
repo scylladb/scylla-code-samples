@@ -7,7 +7,7 @@ We will be using two python scripts to demonstrate the integration of Scylla wit
 2.  Textual search using the “query_data” script, a 2-hop query that will retrieve the unique product_id (SKU) from Elasticsearch and then use the SKU to retrieve all the other product attributes from Scylla.
 
 
-**Pre-requisites**
+**Prerequisites**
 - [python installed](https://www.python.org/download/releases/2.7/)
 - [pip installed](https://packaging.python.org/guides/installing-using-linux-tools/)
 - [Java 8 installed](http://openjdk.java.net/install/)
