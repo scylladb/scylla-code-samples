@@ -105,7 +105,7 @@ cqlsh> SELECT COUNT (*) FROM catalog.apparel ;
 (1 rows)
 ```
 
-7. Run the “query_data” script. The script will perform the following:
+7. Run the *“query_data”* script. The script will perform the following:
 	- Textual search in Elasticsearch using single / multiple filter/s, or no filter (match_all)
 	- Use the Elasticsearch results to query Scylla (using prepared statement)
 
