@@ -64,7 +64,7 @@ curl http://127.0.0.1:9200/_cluster/health?pretty
 	- insert_data_into_scylla+elastic.py
 	- query_data_from_scylla+elastic.py
 
-5. Run the “insert_data” script. The script will perform the following:
+5. Run the *“insert_data”* script. The script will perform the following:
 	- Create the Schema on Scylla
 	- Create the Elasticsearch index
 	- Dual write: insert the catalog items (csv file) to both DBs (using prepared statement for Scylla)
@@ -82,7 +82,7 @@ $ python insert_data_into_scylla+elastic.py -h
 	  -e ES_IP
 ```
 
-6. Once the “insert_data” script completes, you will find 160 entries in both Scylla and Elasticsearch
+6. Once the *“insert_data”* script completes, you will find 160 entries in both Scylla and Elasticsearch
 ```
 $ curl http://127.0.0.1:9200/catalog/_count/?pretty
 {
@@ -113,11 +113,11 @@ Use the ```-s | -e``` flags to insert a comma-separated list of IPs for the Scyl
 If you are running Elasticsearch on the same node as the python scripts, no need to enter IP, default 127.0.0.1 will be used.
 
 Use the ```-n``` flag to select the query type, the optional values are:
-	- **single**: using a single filter (by group) to query for *“pants”*
-	- **multiple (default)**: using multiple filters (by color and sub_group) to query for *"white softshell"*
-	- **none**: query without any filter = *match_all*
+- **single**: using a single filter (by group) to query for *“pants”*
+- **multiple (default)**: using multiple filters (by color and sub_group) to query for *"white softshell"*
+- **none**: query without any filter = *match_all*
 
-Note: Elasticsearch returns only the 1st 10 results by default. To overcome this we set the size limit to 1000 results. For large result we recommend using pagination (read more here: [elasticsearch-py helpers](http://elasticsearch-py.readthedocs.io/en/master/helpers.html?highlight=scroll)).
+**Note:** Elasticsearch returns only the 1st 10 results by default. To overcome this we set the size limit to 1000 results. For large result we recommend using pagination (read more here: [elasticsearch-py helpers](http://elasticsearch-py.readthedocs.io/en/master/helpers.html?highlight=scroll)).
 
 ```
 $ python query_data_from_scylla+elastic.py -h
