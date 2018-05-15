@@ -10,7 +10,7 @@ services:
     environment:
       - DC1=DC1
       - SEEDS=scylla-node1,scylla-node2
-      - CQLSH_HOST=scylla-node2
+      - CQLSH_HOST=scylla-node1
 
   scylla-node2:
     build: ./scylla
