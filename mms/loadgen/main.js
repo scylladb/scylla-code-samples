@@ -6,16 +6,16 @@ var location = 'New York';
 function load() {
   setTimeout(function() {
     var get_year = new Date();
-    var speed = Math.round(Math.random() * (100 - 1) + 1);
-    var heat = Math.round(Math.random() * (50 - 1) + 1);
-    var telepathy_powers = Math.round(Math.random() * (50 - 1) + 1);
     var year = get_year.getFullYear();
     var hour = Math.round(Math.random() * (23 - 1) + 1);
     var minute = Math.round(Math.random() * (59 - 1) + 1);
     var day = Math.round(Math.random() * (30 - 1) + 1);
     var month = Math.round(Math.random() * (12 - 1) + 1);
     var timestamp = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + '+0000';
-    database.populateData(first_name, last_name, timestamp, heat, location, speed, telepathy_powers);
+    database.populateData('Jim', 'Jeffries', timestamp, Math.round(Math.random() * (50 - 1) + 1), 'New York', Math.round(Math.random() * (100 - 1) + 1), Math.round(Math.random() * (50 - 1) + 1));
+    database.populateData('Bob', 'Loblaw', timestamp, Math.round(Math.random() * (50 - 1) + 1), 'Cincinatti', Math.round(Math.random() * (100 - 1) + 1), Math.round(Math.random() * (50 - 1) + 1));
+    database.populateData('Bob', 'Zemuda', timestamp, Math.round(Math.random() * (50 - 1) + 1), 'San Francisco', Math.round(Math.random() * (100 - 1) + 1), Math.round(Math.random() * (50 - 1) + 1));
+    database.populateData('Jim', 'Jeffries', timestamp, Math.round(Math.random() * (50 - 1) + 1), 'New York', Math.round(Math.random() * (100 - 1) + 1), Math.round(Math.random() * (50 - 1) + 1));
     load();
   }, 50);
 }
