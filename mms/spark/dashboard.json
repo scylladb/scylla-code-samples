@@ -1,0 +1,519 @@
+{
+    "datasources": [
+        {
+            "__SqlaTable__": {
+                "description": "",
+                "is_featured": false,
+                "default_endpoint": "",
+                "fetch_values_predicate": "",
+                "perm": "[HiveSparkScylla].[tracking](id:1)",
+                "main_dttm_col": "timestamp",
+                "is_sqllab_view": false,
+                "params": "{\"database_name\": \"HiveSparkScylla\", \"remote_id\": 1}",
+                "id": 1,
+                "user_id": null,
+                "changed_by_fk": 1,
+                "created_on": {
+                    "__datetime__": "2018-05-30T19:19:23"
+                },
+                "table_name": "tracking",
+                "schema": "",
+                "offset": 0,
+                "cache_timeout": null,
+                "database": {
+                    "__Database__": {
+                        "created_on": {
+                            "__datetime__": "2018-05-30T19:19:23"
+                        },
+                        "verbose_name": null,
+                        "allow_run_async": true,
+                        "changed_on": {
+                            "__datetime__": "2018-05-30T19:19:23"
+                        },
+                        "sqlalchemy_uri": "hive://spark:10000/default",
+                        "select_as_create_table_as": false,
+                        "allow_ctas": false,
+                        "allow_multi_schema_metadata_fetch": true,
+                        "force_ctas_schema": null,
+                        "allow_run_sync": true,
+                        "perm": "[HiveSparkScylla].(id:2)",
+                        "allow_dml": false,
+                        "password": null,
+                        "expose_in_sqllab": true,
+                        "created_by_fk": null,
+                        "id": 2,
+                        "impersonate_user": false,
+                        "extra": "{\r\n    \"metadata_params\": {},\r\n    \"engine_params\": {}\r\n}\r\n",
+                        "changed_by_fk": null,
+                        "cache_timeout": null,
+                        "database_name": "HiveSparkScylla"
+                    }
+                },
+                "database_id": 2,
+                "filter_select_enabled": false,
+                "columns": [
+                    {
+                        "__TableColumn__": {
+                            "description": null,
+                            "database_expression": null,
+                            "count_distinct": false,
+                            "is_dttm": false,
+                            "sum": false,
+                            "id": 1,
+                            "filterable": true,
+                            "changed_by_fk": null,
+                            "min": false,
+                            "groupby": true,
+                            "created_on": {
+                                "__datetime__": "2018-05-30T19:19:23"
+                            },
+                            "verbose_name": null,
+                            "max": false,
+                            "expression": "",
+                            "type": "STRING",
+                            "table_id": 1,
+                            "avg": false,
+                            "python_date_format": null,
+                            "changed_on": {
+                                "__datetime__": "2018-05-30T19:19:23"
+                            },
+                            "created_by_fk": null,
+                            "column_name": "first_name",
+                            "is_active": true
+                        }
+                    },
+                    {
+                        "__TableColumn__": {
+                            "description": null,
+                            "database_expression": null,
+                            "count_distinct": false,
+                            "is_dttm": false,
+                            "sum": false,
+                            "id": 2,
+                            "filterable": true,
+                            "changed_by_fk": null,
+                            "min": false,
+                            "groupby": true,
+                            "created_on": {
+                                "__datetime__": "2018-05-30T19:19:23"
+                            },
+                            "verbose_name": null,
+                            "max": false,
+                            "expression": "",
+                            "type": "STRING",
+                            "table_id": 1,
+                            "avg": false,
+                            "python_date_format": null,
+                            "changed_on": {
+                                "__datetime__": "2018-05-30T19:19:23"
+                            },
+                            "created_by_fk": null,
+                            "column_name": "last_name",
+                            "is_active": true
+                        }
+                    },
+                    {
+                        "__TableColumn__": {
+                            "description": null,
+                            "database_expression": null,
+                            "count_distinct": false,
+                            "is_dttm": false,
+                            "sum": false,
+                            "id": 3,
+                            "filterable": true,
+                            "changed_by_fk": 1,
+                            "min": false,
+                            "groupby": true,
+                            "created_on": {
+                                "__datetime__": "2018-05-30T19:19:23"
+                            },
+                            "verbose_name": null,
+                            "max": false,
+                            "expression": "",
+                            "type": "FLOAT",
+                            "table_id": 1,
+                            "avg": true,
+                            "python_date_format": null,
+                            "changed_on": {
+                                "__datetime__": "2018-05-30T19:21:49"
+                            },
+                            "created_by_fk": null,
+                            "column_name": "speed",
+                            "is_active": true
+                        }
+                    },
+                    {
+                        "__TableColumn__": {
+                            "description": null,
+                            "database_expression": null,
+                            "count_distinct": false,
+                            "is_dttm": false,
+                            "sum": false,
+                            "id": 4,
+                            "filterable": true,
+                            "changed_by_fk": 1,
+                            "min": false,
+                            "groupby": true,
+                            "created_on": {
+                                "__datetime__": "2018-05-30T19:19:23"
+                            },
+                            "verbose_name": null,
+                            "max": false,
+                            "expression": "",
+                            "type": "FLOAT",
+                            "table_id": 1,
+                            "avg": true,
+                            "python_date_format": null,
+                            "changed_on": {
+                                "__datetime__": "2018-05-30T19:21:49"
+                            },
+                            "created_by_fk": null,
+                            "column_name": "heat",
+                            "is_active": true
+                        }
+                    },
+                    {
+                        "__TableColumn__": {
+                            "description": null,
+                            "database_expression": null,
+                            "count_distinct": false,
+                            "is_dttm": false,
+                            "sum": false,
+                            "id": 5,
+                            "filterable": true,
+                            "changed_by_fk": 1,
+                            "min": false,
+                            "groupby": true,
+                            "created_on": {
+                                "__datetime__": "2018-05-30T19:19:23"
+                            },
+                            "verbose_name": null,
+                            "max": false,
+                            "expression": "",
+                            "type": "INT",
+                            "table_id": 1,
+                            "avg": true,
+                            "python_date_format": null,
+                            "changed_on": {
+                                "__datetime__": "2018-05-30T19:21:49"
+                            },
+                            "created_by_fk": null,
+                            "column_name": "telepathy_powers",
+                            "is_active": true
+                        }
+                    },
+                    {
+                        "__TableColumn__": {
+                            "description": null,
+                            "database_expression": null,
+                            "count_distinct": false,
+                            "is_dttm": false,
+                            "sum": false,
+                            "id": 6,
+                            "filterable": true,
+                            "changed_by_fk": null,
+                            "min": false,
+                            "groupby": true,
+                            "created_on": {
+                                "__datetime__": "2018-05-30T19:19:23"
+                            },
+                            "verbose_name": null,
+                            "max": false,
+                            "expression": "",
+                            "type": "TIMESTAMP",
+                            "table_id": 1,
+                            "avg": false,
+                            "python_date_format": null,
+                            "changed_on": {
+                                "__datetime__": "2018-05-30T19:19:23"
+                            },
+                            "created_by_fk": null,
+                            "column_name": "timestamp",
+                            "is_active": true
+                        }
+                    },
+                    {
+                        "__TableColumn__": {
+                            "description": null,
+                            "database_expression": null,
+                            "count_distinct": false,
+                            "is_dttm": false,
+                            "sum": false,
+                            "id": 7,
+                            "filterable": true,
+                            "changed_by_fk": 1,
+                            "min": false,
+                            "groupby": true,
+                            "created_on": {
+                                "__datetime__": "2018-05-30T19:21:49"
+                            },
+                            "verbose_name": null,
+                            "max": false,
+                            "expression": "",
+                            "type": "STRING",
+                            "table_id": 1,
+                            "avg": false,
+                            "python_date_format": null,
+                            "changed_on": {
+                                "__datetime__": "2018-05-30T19:21:49"
+                            },
+                            "created_by_fk": 1,
+                            "column_name": "location",
+                            "is_active": true
+                        }
+                    }
+                ],
+                "metrics": [
+                    {
+                        "__SqlMetric__": {
+                            "created_on": {
+                                "__datetime__": "2018-05-30T19:19:23"
+                            },
+                            "verbose_name": null,
+                            "expression": "AVG(heat)",
+                            "description": null,
+                            "metric_type": "avg",
+                            "d3format": null,
+                            "table_id": 1,
+                            "metric_name": "heat",
+                            "is_restricted": false,
+                            "changed_on": {
+                                "__datetime__": "2018-05-30T19:19:23"
+                            },
+                            "created_by_fk": null,
+                            "id": 1,
+                            "warning_text": null,
+                            "changed_by_fk": null
+                        }
+                    },
+                    {
+                        "__SqlMetric__": {
+                            "created_on": {
+                                "__datetime__": "2018-05-30T19:19:23"
+                            },
+                            "verbose_name": null,
+                            "expression": "AVG(telepathy_powers)",
+                            "description": null,
+                            "metric_type": "avg",
+                            "d3format": null,
+                            "table_id": 1,
+                            "metric_name": "telepathy_powers",
+                            "is_restricted": false,
+                            "changed_on": {
+                                "__datetime__": "2018-05-30T19:19:23"
+                            },
+                            "created_by_fk": null,
+                            "id": 2,
+                            "warning_text": null,
+                            "changed_by_fk": null
+                        }
+                    },
+                    {
+                        "__SqlMetric__": {
+                            "created_on": {
+                                "__datetime__": "2018-05-30T19:19:23"
+                            },
+                            "verbose_name": null,
+                            "expression": "AVG(speed)",
+                            "description": null,
+                            "metric_type": "avg",
+                            "d3format": null,
+                            "table_id": 1,
+                            "metric_name": "speed",
+                            "is_restricted": false,
+                            "changed_on": {
+                                "__datetime__": "2018-05-30T19:19:23"
+                            },
+                            "created_by_fk": null,
+                            "id": 3,
+                            "warning_text": null,
+                            "changed_by_fk": null
+                        }
+                    },
+                    {
+                        "__SqlMetric__": {
+                            "created_on": {
+                                "__datetime__": "2018-05-30T19:21:49"
+                            },
+                            "verbose_name": null,
+                            "expression": "AVG(heat)",
+                            "description": null,
+                            "metric_type": "avg",
+                            "d3format": null,
+                            "table_id": 1,
+                            "metric_name": "avg__heat",
+                            "is_restricted": false,
+                            "changed_on": {
+                                "__datetime__": "2018-05-30T19:21:49"
+                            },
+                            "created_by_fk": 1,
+                            "id": 4,
+                            "warning_text": null,
+                            "changed_by_fk": 1
+                        }
+                    },
+                    {
+                        "__SqlMetric__": {
+                            "created_on": {
+                                "__datetime__": "2018-05-30T19:21:49"
+                            },
+                            "verbose_name": null,
+                            "expression": "AVG(speed)",
+                            "description": null,
+                            "metric_type": "avg",
+                            "d3format": null,
+                            "table_id": 1,
+                            "metric_name": "avg__speed",
+                            "is_restricted": false,
+                            "changed_on": {
+                                "__datetime__": "2018-05-30T19:21:49"
+                            },
+                            "created_by_fk": 1,
+                            "id": 5,
+                            "warning_text": null,
+                            "changed_by_fk": 1
+                        }
+                    },
+                    {
+                        "__SqlMetric__": {
+                            "created_on": {
+                                "__datetime__": "2018-05-30T19:21:49"
+                            },
+                            "verbose_name": null,
+                            "expression": "AVG(telepathy_powers)",
+                            "description": null,
+                            "metric_type": "avg",
+                            "d3format": null,
+                            "table_id": 1,
+                            "metric_name": "avg__telepathy_powers",
+                            "is_restricted": false,
+                            "changed_on": {
+                                "__datetime__": "2018-05-30T19:21:49"
+                            },
+                            "created_by_fk": 1,
+                            "id": 6,
+                            "warning_text": null,
+                            "changed_by_fk": 1
+                        }
+                    },
+                    {
+                        "__SqlMetric__": {
+                            "created_on": {
+                                "__datetime__": "2018-05-30T19:21:49"
+                            },
+                            "verbose_name": "COUNT(*)",
+                            "expression": "COUNT(*)",
+                            "description": null,
+                            "metric_type": "count",
+                            "d3format": null,
+                            "table_id": 1,
+                            "metric_name": "count",
+                            "is_restricted": false,
+                            "changed_on": {
+                                "__datetime__": "2018-05-30T19:21:49"
+                            },
+                            "created_by_fk": 1,
+                            "id": 7,
+                            "warning_text": null,
+                            "changed_by_fk": 1
+                        }
+                    }
+                ],
+                "changed_on": {
+                    "__datetime__": "2018-05-30T19:21:49"
+                },
+                "created_by_fk": null,
+                "sql": ""
+            }
+        }
+    ],
+    "dashboards": [
+        {
+            "__Dashboard__": {
+                "created_on": {
+                    "__datetime__": "2018-05-30T19:29:30"
+                },
+                "description": null,
+                "dashboard_title": "Main",
+                "slices": [
+                    {
+                        "__Slice__": {
+                            "created_on": {
+                                "__datetime__": "2018-05-30T19:29:11"
+                            },
+                            "description": null,
+                            "datasource_id": 1,
+                            "viz_type": "pie",
+                            "slice_name": "Heat Pie Chart",
+                            "perm": "[HiveSparkScylla].[tracking](id:1)",
+                            "params": "{\"show_legend\": true, \"viz_type\": \"pie\", \"granularity_sqla\": null, \"labels_outside\": true, \"schema\": \"tracking\", \"slice_id\": 5, \"donut\": false, \"datasource_name\": \"tracking\", \"filters\": [], \"where\": \"\", \"pie_label_type\": \"key\", \"since\": \"\", \"having\": \"\", \"color_scheme\": \"bnbColors\", \"time_grain_sqla\": null, \"datasource\": \"1__table\", \"until\": \"now\", \"database_name\": \"HiveSparkScylla\", \"groupby\": [\"first_name\"], \"url_params\": {}, \"metrics\": [{\"fromFormData\": true, \"sqlExpression\": null, \"aggregate\": \"AVG\", \"hasCustomLabel\": false, \"label\": \"AVG(heat)\", \"optionName\": \"metric_uu7rmpbr3b_vgd5pgcxl4\", \"expressionType\": \"SIMPLE\", \"column\": {\"optionName\": \"_col_heat\", \"verbose_name\": null, \"filterable\": true, \"type\": \"FLOAT\", \"description\": null, \"expression\": \"\", \"is_dttm\": false, \"column_name\": \"heat\", \"groupby\": true}}], \"remote_id\": 5}",
+                            "datasource_type": "table",
+                            "changed_on": {
+                                "__datetime__": "2018-05-30T19:36:01"
+                            },
+                            "created_by_fk": 1,
+                            "id": 5,
+                            "changed_by_fk": 1,
+                            "cache_timeout": null,
+                            "datasource_name": "tracking"
+                        }
+                    },
+                    {
+                        "__Slice__": {
+                            "created_on": {
+                                "__datetime__": "2018-05-30T19:26:05"
+                            },
+                            "description": null,
+                            "datasource_id": 1,
+                            "viz_type": "table",
+                            "slice_name": "Table View",
+                            "perm": "[HiveSparkScylla].[tracking](id:1)",
+                            "params": "{\"include_search\": false, \"color_pn\": true, \"timeseries_limit_metric\": null, \"row_limit\": 10000, \"time_grain_sqla\": null, \"granularity_sqla\": null, \"table_timestamp_format\": \"%Y-%m-%d %H:%M:%S\", \"schema\": \"tracking\", \"slice_id\": 4, \"remote_id\": 4, \"include_time\": false, \"all_columns\": [], \"page_length\": 0, \"align_pn\": false, \"groupby\": [\"last_name\"], \"filters\": [], \"where\": \"\", \"since\": \"\", \"url_params\": {}, \"table_filter\": false, \"order_desc\": true, \"order_by_cols\": [], \"viz_type\": \"table\", \"until\": \"now\", \"database_name\": \"HiveSparkScylla\", \"datasource_name\": \"tracking\", \"having\": \"\", \"metrics\": [{\"fromFormData\": true, \"sqlExpression\": null, \"aggregate\": \"AVG\", \"hasCustomLabel\": false, \"label\": \"AVG(speed)\", \"optionName\": \"metric_msuqcsr1qpo_cai4pfuqxso\", \"expressionType\": \"SIMPLE\", \"column\": {\"optionName\": \"_col_speed\", \"verbose_name\": null, \"filterable\": true, \"type\": \"FLOAT\", \"description\": null, \"expression\": \"\", \"is_dttm\": false, \"column_name\": \"speed\", \"groupby\": true}}, {\"fromFormData\": true, \"sqlExpression\": null, \"aggregate\": \"AVG\", \"hasCustomLabel\": false, \"label\": \"AVG(heat)\", \"optionName\": \"metric_mrbu0y9mmbm_gtikq17c7sl\", \"expressionType\": \"SIMPLE\", \"column\": {\"optionName\": \"_col_heat\", \"verbose_name\": null, \"filterable\": true, \"type\": \"FLOAT\", \"description\": null, \"expression\": \"\", \"is_dttm\": false, \"column_name\": \"heat\", \"groupby\": true}}, {\"fromFormData\": true, \"sqlExpression\": null, \"aggregate\": \"AVG\", \"hasCustomLabel\": false, \"label\": \"AVG(telepathy_powers)\", \"optionName\": \"metric_cko2s1ulpcu_3xody1hrkmm\", \"expressionType\": \"SIMPLE\", \"column\": {\"optionName\": \"_col_telepathy_powers\", \"verbose_name\": null, \"filterable\": true, \"type\": \"INT\", \"description\": null, \"expression\": \"\", \"is_dttm\": false, \"column_name\": \"telepathy_powers\", \"groupby\": true}}], \"datasource\": \"1__table\"}",
+                            "datasource_type": "table",
+                            "changed_on": {
+                                "__datetime__": "2018-05-30T19:36:01"
+                            },
+                            "created_by_fk": 1,
+                            "id": 4,
+                            "changed_by_fk": 1,
+                            "cache_timeout": null,
+                            "datasource_name": "tracking"
+                        }
+                    },
+                    {
+                        "__Slice__": {
+                            "created_on": {
+                                "__datetime__": "2018-05-30T19:34:43"
+                            },
+                            "description": null,
+                            "datasource_id": 1,
+                            "viz_type": "line",
+                            "slice_name": "Graph",
+                            "perm": "[HiveSparkScylla].[tracking](id:1)",
+                            "params": "{\"remote_id\": 6, \"show_legend\": true, \"time_grain_sqla\": null, \"show_markers\": false, \"x_axis_showminmax\": false, \"schema\": \"tracking\", \"resample_how\": null, \"show_brush\": \"auto\", \"rich_tooltip\": false, \"left_margin\": \"auto\", \"y_axis_showminmax\": false, \"since\": \"\", \"url_params\": {}, \"line_interpolation\": \"linear\", \"resample_rule\": null, \"until\": \"now\", \"database_name\": \"HiveSparkScylla\", \"groupby\": [\"first_name\"], \"x_axis_label\": \"\", \"metrics\": [{\"fromFormData\": true, \"sqlExpression\": null, \"aggregate\": \"AVG\", \"hasCustomLabel\": false, \"label\": \"AVG(speed)\", \"optionName\": \"metric_eqfzgm7zv6_nub42045iqa\", \"expressionType\": \"SIMPLE\", \"column\": {\"optionName\": \"_col_speed\", \"verbose_name\": null, \"expression\": \"\", \"filterable\": true, \"type\": \"FLOAT\", \"description\": null, \"is_dttm\": false, \"column_name\": \"speed\", \"groupby\": true}}, {\"fromFormData\": false, \"sqlExpression\": null, \"aggregate\": \"SUM\", \"hasCustomLabel\": false, \"label\": \"SUM(heat)\", \"optionName\": \"metric_ehmt81wbp5_8nwkl6niz3g\", \"expressionType\": \"SIMPLE\", \"column\": {\"optionName\": \"_col_heat\", \"verbose_name\": null, \"expression\": \"\", \"filterable\": true, \"type\": \"FLOAT\", \"description\": null, \"is_dttm\": false, \"column_name\": \"heat\", \"groupby\": true}}, {\"fromFormData\": true, \"sqlExpression\": null, \"aggregate\": \"AVG\", \"hasCustomLabel\": false, \"label\": \"AVG(telepathy_powers)\", \"optionName\": \"metric_n39lxhp7oc9_ktl7cu7ubkl\", \"expressionType\": \"SIMPLE\", \"column\": {\"optionName\": \"_col_telepathy_powers\", \"verbose_name\": null, \"expression\": \"\", \"filterable\": true, \"type\": \"INT\", \"description\": null, \"is_dttm\": false, \"column_name\": \"telepathy_powers\", \"groupby\": true}}], \"resample_fillmethod\": null, \"datasource\": \"1__table\", \"timeseries_limit_metric\": null, \"y_axis_label\": \"\", \"y_axis_format\": \".3s\", \"rolling_type\": \"None\", \"x_axis_format\": \"smart_date\", \"granularity_sqla\": null, \"y_axis_bounds\": [null, null], \"time_compare\": null, \"y_log_scale\": false, \"x_ticks_layout\": \"auto\", \"datasource_name\": \"tracking\", \"filters\": [], \"where\": \"\", \"annotation_layers\": [], \"bottom_margin\": \"auto\", \"color_scheme\": \"bnbColors\", \"having\": \"\", \"contribution\": false, \"viz_type\": \"line\", \"order_desc\": true, \"num_period_compare\": \"\", \"period_ratio_type\": \"growth\"}",
+                            "datasource_type": "table",
+                            "changed_on": {
+                                "__datetime__": "2018-05-30T19:36:01"
+                            },
+                            "created_by_fk": 1,
+                            "id": 6,
+                            "changed_by_fk": 1,
+                            "cache_timeout": null,
+                            "datasource_name": "tracking"
+                        }
+                    }
+                ],
+                "position_json": "[\n    {\n        \"col\": 17,\n        \"row\": 0,\n        \"size_x\": 27,\n        \"size_y\": 15,\n        \"slice_id\": \"4\"\n    },\n    {\n        \"col\": 1,\n        \"row\": 0,\n        \"size_x\": 16,\n        \"size_y\": 16,\n        \"slice_id\": \"5\"\n    },\n    {\n        \"col\": 1,\n        \"row\": 35,\n        \"size_x\": 43,\n        \"size_y\": 19,\n        \"slice_id\": \"6\"\n    }\n]",
+                "json_metadata": "{\"timed_refresh_immune_slices\": [], \"filter_immune_slices\": [], \"default_filters\": \"{}\", \"filter_immune_slice_fields\": {}, \"expanded_slices\": {}, \"remote_id\": 1}",
+                "css": "",
+                "changed_on": {
+                    "__datetime__": "2018-05-30T19:35:06"
+                },
+                "created_by_fk": 1,
+                "id": 1,
+                "slug": null,
+                "changed_by_fk": 1
+            }
+        }
+    ]
+}

@@ -1,0 +1,24 @@
+databases:
+- allow_run_async:  true
+  database_name:    HiveSparkScylla
+  expose_in_sqllab: true
+  extra: "{\r\n    \"metadata_params\": {},\r\n    \"engine_params\": {}\r\n}\r\n"
+  sqlalchemy_uri:   hive://spark:10000/default
+  tables:
+  - columns:
+    - {column_name: first_name, filterable: true, groupby: true, type: STRING}
+    - {column_name: last_name, filterable: true, groupby: true, type: STRING}
+    - {avg: true, column_name: speed, filterable: true, groupby: true, type: DOUBLE}
+    - {avg: true, column_name: heat, filterable: true, groupby: true, type: DOUBLE}
+    - {avg: true, column_name: telepathy_powers, filterable: true, groupby: true, type: DOUBLE}
+    - {avg: true, column_name: speed, filterable: true, groupby: true, type: DOUBLE}
+    - {column_name: timestamp, filterable: true, groupby: true, type: TIMESTAMP}
+    main_dttm_col:  timestamp
+    metrics:
+    - {expression: AVG(heat), metric_name: heat, metric_type: avg}
+    - {expression: AVG(telepathy_powers), metric_name: telepathy_powers, metric_type: avg}
+    - {expression: AVG(speed), metric_name: speed, metric_type: avg}
+    schema:         ''
+    table_name:     tracking_data;
+    
+    
