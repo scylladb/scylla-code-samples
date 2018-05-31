@@ -40,7 +40,13 @@ services:
     entrypoint:
       - /usr/bin/sleep 
       - infinity
-        
+  
+  loadgen:
+    build: ../loadgen
+    restart: always
+    networks:
+      web:        
+      
   superset:
     image: amancevice/superset
     restart: always
