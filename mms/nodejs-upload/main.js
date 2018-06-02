@@ -20,7 +20,7 @@ var location = 'Hell';
 
 app.get('/alter', (req, res) => {
   scylla.alterTable(function() {});
-
+  res.end();
 });
 
 app.get('/', (req, res) => {
