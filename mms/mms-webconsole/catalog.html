@@ -55,7 +55,9 @@
               url: "/upload",
               params: {
                 'first_name': data.rows[i].first_name,
-                'last_name': data.rows[i].last_name
+                'last_name': data.rows[i].last_name,
+                'address': data.rows[i].address,
+                'picture_location': data.rows[i].picture_location
               }
             });
             if (data.rows[i].data) {

@@ -24,12 +24,22 @@
     var mutant_body_div = document.getElementById('add-mutant-body');
     var first_name = document.createElement("input");
     var last_name = document.createElement("input");
+    var address = document.createElement("input");
+    var picture_location = document.createElement("input");
+    address.setAttribute("id", "address");
+    address.setAttribute("class", "imageinfo");
+    picture_location.setAttribute("id", "picture_location");
+    picture_location.setAttribute("class", "imageinfo");
     first_name.setAttribute("id", "first_name");
     first_name.setAttribute("class", "imageinfo");
     last_name.setAttribute("id", "last_name");
     last_name.setAttribute("class", "imageinfo");
     var first_name_label = document.createElement("Label");
     var last_name_label = document.createElement("Label");
+    var address_label = document.createElement("Label");
+    var picture_location_label = document.createElement("Label");
+    address_label.setAttribute("class", "imageinfo");
+    picture_location_label.setAttribute("class", "imageinfo");
     first_name_label.setAttribute("class", "imageinfo");
     last_name_label.setAttribute("class", "imageinfo");
     var btn = document.createElement("BUTTON");
@@ -39,11 +49,19 @@
     btn.appendChild(t);
     first_name_label.innerHTML = "First Name: ";
     last_name_label.innerHTML = "Last Name: ";
+    address_label.innerHTML = "Address: ";
+    picture_location_label.innerHTML = "Picture Location: ";
     mutant_body_div.appendChild(first_name_label);
     mutant_body_div.appendChild(first_name);
     mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><br>';
     mutant_body_div.appendChild(last_name_label);
     mutant_body_div.appendChild(last_name);
+    mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><br>';
+    mutant_body_div.appendChild(address_label);
+    mutant_body_div.appendChild(address);
+    mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><br>';
+    mutant_body_div.appendChild(picture_location_label);
+    mutant_body_div.appendChild(picture_location);
     mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><br>';
     mutant_body_div.appendChild(btn);
 
@@ -59,7 +77,9 @@
     function exec() {
       $.post('/upload', {
         first_name: document.getElementById('first_name').value,
-        last_name: document.getElementById('last_name').value
+        last_name: document.getElementById('last_name').value,
+        address: document.getElementById('address').value,
+        picture_location: document.getElementById('picture_location').value
       }, function(tracking_data) {
 
       });

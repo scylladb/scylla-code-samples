@@ -55,13 +55,15 @@ app.get('/add-mutant.html', (req, res) => {
 app.post('/upload', upload.single('file'), function(req, res, next) {
   const first_name = req.body.first_name;
   const last_name = req.body.last_name;
+  const address = req.body.address;
+  const picture_location = req.body.picture_location;
   if (req.file) {
     fs.readFile(req.file.path, (err, data) => {
-      scylla.insertData(first_name, last_name, data, req.file.originalname);
+      scylla.insertData(first_name, last_name, address, picture_location, data, req.file.originalname);
     });
   } else {
     fs.readFile('/webconsole/question.jpeg', (err, data) => {
-      scylla.insertData(first_name, last_name, data, 'question.jpeg');
+      scylla.insertData(first_name, last_name, address, picture_location, data);
     });
   }
 });

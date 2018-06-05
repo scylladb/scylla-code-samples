@@ -7,10 +7,10 @@ var client = new cassandra.Client({
   keyspace: 'catalog'
 });
 
-var insertData = function(first_name, last_name, data) {
+var insertData = function(first_name, last_name, address, picture_location, data) {
   client.keyspace = 'catalog';
-  var query = 'INSERT INTO mutant_data (first_name,last_name,data) VALUES (?,?,?);';
-  const parms = [first_name, last_name, data];
+  var query = 'INSERT INTO mutant_data (first_name,last_name, address, picture_location, data) VALUES (?,?,?,?,?);';
+  const parms = [first_name, last_name, address, picture_location, data];
   client.execute(query, parms, {
     prepare: true
   }, function(err, result) {
