@@ -4,6 +4,20 @@ A simple web appllication in Node.js to view and manipulate the MMS console.
 
 ## Getting Started
 
+First we will need to bring up the Scylla cluster. Modify ```docker-compose.yml``` and add the following line to the environment: section of scylla-node1:
+```
+- IMPORT=IMPORT
+```
+
+Now we can build and run the Scylla Cluster:
+
+```
+docker-compose build
+docker-compose up -d
+```
+After roughly 60 seconds, the existing MMS data will be automatically imported and we can proceed.
+
+To build and run the MMS Web Console:
 ```
 cd mms-webconsole
 docker build -t webconsole .
