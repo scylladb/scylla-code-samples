@@ -23,6 +23,10 @@
 			$('#alter').click(function() {
 				$('#iframe_a').attr('src', '/alter');
 			});
+			
+			$('#add-mutant').click(function() {
+				$('#iframe_a').attr('src', '/add-mutant.html');
+			});
 
 		});
 	</script>
@@ -58,14 +62,15 @@
 				<li><a href="#!">Mutant</a>
 					<ul class="dropdown">
 						<li><a href="#" id="catalog">Catalog</a></li>
+						<li><a href="#" id="add-mutant">Add Mutant</a></li>
 					</ul>
 				</li>
-					<li><a href="#!">Keyspaces</a>
-						<ul class="dropdown">
-							<li><a href="#" id="alter">Alter</a></li>
-						</ul>
-						</li>
+				<li><a href="#!">Keyspaces</a>
+					<ul class="dropdown">
+						<li><a href="#" id="alter">Alter</a></li>
 					</ul>
+				</li>
+			</ul>
 		</nav>
 		</td>
 	</div>
