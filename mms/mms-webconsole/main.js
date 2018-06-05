@@ -50,12 +50,22 @@ app.get('/catalog.html', (req, res) => {
   res.sendFile(__dirname + '/catalog.html');
 });
 
+app.get('/add-mutant.html', (req, res) => {
+  res.sendFile(__dirname + '/add-mutant.html');
+});
+
 app.post('/upload', upload.single('file'), function(req, res, next) {
   const first_name = req.body.first_name;
   const last_name = req.body.last_name;
-  fs.readFile(req.file.path, (err, data) => {
-    scylla.insertData(first_name, last_name, data, req.file.originalname);
-  });
+  if (req.file) {
+    fs.readFile(req.file.path, (err, data) => {
+      scylla.insertData(first_name, last_name, data, req.file.originalname);
+    });
+  } else {
+    fs.readFile('/webconsole/question.jpeg', (err, data) => {
+      scylla.insertData(first_name, last_name, data, 'question.jpeg');
+    });
+  }
 });
 
 app.get('/pictures', (req, res) => {

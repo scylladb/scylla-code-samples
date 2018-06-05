@@ -10,7 +10,7 @@
 
 <body>
   <div id="main" class="modal">
-    <div class="modal-content modal-small">
+    <div class="modal-content modal-large">
       <div class="modal-header">
         <span class="close">&times;</span>
         <h2>Mutant Catalog</h2>
@@ -27,7 +27,6 @@
         <h2>Mutant Info</h2>
       </div>
       <div id="mutant-info-body" class="modal-body">
-
       </div>
     </div>
   </div>
@@ -79,7 +78,6 @@
               last_name: data.rows[i].last_name
             }, function(tracking_data) {
               if (tracking_data.rows[0]) {
-
                 mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<label class="imageinfo"><b>Current Location:</b> ' + tracking_data.rows[0].location + "</label>";
                 mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><label class="imageinfo"><b>Latest Heat Signature:</b> ' + tracking_data.rows[0].heat + "</label>";
                 mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><label class="imageinfo"><b>Latest Telepathy Powers:</b> ' + tracking_data.rows[0].telepathy_powers + "</b></label>";
