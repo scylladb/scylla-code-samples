@@ -11,8 +11,6 @@ const upload = multer({
   dest: '../'
 });
 
-var location = 'Hell';
-
 app.get('/alter', (req, res) => {
   scylla.alterTable(function() {});
   res.end();
@@ -102,10 +100,3 @@ const server = http.createServer(app);
 server.listen('80', () => {
   console.log('Listening on port %d', '80');
 });
-
-
-
-//
-//scylla.insertData("Bob", "Loblaw", timestamp, heat, location, speed, telepathy_powers, '/bin/sh');
-
-//scylla.getData("Bob", "Loblaw", "/bin/sh", function() {});

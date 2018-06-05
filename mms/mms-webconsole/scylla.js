@@ -7,17 +7,17 @@ var client = new cassandra.Client({
   keyspace: 'catalog'
 });
 
-var insertData = function(first_name, last_name, data, filename) {
+var insertData = function(first_name, last_name, data) {
   client.keyspace = 'catalog';
-      var query = 'INSERT INTO mutant_data (first_name,last_name,data,filename) VALUES (?,?,?,?);';
-      const parms = [first_name, last_name, data, filename];
-      client.execute(query, parms, {
-        prepare: true
-      }, function(err, result) {
-        if (err) {
-          console.log('\n' + err);
-        }
-      });
+  var query = 'INSERT INTO mutant_data (first_name,last_name,data) VALUES (?,?,?);';
+  const parms = [first_name, last_name, data];
+  client.execute(query, parms, {
+    prepare: true
+  }, function(err, result) {
+    if (err) {
+      console.log('\n' + err);
+    }
+  });
 };
 
 var alterTable = function() {
@@ -25,16 +25,9 @@ var alterTable = function() {
   console.log('\nDeleting old columns......');
   var query = 'ALTER table mutant_data DROP data';
   client.execute(query, function(err, result) {
-    var query = 'ALTER table mutant_data DROP filename';
-    client.execute(query, function(err, result) {
-      console.log('\nAdding data column......');
-      var query = 'ALTER table mutant_data ADD data blob';
-      client.execute(query, function(err, result) {
-        console.log('\nAdding filename column......');
-        var query = 'ALTER table mutant_data ADD filename text';
-        client.execute(query, function(err, result) {});
-      });
-    });
+    console.log('\nAdding data column......');
+    var query = 'ALTER table mutant_data ADD data blob';
+    client.execute(query, function(err, result) {});
   });
 };
 
