@@ -28,7 +28,7 @@ docker run -d --net=mms_web -p 80:80 --name webconsole webconsole
 
 The web console is accessible at  http://127.0.0.1
 
-Once in, we need to alter the existing catalog.mutant_data table to add a column for storing image. To do this, click on click Keyspaces -> Alter. Wait 10 seconds.
+Once in, we need to alter the existing catalog.mutant_data table to add a blob column for storing images. To do this, click on click Keyspaces -> Alter. Wait 10 seconds.
 
 ## Viewing the Catalog
 
