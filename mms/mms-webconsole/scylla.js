@@ -20,6 +20,19 @@ var insertData = function(first_name, last_name, address, picture_location, data
   });
 };
 
+var deleteData = function(first_name, last_name) {
+  client.keyspace = 'catalog';
+  var query = 'DELETE FROM mutant_data WHERE first_name = ? AND last_name = ?;';
+  const parms = [first_name, last_name];
+  client.execute(query, parms, {
+    prepare: true
+  }, function(err, result) {
+    if (err) {
+      console.log('\n' + err);
+    }
+  });
+};
+
 var alterTable = function() {
   client.keyspace = 'catalog';
   console.log('\nDeleting old columns......');
@@ -71,4 +84,5 @@ var getData = function(callback) {
 module.exports.alterTable = alterTable;
 module.exports.insertData = insertData;
 module.exports.getData = getData;
+module.exports.deleteData = deleteData;
 module.exports.getTracking = getTracking;

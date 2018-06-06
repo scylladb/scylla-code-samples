@@ -56,6 +56,15 @@ app.get('/edit.png', (req, res) => {
   res.sendFile(__dirname + '/edit.png');
 });
 
+app.get('/image.png', (req, res) => {
+  res.sendFile(__dirname + '/image.png');
+});
+
+app.get('/delete.png', (req, res) => {
+  res.sendFile(__dirname + '/delete.png');
+});
+
+
 app.post('/upload', upload.single('file'), function(req, res, next) {
   const first_name = req.body.first_name;
   const last_name = req.body.last_name;
@@ -91,6 +100,13 @@ app.post('/pictures', (req, res) => {
   const last_name = req.body.last_name;
   const file = req.body.file;
   scylla.insertData(first_name, last_name, file);
+  res.end();
+});
+
+app.post('/delete', (req, res) => {
+  const first_name = req.body.first_name;
+  const last_name = req.body.last_name;
+  scylla.deleteData(first_name, last_name);
   res.end();
 });
 
