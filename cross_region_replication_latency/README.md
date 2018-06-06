@@ -2,22 +2,23 @@ General Info and Prerequisites
 ==============================
 
 This scripts enables you to measure Scylla cluster cross region replication latency in AWS.
+
 Using a single writer in us-east (N. Virginia) to write a single partition using CL=LOCAL_ONE, which we then read from us-west (Oregon) using a single reader.
+
 The write rate is ~5 partitions per second. We calculate the replication latency time from the reader’s end by subtracting the insert time from the reader’s now() time.
 
 **Prerequisites**
 - [python installed](https://www.python.org/download/releases/2.7/)
 - [pip installed](https://packaging.python.org/guides/installing-using-linux-tools/)
-- [Scylla cluster up and running](https://www.scylladb.com/download/) with 2 DCs, 1 in us-east-1 and the second in us-west-2
-- 1 instance in each region for the writer and the reader scripts
-- All Scylla nodes clock is synced using either ```ntp``` or [chrony](https://aws.amazon.com/blogs/aws/keeping-time-with-amazon-time-sync-service/)
+- [Multi-DC Scylla cluster on AWS](http://docs.scylladb.com/procedures/ec2_dc/) - 2 DCs, 1 in us-east-1 and the second in us-west-2 (can be different regions, require a change in the scripts)
+- An instance in each region for the writer and the reader scripts
+- Scylla nodes clock is synced using either ```ntp``` or [chrony](https://aws.amazon.com/blogs/aws/keeping-time-with-amazon-time-sync-service/)
 
 
 
 Instructions
 ============
 
-**Procedure**
 1. Install the python drivers on the loaders that will run the scripts
 ```
 $ sudo pip install cassandra-driver
@@ -71,7 +72,11 @@ CREATE TABLE replicated.test_count (
 ```
 
 4. Run both the writer and reader scripts together as the following:
-	- python scylla-tester-writer.py [IP from us-east DC] [num of readers]
-	- python scylla-tester-reader_log.py [IP from us-west DC] output_file.csv [run duration in min.]
+	- ```python scylla-tester-writer.py [IP from us-east DC] [num of readers]```
+	- ```python scylla-tester-reader_log.py [IP from us-west DC] output_file.csv [run duration in min.]```
 
 5. The resutls are logged into a csv file and at the end of the run you will have an output of the ```Max``` and the ```Avg``` latencies.
+```
+Max Latency: 272.00
+Avg Latency: 81.46
+```
