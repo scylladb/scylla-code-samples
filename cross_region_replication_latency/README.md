@@ -5,7 +5,7 @@ This scripts enables you to measure Scylla cluster cross region replication late
 
 Using a single writer in us-east (N. Virginia) to write a single partition using CL=LOCAL_ONE, which we then read from us-west (Oregon) using a single reader.
 
-The write rate is ~5 partitions per second. We calculate the replication latency time from the reader’s end by subtracting the insert time from the reader’s now() time.
+The write rate is ~5 partitions per second. We calculate the replication latency time from the reader’s end by subtracting the partition insert time from the partition's now() time.
 
 **Prerequisites**
 - [python installed](https://www.python.org/download/releases/2.7/)
