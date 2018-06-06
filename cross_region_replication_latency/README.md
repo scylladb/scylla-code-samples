@@ -1,16 +1,17 @@
 General Info and Prerequisites
 ==============================
 
-This scripts enables you to measure Scylla cluster cross region replication latency in AWS.
+This scripts enables you to measure Scylla's cross DC/region replication latency on Cloud or on-prem deployments.
 
-Using a single writer in us-east (N. Virginia) to write a single partition using CL=LOCAL_ONE, which we then read from us-west (Oregon) using a single reader.
+In this specific code example we are using a single writer in us-east (N. Virginia) to write a single partition using CL=LOCAL_ONE, which we then read from us-west (Oregon) using a single reader.
 
-The write rate is ~5 partitions per second. We calculate the replication latency time from the reader’s end by subtracting the partition insert time from the partition's now() time.
+The write rate is ~5 partitions per second. We calculate the replication latency time on the reader’s end by subtracting the partition's insert time from the partition's now() time at the moment it is read.
+
 
 **Prerequisites**
 - [python installed](https://www.python.org/download/releases/2.7/)
 - [pip installed](https://packaging.python.org/guides/installing-using-linux-tools/)
-- [Multi-DC Scylla cluster on AWS](http://docs.scylladb.com/procedures/ec2_dc/) - 2 DCs, 1 in us-east-1 and the second in us-west-2 (can be different regions, require a change in the scripts)
+- [Multi-DC Scylla cluster on AWS](http://docs.scylladb.com/procedures/ec2_dc/) - Two DCs, one in us-east-1 and the second in us-west-2 (can be different regions/cloud vendor, require a minor change in the scripts)
 - An instance in each region for the writer and the reader scripts
 - Scylla nodes clock is synced using either ```ntp``` or [chrony](https://aws.amazon.com/blogs/aws/keeping-time-with-amazon-time-sync-service/)
 
