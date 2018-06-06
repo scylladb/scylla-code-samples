@@ -75,8 +75,8 @@ CREATE TABLE replicated.test_count (
 	- ```python scylla-tester-writer.py [IP from us-east DC] [num of readers]```
 	- ```python scylla-tester-reader_log.py [IP from us-west DC] output_file.csv [run duration in min.]```
 
-5. The resutls are logged into a csv file and at the end of the run you will have an output of the ```Max``` and the ```Avg``` latencies.
+5. The resutls are logged into a csv file and at the end of the run you will get the ```Max``` and the ```Avg``` latencies output in ms. 
 ```
-Max Latency: 272.00
-Avg Latency: 81.46
+Max Latency (ms): 272.00
+Avg Latency (ms): 81.46
 ```

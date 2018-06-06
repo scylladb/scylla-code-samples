@@ -71,8 +71,8 @@ while True:
     current_time = datetime.datetime.utcnow()
     if current_time > end_time:
         # we have finished, calculate stats
-        print("Max Latency: {0:0.2f}".format(max_latency))
-        print("Avg Latency: {0:0.2f}".format(sum_latency / float(count)))
+        print("Max Latency (ms): {0:0.2f}".format(max_latency))
+        print("Avg Latency (ms): {0:0.2f}".format(sum_latency / float(count)))
         break
     else:
         print("Time left for the test: {0}".format(end_time - current_time))
