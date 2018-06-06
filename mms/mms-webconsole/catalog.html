@@ -76,9 +76,6 @@
             }
             first_name = data.rows[i].first_name;
             last_name = data.rows[i].last_name;
-            mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<a href="/add-mutant.html" onClick="edit(\'' + data.rows[i].first_name + '\',\'' + data.rows[i].last_name + '\',\'' +  data.rows[i].address + '\',\'' +  data.rows[i].picture_location +
-              '\');"> <img width="20" height="20" src="/edit.png"> Edit Details</a><br><br>';
-          
             $.post('/tracking', {
               first_name: data.rows[i].first_name,
               last_name: data.rows[i].last_name
@@ -87,7 +84,9 @@
                 mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<label class="imageinfo"><b>Current Location:</b> ' + tracking_data.rows[0].location + "</label>";
                 mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><label class="imageinfo"><b>Latest Heat Signature:</b> ' + tracking_data.rows[0].heat + "</label>";
                 mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><label class="imageinfo"><b>Latest Telepathy Powers:</b> ' + tracking_data.rows[0].telepathy_powers + "</b></label>";
-                mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><br>(Click anywhere in this window to upload a new image. After the image is uploaded, return to the catalog to see the update)<br>'
+                mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><br><a href="/add-mutant.html" onClick="edit(\'' + data.rows[i].first_name + '\',\'' + data.rows[i].last_name + '\',\'' +  data.rows[i].address + '\',\'' +  data.rows[i].picture_location +
+                  '\');"> <img width="20" height="20" src="/edit.png"> Edit Details</a><br><br>';
+                mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br>(Click anywhere above in this window to upload a new image. After the image is uploaded, return to the catalog to see the update)<br><br>'
               }
             });
           }
