@@ -47,6 +47,20 @@
     btn.setAttribute("onClick", "javascript: exec();");
     var t = document.createTextNode("Add Mutant");
     btn.appendChild(t);
+    if (parent.first_name && parent.last_name && parent.picture_location && parent.address) {
+      first_name.setAttribute('value', parent.first_name);
+      last_name.setAttribute('value', parent.last_name);
+      address.setAttribute('value', parent.address);
+      picture_location.setAttribute('value', parent.picture_location);
+      //document.getElementById('first_name').value = parent.first_name;
+      //document.getElementById('last_name').value = parent.last_name;
+      //document.getElementById('address').value = parent.address;
+      //document.getElementById('picture_location').value = parent.picture_location;
+      parent.first_name = '';
+      parent.last_name = '';
+      parent.address = '';
+      parent.picture_location = '';
+    }
     first_name_label.innerHTML = "First Name: ";
     last_name_label.innerHTML = "Last Name: ";
     address_label.innerHTML = "Address: ";

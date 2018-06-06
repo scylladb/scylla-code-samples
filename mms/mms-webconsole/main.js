@@ -52,6 +52,10 @@ app.get('/add-mutant.html', (req, res) => {
   res.sendFile(__dirname + '/add-mutant.html');
 });
 
+app.get('/edit.png', (req, res) => {
+  res.sendFile(__dirname + '/edit.png');
+});
+
 app.post('/upload', upload.single('file'), function(req, res, next) {
   const first_name = req.body.first_name;
   const last_name = req.body.last_name;

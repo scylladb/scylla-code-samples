@@ -9,6 +9,11 @@
 	<meta name="theme-color" content="#ffffff">
 	<link rel="stylesheet" href="/menu.css">
 	<script>
+		var first_name = '';
+		var last_name = '';
+		var address = '';
+		var picture_location = '';
+
 		function clear(callback) {
 			var iframe = document.getElementById('iframe_a').contentWindow.document;
 			iframe.write('<html>');
@@ -23,11 +28,10 @@
 			$('#alter').click(function() {
 				$('#iframe_a').attr('src', '/alter');
 			});
-			
+
 			$('#add-mutant').click(function() {
 				$('#iframe_a').attr('src', '/add-mutant.html');
 			});
-
 		});
 	</script>
 	<script>
@@ -71,7 +75,7 @@
 					</ul>
 				</li>
 			</ul>
-				<label class="logo">Mutant Monitoring Web Console</label>
+			<label class="logo">Mutant Monitoring Web Console</label>
 		</nav>
 		</td>
 	</div>

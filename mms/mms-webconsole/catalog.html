@@ -21,7 +21,7 @@
   </div>
 
   <div id="output" class="modal">
-    <div class="modal-content modal-small">
+    <div class="modal-content modal-large">
       <div class="modal-header">
         <span class="close">&times;</span>
         <h2>Mutant Info</h2>
@@ -45,6 +45,7 @@
       var output_modal = document.getElementById('output');
       var main = document.getElementById('main');
       var mutant_body_div = document.getElementById('mutant-info-body');
+    
       mutant_body_div.innerHTML = '<br>';
 
       $.get("/pictures", function(data) {
@@ -75,6 +76,9 @@
             }
             first_name = data.rows[i].first_name;
             last_name = data.rows[i].last_name;
+            mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<a href="/add-mutant.html" onClick="edit(\'' + data.rows[i].first_name + '\',\'' + data.rows[i].last_name + '\',\'' +  data.rows[i].address + '\',\'' +  data.rows[i].picture_location +
+              '\');"> <img width="20" height="20" src="/edit.png"> Edit Details</a><br><br>';
+          
             $.post('/tracking', {
               first_name: data.rows[i].first_name,
               last_name: data.rows[i].last_name
@@ -88,9 +92,11 @@
             });
           }
         }
+      
         divChanger('main');
         divChanger('output');
       });
+
     };
     var output_modal = document.getElementById('output');
     var output_span = document.getElementsByClassName("close")[1];
@@ -110,6 +116,13 @@
       return base64;
     }
 
+    function edit(first_name, last_name, address, picture_location) {
+      parent.first_name = first_name;
+      parent.last_name = last_name;
+      parent.address = address;
+      parent.picture_location = picture_location;
+    }
+
     function getImages() {
       var div = document.getElementById('main-body');
       div.innerHTML = '<br>';
@@ -123,7 +136,6 @@
             div.innerHTML = div.innerHTML + '<a href="#" onClick=exec("' + data.rows[i].first_name + '","' + data.rows[i].last_name + '");> <img class="imagesize" src="data:image/jpeg;base64,' +
               '" ></a> <br><b><label class="imageinfo">' + data.rows[
                 i].first_name + '</label> ' + '<label class="imageinfo">' + data.rows[i].last_name + '</label></b><br><label class="imageinfo">' + data.rows[i].address + '</label><br><br>';
-
           }
         }
         divChanger('main');
