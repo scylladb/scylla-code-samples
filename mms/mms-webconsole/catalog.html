@@ -76,7 +76,7 @@
             }
             first_name = data.rows[i].first_name;
             last_name = data.rows[i].last_name;
-            mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<a href="/add-mutant.html" onClick="edit(\'' + data.rows[i].first_name + '\',\'' + data.rows[i].last_name + '\',\'' + data.rows[i].address + '\',\'' + data.rows[i].picture_location +
+            mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><br><a href="/add-mutant.html" onClick="edit(\'' + data.rows[i].first_name + '\',\'' + data.rows[i].last_name + '\',\'' + data.rows[i].address + '\',\'' + data.rows[i].picture_location +
               '\');"> <img width="20" height="20" src="/edit.png"> Edit Details</a><br><br>';
             mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<img width="25" height="25" src="/image.png"> Change Image</a><br><br>';
             mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<a href="#" onClick="deleteMutant(\'' + data.rows[i].first_name + '\',\'' + data.rows[i].last_name +
@@ -104,10 +104,6 @@
     var output_span = document.getElementsByClassName("close")[1];
     var main = document.getElementById('main');
 
-    output_span.onclick = function() {
-      divChanger('output');
-    }
-    //  divChanger('output');
     divChanger('main');
 
     function base64(blob) {

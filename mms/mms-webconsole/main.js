@@ -56,6 +56,10 @@ app.get('/edit.png', (req, res) => {
   res.sendFile(__dirname + '/edit.png');
 });
 
+app.get('/mms.png', (req, res) => {
+  res.sendFile(__dirname + '/mms.png');
+});
+
 app.get('/load', (req, res) => {
   scylla.load();
   res.end();
