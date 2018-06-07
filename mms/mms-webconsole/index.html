@@ -9,6 +9,23 @@
 	<meta name="theme-color" content="#ffffff">
 	<link rel="stylesheet" href="/menu.css">
 	<script>
+		var first_name = '';
+		var last_name = '';
+		var address = '';
+		var picture_location = '';
+
+		function load() {
+			$.get("/load", function(data) {
+				alert('Sent Request to start populating the tracking keyspace with data.');
+			});
+		}
+
+		function stopload() {
+			$.get("/stopload", function(data) {
+				alert('Sent Request to stop populating the tracking keyspace with data.');
+			});
+		}
+
 		function clear(callback) {
 			var iframe = document.getElementById('iframe_a').contentWindow.document;
 			iframe.write('<html>');
@@ -23,11 +40,15 @@
 			$('#alter').click(function() {
 				$('#iframe_a').attr('src', '/alter');
 			});
-			
 			$('#add-mutant').click(function() {
 				$('#iframe_a').attr('src', '/add-mutant.html');
 			});
-
+			$('#load').click(function() {
+				$('#iframe_a').attr('onClick', load());
+			});
+			$('#stopload').click(function() {
+				$('#iframe_a').attr('onClick', stopload());
+			});
 		});
 	</script>
 	<script>
@@ -70,8 +91,14 @@
 						<li><a href="#" id="alter">Alter</a></li>
 					</ul>
 				</li>
+				<li><a href="#!">Tools</a>
+					<ul class="dropdown">
+						<li><a href="#" id="load">Start Load Generator</a></li>
+						<li><a href="#" id="stopload">Stop Load</a></li>
+					</ul>
+				</li>
 			</ul>
-				<label class="logo">Mutant Monitoring Web Console</label>
+			<label class="logo">Mutant Monitoring Web Console</label>
 		</nav>
 		</td>
 	</div>

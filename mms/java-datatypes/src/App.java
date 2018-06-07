@@ -41,10 +41,12 @@ public static void main(String[] args) {
 
 }
 private static void createSchema(Session session) {
-        session.execute("ALTER table catalog.mutant_data DROP m;");
-        session.execute("ALTER table catalog.mutant_data DROP b;");
-        session.execute("ALTER table catalog.mutant_data ADD b blob");
-        session.execute("ALTER table catalog.mutant_data ADD m map<text, blob>");
+        try {
+                session.execute("ALTER table catalog.mutant_data ADD b blob");
+                session.execute("ALTER table catalog.mutant_data ADD m map<text, blob>");
+        } catch (Exception schema) {
+        }
+
 }
 
 private static void allocateAndInsert(Session session, String first_name, String last_name) {

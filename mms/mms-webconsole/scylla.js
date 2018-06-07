@@ -6,6 +6,11 @@ var client = new cassandra.Client({
   contactPoints: ['scylla-node1', 'scylla-node2', 'scylla-node3'],
   keyspace: 'catalog'
 });
+var loadclient = new cassandra.Client({
+  contactPoints: ['scylla-node1', 'scylla-node2', 'scylla-node3'],
+  keyspace: 'tracking'
+});
+var loadtool = '';
 
 var insertData = function(first_name, last_name, address, picture_location, data) {
   client.keyspace = 'catalog';
@@ -20,8 +25,19 @@ var insertData = function(first_name, last_name, address, picture_location, data
   });
 };
 
+var deleteData = function(first_name, last_name) {
+  var query = 'DELETE FROM mutant_data WHERE first_name = ? AND last_name = ?;';
+  const parms = [first_name, last_name];
+  client.execute(query, parms, {
+    prepare: true
+  }, function(err, result) {
+    if (err) {
+      console.log('\n' + err);
+    }
+  });
+};
+
 var alterTable = function() {
-  client.keyspace = 'catalog';
   console.log('\nDeleting old columns......');
   var query = 'ALTER table mutant_data DROP data';
   client.execute(query, function(err, result) {
@@ -31,11 +47,44 @@ var alterTable = function() {
   });
 };
 
+var populateData = function(first_name, last_name, timestamp, heat, location, speed, telepathy_powers, date) {
+  var query = 'INSERT INTO tracking_data (first_name,last_name,timestamp,heat,location,speed,telepathy_powers) VALUES (?,?,?,?,?,?,?);';
+  const parms = [first_name, last_name, timestamp, heat, location, speed, telepathy_powers];
+  loadclient.execute(query, parms, {
+    prepare: true
+  }, function(err, result) {
+    if (err) {
+      console.log('\n' + err);
+    }
+  });
+};
+
+
+function stopload() {
+  clearTimeout(loadtool);
+}
+
+function load() {
+  loadtool = setTimeout(function() {
+    var get_year = new Date();
+    var year = get_year.getFullYear();
+    var hour = Math.round(Math.random() * (23 - 1) + 1);
+    var minute = Math.round(Math.random() * (59 - 1) + 1);
+    var day = Math.round(Math.random() * (30 - 1) + 1);
+    var month = Math.round(Math.random() * (12 - 1) + 1);
+    var timestamp = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + '+0000';
+    populateData('Jim', 'Jeffries', timestamp, Math.round(Math.random() * (50 - 1) + 1), 'New York', Math.round(Math.random() * (100 - 1) + 1), Math.round(Math.random() * (50 - 1) + 1));
+    populateData('Bob', 'Loblaw', timestamp, Math.round(Math.random() * (50 - 1) + 1), 'Cincinnati', Math.round(Math.random() * (100 - 1) + 1), Math.round(Math.random() * (50 - 1) + 1));
+    populateData('Bob', 'Zemuda', timestamp, Math.round(Math.random() * (50 - 1) + 1), 'San Francisco', Math.round(Math.random() * (100 - 1) + 1), Math.round(Math.random() * (50 - 1) + 1));
+    populateData('Jim', 'Jeffries', timestamp, Math.round(Math.random() * (50 - 1) + 1), 'New York', Math.round(Math.random() * (100 - 1) + 1), Math.round(Math.random() * (50 - 1) + 1));
+    load();
+  }, 50);
+}
+
 var getTracking = function(first_name, last_name, callback) {
-  client.keyspace = 'tracking';
   var query = 'select * from tracking_data where first_name=? and last_name=? ORDER BY timestamp DESC;';
   const parms = [first_name, last_name];
-  client.execute(query, parms, {
+  loadclient.execute(query, parms, {
     prepare: true
   }, function(err, result) {
     if (err) {
@@ -50,10 +99,7 @@ var getTracking = function(first_name, last_name, callback) {
   });
 };
 
-
-
 var getData = function(callback) {
-  client.keyspace = 'catalog';
   var query = 'select * from mutant_data;';
   client.execute(query, function(err, result) {
     if (err) {
@@ -68,7 +114,10 @@ var getData = function(callback) {
   });
 };
 
+module.exports.stopload = stopload;
+module.exports.load = load;
 module.exports.alterTable = alterTable;
 module.exports.insertData = insertData;
 module.exports.getData = getData;
+module.exports.deleteData = deleteData;
 module.exports.getTracking = getTracking;
