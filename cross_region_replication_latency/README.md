@@ -1,11 +1,11 @@
 General Info and Prerequisites
 ==============================
 
-This scripts enables you to measure Scylla's cross DC/region replication latency on Cloud or on-prem deployments.
+These scripts enables you to measure Scylla's cross DC/region replication latency on Cloud or on-prem deployments.
 
 In this specific code example we are using a single writer in us-east (N. Virginia) to write a single partition using CL=LOCAL_ONE, which we then read from us-west (Oregon) using a single reader.
 
-The write rate is ~5 partitions per second. We calculate the replication latency time on the reader’s end by subtracting the partition's insert time from the partition's now() time at the moment it is read.
+The write rate is ~5 partitions per second. We calculate the replication latency time on the reader’s end by subtracting the partition's insert time from the partition's now() time at the moment it is read. In both cases it's the server/DB timestamps.
 
 
 **Prerequisites**
