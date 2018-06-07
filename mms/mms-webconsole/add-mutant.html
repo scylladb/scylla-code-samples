@@ -13,7 +13,7 @@
     <div class="modal-content modal-small">
       <div class="modal-header">
         <span class="close">&times;</span>
-        <h2>Add a Mutant</h2>
+        <h2>Add/Modify a Mutant</h2>
       </div>
       <div id="add-mutant-body" class="modal-body">
       </div>
@@ -46,8 +46,8 @@
     btn.setAttribute("class", "imageinfo");
     btn.setAttribute("onClick", "javascript: exec();");
     var t = document.createTextNode("Add Mutant");
-    btn.appendChild(t);
     if (parent.first_name && parent.last_name && parent.picture_location && parent.address) {
+      t = document.createTextNode("Save Changes");
       first_name.setAttribute('value', parent.first_name);
       last_name.setAttribute('value', parent.last_name);
       address.setAttribute('value', parent.address);
@@ -73,6 +73,7 @@
     mutant_body_div.appendChild(picture_location_label);
     mutant_body_div.appendChild(picture_location);
     mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><br>';
+    btn.appendChild(t);
     mutant_body_div.appendChild(btn);
 
     function divChanger(div) {
