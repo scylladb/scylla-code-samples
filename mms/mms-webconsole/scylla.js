@@ -64,19 +64,31 @@ function stopload() {
   clearTimeout(loadtool);
 }
 
+
 function load() {
+  var first_name = [];
+  var last_name = [];
+  var locations = ['New York', 'Cincinnati', 'Las Vegas', 'San Francisco', 'Austin', 'Dallas', 'Chicago', 'Reno'];
+  var get_names = getData(function(data) {
+    first_name.length = data.rows.length;
+    last_name.length = first_name.length;
+    for (var i = 0; i != data.rows.length; i++) {
+      first_name[i] = data.rows[i].first_name;
+      last_name[i] = data.rows[i].last_name;
+    }
+  });
+
   loadtool = setTimeout(function() {
-    var get_year = new Date();
-    var year = get_year.getFullYear();
-    var hour = Math.round(Math.random() * (23 - 1) + 1);
-    var minute = Math.round(Math.random() * (59 - 1) + 1);
-    var day = Math.round(Math.random() * (30 - 1) + 1);
-    var month = Math.round(Math.random() * (12 - 1) + 1);
-    var timestamp = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + '+0000';
-    populateData('Jim', 'Jeffries', timestamp, Math.round(Math.random() * (50 - 1) + 1), 'New York', Math.round(Math.random() * (100 - 1) + 1), Math.round(Math.random() * (50 - 1) + 1));
-    populateData('Bob', 'Loblaw', timestamp, Math.round(Math.random() * (50 - 1) + 1), 'Cincinnati', Math.round(Math.random() * (100 - 1) + 1), Math.round(Math.random() * (50 - 1) + 1));
-    populateData('Bob', 'Zemuda', timestamp, Math.round(Math.random() * (50 - 1) + 1), 'San Francisco', Math.round(Math.random() * (100 - 1) + 1), Math.round(Math.random() * (50 - 1) + 1));
-    populateData('Jim', 'Jeffries', timestamp, Math.round(Math.random() * (50 - 1) + 1), 'New York', Math.round(Math.random() * (100 - 1) + 1), Math.round(Math.random() * (50 - 1) + 1));
+    for (var i = 0; i != first_name.length; i++) {
+      var get_year = new Date();
+      var year = get_year.getFullYear();
+      var hour = Math.round(Math.random() * (23 - 1) + 1);
+      var minute = Math.round(Math.random() * (59 - 1) + 1);
+      var day = Math.round(Math.random() * (30 - 1) + 1);
+      var month = Math.round(Math.random() * (12 - 1) + 1);
+      var timestamp = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + '+0000';
+      populateData(first_name[i], last_name[i], timestamp, Math.round(Math.random() * (50 - 1) + 1), locations[Math.floor(Math.random() * locations.length)], Math.round(Math.random() * (100 - 1) + 1), Math.round(Math.random() * (50 - 1) + 1));
+    }
     load();
   }, 50);
 }
