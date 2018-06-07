@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+
+  scylla-node1:
+    build: ../scylla
+    restart: always
+    networks:
+      web:
+    environment:
+      - DC1=DC1
+      - SEEDS=scylla-node1,scylla-node2
+      - CQLSH_HOST=scylla-node1
+      - IMPORT=IMPORT
+      
+  scylla-node2:
+    build: ../scylla
+    restart: always
+    networks:
+      web:
+    environment:
+      - DC1=DC1
+      - SEEDS=scylla-node1,scylla-node2
+      - CQLSH_HOST=scylla-node2
+
+  scylla-node3:
+    build: ../scylla
+    restart: always
+    networks:
+      web:
+    environment:
+      - DC1=DC1
+      - SEEDS=scylla-node1,scylla-node2
+      - CQLSH_HOST=scylla-node3
+      
+  webconsole:
+    build: .
+    restart: always
+    ports:
+      - 80:80
+    networks:
+      web:
+networks:
+  web:
+    driver: bridge

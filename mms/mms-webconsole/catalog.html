@@ -72,7 +72,7 @@
                   i].first_name +
                 '</label> ' +
                 '<label class="imageinfo">' +
-                data.rows[i].last_name + '</label></b><br><label class="imageinfo"><b>Home Address:</b> ' + data.rows[i].address + '</label>';
+                data.rows[i].last_name + '</label></b><br><label class="imageinfo"><b>Home Address:</b> ' + data.rows[i].address + '</label><br><br>';
             }
             first_name = data.rows[i].first_name;
             last_name = data.rows[i].last_name;
@@ -86,10 +86,11 @@
               last_name: data.rows[i].last_name
             }, function(tracking_data) {
               if (tracking_data.rows[0]) {
-                mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<hr><b>Tracking Data:</b><br><br>'
+                mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<hr><b><font size="+2">Tracking Data:</font></b><br><br>'
                 mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<label class="imageinfo"><b>Current Location:</b> ' + tracking_data.rows[0].location + "</label>";
                 mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><label class="imageinfo"><b>Latest Heat Signature:</b> ' + tracking_data.rows[0].heat + "</label>";
                 mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><label class="imageinfo"><b>Latest Telepathy Powers:</b> ' + tracking_data.rows[0].telepathy_powers + "</b></label>";
+                mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><label class="imageinfo"><b>Latest Speed Reading:</b> ' + tracking_data.rows[0].speed + "</b></label>";
               }
             });
           }
@@ -104,10 +105,6 @@
     var output_span = document.getElementsByClassName("close")[1];
     var main = document.getElementById('main');
 
-    output_span.onclick = function() {
-      divChanger('output');
-    }
-    //  divChanger('output');
     divChanger('main');
 
     function base64(blob) {
