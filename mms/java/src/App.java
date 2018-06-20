@@ -5,7 +5,7 @@ import com.datastax.driver.core.Session;
 
 public class App {
 
-static Cluster cluster = Cluster.builder().addContactPoints("scylla-node1", "scylla-node2", "scylla-node2").build();
+static Cluster cluster = Cluster.builder().addContactPoints("scylla-node1", "scylla-node2", "scylla-node3").build();
 static Session session = cluster.connect("catalog");
 
 public static void selectQuery() {

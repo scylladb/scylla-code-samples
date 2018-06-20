@@ -18,7 +18,7 @@ static File FILE;
 
 public static void main(String[] args) {
         try {
-                Cluster cluster = Cluster.builder().addContactPoints("scylla-node1", "scylla-node2", "scylla-node2").build();
+                Cluster cluster = Cluster.builder().addContactPoints("scylla-node1", "scylla-node2", "scylla-node3").build();
                 Session session = cluster.connect("catalog");
                 createSchema(session);
 
