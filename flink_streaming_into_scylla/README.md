@@ -3,7 +3,7 @@ General Info and Prerequisites
 
 The following Flink program will use a ```movies.csv``` file as incoming stream. The file contains approx. 9100 movie titles and a list of their genres. It will filter out only the movies with "Action" genre and send the results into your Scylla cluster.
 
-Program was written and tested on Ubuntu 16.04 using Java8, with a Scylla node running version 2.2 RC2 on Centos7
+The code was written and tested on Ubuntu 16.04 using Java8, with a Scylla node running version 2.2 RC2 on Centos7
 
 **Prerequisites**
 - [Java 8 installed](http://openjdk.java.net/install/) -> Install Java 8 JDK: ```sudo apt install openjdk-8-jdk-headless```
@@ -17,9 +17,11 @@ Instructions
 ============
 
 1. Download Flink
+
 ```curl -L -O http://apache.mivzakim.net/flink/flink-1.5.0/flink-1.5.0-bin-scala_2.11.tgz```
 
 2. Extract archive
+
 ```tar xvzf flink-1.5.0-bin-scala_2.11.tgz```
 
 3. Start / Stop Flink
@@ -27,9 +29,10 @@ Instructions
 	- ```./bin/start-cluster.sh``` | ```./bin/stop-cluster.sh```
 
 3. Maven create project quickstart (if needed)
+
 ```mvn archetype:generate -DgroupId=com.scylla.movies -DartifactId=flink-app -DarchetypeArtifactId=flink-quickstart-java -DarchetypeGroupId=org.apache.flink -DarchetypeVersion=1.5.0```
 
-4. Download/clone the ```movies.csv`` file and the flink code from git. Code is already in a Maven project structure
+4. Download/clone this repo (```movies.csv`` file + flink code). Code is already in a Maven project structure
 
 5. Set the Scylla node IP to your Scylla node
 	- Go into ```flink-app``` folder
