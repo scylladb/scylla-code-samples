@@ -32,7 +32,9 @@ Instructions
 
 4. Maven create project quickstart (if needed)
 
-```mvn archetype:generate -DgroupId=com.scylla.movies -DartifactId=flink-app -DarchetypeArtifactId=flink-quickstart-java -DarchetypeGroupId=org.apache.flink -DarchetypeVersion=1.5.0```
+```
+mvn archetype:generate -DgroupId=com.scylla.movies -DartifactId=flink-app -DarchetypeArtifactId=flink-quickstart-java -DarchetypeGroupId=org.apache.flink -DarchetypeVersion=1.5.0
+```
 
 5. Download/clone this repo (```movies.csv``` file + flink code). Code is already in a Maven project structure
 
@@ -48,9 +50,7 @@ Instructions
 
 	b. Edit ```env.readTextFile("[full_path_to_csv]")``` and set the full path to the ```movies.csv``` file
 
-8. Compile the code
-
-	Go into ```flink-app``` folder. Run ```mvn install```
+8. Compile the code: go into ```flink-app``` folder. Run ```mvn install```
 
 9. Create the following schema on Scylla using ```cqlsh```
 
