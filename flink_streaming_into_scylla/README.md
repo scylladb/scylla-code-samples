@@ -46,11 +46,11 @@ Instructions
 
 	a. Go into ```flink-app``` folder. Run ```vi src/main/java/com/scylla/movies/FilterMoviesStreamingJob.java```
 
-	b. Edit ```env.readTextFile("[full_path_to_csv]");``` and set the full path to the ```movies.csv``` file
+	b. Edit ```env.readTextFile("[full_path_to_csv]")``` and set the full path to the ```movies.csv``` file
 
 8. Compile the code
 
-Go into ```flink-app``` folder. Run ```mvn install```
+	Go into ```flink-app``` folder. Run ```mvn install```
 
 9. Create the following schema on Scylla using ```cqlsh```
 
