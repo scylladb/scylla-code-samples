@@ -34,31 +34,25 @@ Instructions
 
 ```mvn archetype:generate -DgroupId=com.scylla.movies -DartifactId=flink-app -DarchetypeArtifactId=flink-quickstart-java -DarchetypeGroupId=org.apache.flink -DarchetypeVersion=1.5.0```
 
-5. Download/clone this repo (```movies.csv`` file + flink code). Code is already in a Maven project structure
+5. Download/clone this repo (```movies.csv``` file + flink code). Code is already in a Maven project structure
 
 6. Set the Scylla node IP to your Scylla node
 
-	a. Go into ```flink-app``` folder
+	a. Go into ```flink-app``` folder. Run ```vi src/main/java/com/scylla/movies/FilterMoviesStreamingJob.java```
 
-	b. Run ```vi src/main/java/com/scylla/movies/FilterMoviesStreamingJob.java```
-
-	c. Edit ```.setHost("[scylla_node_IP]")``` and place your Scylla node IP
+	b. Edit ```.setHost("[scylla_node_IP]")``` and place your Scylla node IP
 
 7. Set the path to the location of the ```movies.csv``` file. In my case it was under ```flink-1.5.0/data/``` folder
 
-	a. Go into ```flink-app``` folder
+	a. Go into ```flink-app``` folder. Run ```vi src/main/java/com/scylla/movies/FilterMoviesStreamingJob.java```
 
-	b. Run ```vi src/main/java/com/scylla/movies/FilterMoviesStreamingJob.java```
-
-	c. Edit ```env.readTextFile("[full_path_to_csv]");``` and set the full path to the ```movies.csv``` file
+	b. Edit ```env.readTextFile("[full_path_to_csv]");``` and set the full path to the ```movies.csv``` file
 
 8. Compile the code
 
-	a. Go into ```flink-app``` folder
+Go into ```flink-app``` folder. Run ```mvn install```
 
-	b. Run ```mvn install```
-
-8. Create the following schema on Scylla using ```cqlsh```
+9. Create the following schema on Scylla using ```cqlsh```
 
 ```
 CREATE KEYSPACE flink_example WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
@@ -108,5 +102,4 @@ title                 | genres
 -----------------------+----------------------------------------------------------
  Doctor Strange (2007) | ['Action', 'Animation', 'Children', 'Fantasy', 'Sci-Fi']
 ```
-
 
