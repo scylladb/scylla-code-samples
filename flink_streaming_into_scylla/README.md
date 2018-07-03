@@ -25,28 +25,28 @@ Instructions
 ```tar xvzf flink-1.5.0-bin-scala_2.11.tgz```
 
 3. Start / Stop Flink
-	- ```cd flink-1.5.0/```
-	- ```./bin/start-cluster.sh``` | ```./bin/stop-cluster.sh```
+- ```cd flink-1.5.0/```
+- ```./bin/start-cluster.sh``` | ```./bin/stop-cluster.sh```
 
-3. Maven create project quickstart (if needed)
+4. Maven create project quickstart (if needed)
 
 ```mvn archetype:generate -DgroupId=com.scylla.movies -DartifactId=flink-app -DarchetypeArtifactId=flink-quickstart-java -DarchetypeGroupId=org.apache.flink -DarchetypeVersion=1.5.0```
 
-4. Download/clone this repo (```movies.csv`` file + flink code). Code is already in a Maven project structure
+5. Download/clone this repo (```movies.csv`` file + flink code). Code is already in a Maven project structure
 
-5. Set the Scylla node IP to your Scylla node
-	- Go into ```flink-app``` folder
-	- Run ```vi src/main/java/com/scylla/movies/FilterMoviesStreamingJob.java```
-	- Edit ```.setHost("[scylla_node_IP]")``` and place your Scylla node IP
+6. Set the Scylla node IP to your Scylla node
+- Go into ```flink-app``` folder
+- Run ```vi src/main/java/com/scylla/movies/FilterMoviesStreamingJob.java```
+- Edit ```.setHost("[scylla_node_IP]")``` and place your Scylla node IP
 
-6. Set the path to the location of the ```movies.csv``` file. In my case it was under ```flink-1.5.0/data/``` folder
-	- Go into ```flink-app``` folder
-	- Run ```vi src/main/java/com/scylla/movies/FilterMoviesStreamingJob.java```
-	- Edit ```env.readTextFile("[full_path_to_csv]");``` and set the full path to the ```movies.csv``` file
+7. Set the path to the location of the ```movies.csv``` file. In my case it was under ```flink-1.5.0/data/``` folder
+- Go into ```flink-app``` folder
+- Run ```vi src/main/java/com/scylla/movies/FilterMoviesStreamingJob.java```
+- Edit ```env.readTextFile("[full_path_to_csv]");``` and set the full path to the ```movies.csv``` file
 
-7. Compile the code
-	- Go into ```flink-app``` folder
-	- Run ```mvn install```
+8. Compile the code
+- Go into ```flink-app``` folder
+- Run ```mvn install```
 
 8. Create the following schema on Scylla using ```cqlsh```
 
@@ -72,11 +72,14 @@ CREATE TABLE flink_example.movies (
     AND speculative_retry = '99.0PERCENTILE';
 ```
 
-9. Run the Flink program
-	- Go into ```flink-1.5.0``` folder
-	- Run ```./bin/flink run [full_path]/flink-app-1.0-SNAPSHOT.jar```
+10. Run the Flink program
+- Go into ```flink-1.5.0``` folder
+- Run ```./bin/flink run [full_path]/flink-app-1.0-SNAPSHOT.jar```
 
-10. You should have 1544 entries in Scylla
+
+**Results in Scylla**
+
+You should have 1544 entries in Scylla.
 
 ```
 cqlsh> select count (*) from flink_example.movies ;
