@@ -186,7 +186,7 @@ Print Rows Output File        : %s
 		// List of returned values from the queries
 		printOutChannel = make(chan int64)
 		go func() {
-			if f, err := os.Create("/tmp/rows.txt"); err == nil {
+			if f, err := os.Create(*printRowsOutputFile); err == nil {
 				defer f.Close()
 
 				for tokenKey := range printOutChannel {
