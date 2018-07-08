@@ -18,11 +18,11 @@ Instructions
 
 1. Download Flink
 
-```curl -L -O http://apache.mivzakim.net/flink/flink-1.5.0/flink-1.5.0-bin-scala_2.11.tgz```
+   ```curl -L -O http://apache.mivzakim.net/flink/flink-1.5.0/flink-1.5.0-bin-scala_2.11.tgz```
 
 2. Extract archive
 
-```tar xvzf flink-1.5.0-bin-scala_2.11.tgz```
+   ```tar xvzf flink-1.5.0-bin-scala_2.11.tgz```
 
 3. Start / Stop Flink
 
@@ -36,7 +36,9 @@ Instructions
 mvn archetype:generate -DgroupId=com.scylla.movies -DartifactId=flink-app -DarchetypeArtifactId=flink-quickstart-java -DarchetypeGroupId=org.apache.flink -DarchetypeVersion=1.5.0
 ```
 
-5. Download/clone this repo (```movies.csv``` file + flink code). Code is already in a Maven project structure
+5. Download/clone this repo
+
+   ```movies.csv``` file + flink code (program is already in a Maven project structure)
 
 6. Set the Scylla node IP to your Scylla node
 
@@ -52,7 +54,9 @@ mvn archetype:generate -DgroupId=com.scylla.movies -DartifactId=flink-app -Darch
 
    Set the full path to the ```movies.csv``` file here: ```env.readTextFile("[full_path_to_csv]")```
 
-8. Compile the code: go into ```flink-app``` folder, run ```mvn install```
+8. Compile the code
+
+   go into ```flink-app``` folder and run ```mvn install```
 
 
 9. Run the Flink program
