@@ -52,7 +52,17 @@ mvn archetype:generate -DgroupId=com.scylla.movies -DartifactId=flink-app -Darch
 
 8. Compile the code: go into ```flink-app``` folder. Run ```mvn install```
 
-9. Create the following schema on Scylla using ```cqlsh```
+
+9. Run the Flink program
+
+	a. Go into ```flink-1.5.0``` folder (verify Flink server is running, see item #3)
+
+	b. Run ```./bin/flink run [full_path]/flink-app-1.0-SNAPSHOT.jar```
+
+
+**Scylla schema created**
+
+The programs creates the following schema 
 
 ```
 CREATE KEYSPACE flink_example WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
@@ -75,12 +85,6 @@ CREATE TABLE flink_example.movies (
     AND read_repair_chance = 0.0
     AND speculative_retry = '99.0PERCENTILE';
 ```
-
-10. Run the Flink program
-
-	a. Go into ```flink-1.5.0``` folder
-
-	b. Run ```./bin/flink run [full_path]/flink-app-1.0-SNAPSHOT.jar```
 
 
 **Results in Scylla**
