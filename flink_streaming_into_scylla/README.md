@@ -28,7 +28,7 @@ Instructions
 
    Go into the Flink folder ```cd flink-1.5.0/```
 
-	- ```./bin/start-cluster.sh``` | ```./bin/stop-cluster.sh```
+   ```./bin/start-cluster.sh``` | ```./bin/stop-cluster.sh```
 
 4. Maven create project quickstart (if needed)
 
@@ -48,9 +48,9 @@ mvn archetype:generate -DgroupId=com.scylla.movies -DartifactId=flink-app -Darch
 
 7. Set the path to the location of the ```movies.csv``` file. In my case it was under ```flink-1.5.0/data/``` folder
 
-   Go into ```flink-app``` folder, run ```vi src/main/java/com/scylla/movies/FilterMoviesStreamingJob.java``` and the set the full path to the ```movies.csv``` file
+   Go into ```flink-app``` folder, run ```vi src/main/java/com/scylla/movies/FilterMoviesStreamingJob.java```
 
-	- ```env.readTextFile("[full_path_to_csv]")```
+   Set the full path to the ```movies.csv``` file here: ```env.readTextFile("[full_path_to_csv]")```
 
 8. Compile the code: go into ```flink-app``` folder, run ```mvn install```
 
@@ -59,7 +59,7 @@ mvn archetype:generate -DgroupId=com.scylla.movies -DartifactId=flink-app -Darch
 
    Go into ```flink-1.5.0``` folder (verify Flink server is running, see item #3)
 
-	- Run ```./bin/flink run [full_path]/flink-app-1.0-SNAPSHOT.jar```
+   Run ```./bin/flink run [full_path]/flink-app-1.0-SNAPSHOT.jar```
 
 
 
