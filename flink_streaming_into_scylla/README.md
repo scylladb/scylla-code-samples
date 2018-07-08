@@ -61,7 +61,7 @@ mvn archetype:generate -DgroupId=com.scylla.movies -DartifactId=flink-app -Darch
 
 
 
-What to expect
+What to Expect
 ==============
 
 **Scylla schema**
