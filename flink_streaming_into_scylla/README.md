@@ -60,9 +60,13 @@ mvn archetype:generate -DgroupId=com.scylla.movies -DartifactId=flink-app -Darch
 	b. Run ```./bin/flink run [full_path]/flink-app-1.0-SNAPSHOT.jar```
 
 
-**Scylla schema created**
 
-The programs creates the following schema 
+What to expect
+==============
+
+**Scylla schema**
+
+The program creates the following schema.
 
 ```
 CREATE KEYSPACE flink_example WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
