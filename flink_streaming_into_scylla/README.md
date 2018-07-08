@@ -40,11 +40,11 @@ mvn archetype:generate -DgroupId=com.scylla.movies -DartifactId=flink-app -Darch
 
 6. Set the Scylla node IP to your Scylla node
 
-	- Go into ```flink-app``` folder. Run ```vi src/main/java/com/scylla/movies/FilterMoviesStreamingJob.java```
+   Go into ```flink-app``` folder, run ```vi src/main/java/com/scylla/movies/FilterMoviesStreamingJob.java``` and set your your Scylla node IP in 2 locations:
 
-	- Edit ```InetSocketAddress("[scylla_node_IP]", 9042)``` (9042 is the default CQL port)
+	- ```InetSocketAddress("[scylla_node_IP]", 9042)``` (9042 is the default CQL port)
 
-	- Edit ```.setHost("[scylla_node_IP]")``` and place your Scylla node IP
+	- ```.setHost("[scylla_node_IP]")```
 
 7. Set the path to the location of the ```movies.csv``` file. In my case it was under ```flink-1.5.0/data/``` folder
 
