@@ -26,9 +26,9 @@ Instructions
 
 3. Start / Stop Flink
 
-	a. ```cd flink-1.5.0/```
+	- ```cd flink-1.5.0/```
 
-	b. ```./bin/start-cluster.sh``` | ```./bin/stop-cluster.sh```
+	- ```./bin/start-cluster.sh``` | ```./bin/stop-cluster.sh```
 
 4. Maven create project quickstart (if needed)
 
@@ -40,24 +40,24 @@ mvn archetype:generate -DgroupId=com.scylla.movies -DartifactId=flink-app -Darch
 
 6. Set the Scylla node IP to your Scylla node
 
-	a. Go into ```flink-app``` folder. Run ```vi src/main/java/com/scylla/movies/FilterMoviesStreamingJob.java```
+	- Go into ```flink-app``` folder. Run ```vi src/main/java/com/scylla/movies/FilterMoviesStreamingJob.java```
 
-	b. Edit ```.setHost("[scylla_node_IP]")``` and place your Scylla node IP
+	- Edit ```.setHost("[scylla_node_IP]")``` and place your Scylla node IP
 
 7. Set the path to the location of the ```movies.csv``` file. In my case it was under ```flink-1.5.0/data/``` folder
 
-	a. Go into ```flink-app``` folder. Run ```vi src/main/java/com/scylla/movies/FilterMoviesStreamingJob.java```
+	- Go into ```flink-app``` folder. Run ```vi src/main/java/com/scylla/movies/FilterMoviesStreamingJob.java```
 
-	b. Edit ```env.readTextFile("[full_path_to_csv]")``` and set the full path to the ```movies.csv``` file
+	- Edit ```env.readTextFile("[full_path_to_csv]")``` and set the full path to the ```movies.csv``` file
 
 8. Compile the code: go into ```flink-app``` folder. Run ```mvn install```
 
 
 9. Run the Flink program
 
-	a. Go into ```flink-1.5.0``` folder (verify Flink server is running, see item #3)
+	- Go into ```flink-1.5.0``` folder (verify Flink server is running, see item #3)
 
-	b. Run ```./bin/flink run [full_path]/flink-app-1.0-SNAPSHOT.jar```
+	- Run ```./bin/flink run [full_path]/flink-app-1.0-SNAPSHOT.jar```
 
 
 
