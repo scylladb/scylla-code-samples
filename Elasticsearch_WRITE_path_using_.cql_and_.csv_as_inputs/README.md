@@ -15,7 +15,7 @@ The following script will use `.cql` schema file and `.csv` data file as inputs 
 - [Java 8 installed](http://openjdk.java.net/install/)
 - An instance for Elasticsearch installation and python scripts (can be separate instances)
 - `.cql` schema file that contains the table schema
-- `.csv` data file in the following name format: [keyspace].[table].csv
+- `.csv` data file in the following name format: `<keyspace>.<table>.csv`
 - The data file contains a header line with the column names
 
 
@@ -67,12 +67,10 @@ curl http://127.0.0.1:9200/_cluster/health?pretty
 }
 ```
 
-4. Copy the python file to the location from which you will run it, and make it executable
-	- ES_insert_data_per_schema.py
-	- Place your `.csv` and `.cql` files in an accesible location (can be same dir as the python script)
+4. Copy the python file to the location from which you will run it, and make it executable. Place your `.csv` and `.cql` files in an accessible location (can be same dir as the python script)
 
 
-5. Run the script
+5. Run the script (see below usage, important details and examples)
 	
 
 **Usage**
@@ -92,7 +90,7 @@ optional arguments:
 
 **Important Details**
 - Use `-e` flag to insert a comma-separated list of IPs for Elasticsearch (ES) nodes. If ES is running locally, no need for this flag, default `127.0.0.1` will be used
-- `-i` ignore_cql_schema -> default: True. Meaning it will use the 1st column from the `.csv` for the index `_id` field. If you have a compound PK use `-i no` so not to ignore the .cql schema
+- `-i` ignore_cql_schema -> default: `True`. Meaning it will use the 1st column from the `.csv` for the index `_id` field. If you have a compound PK use `-i no` so not to ignore the `.cql` schema
 - `-c` csv_file_name -> requires full path to file. Needs to be in the format as described in the prerequisites
 - `-s` cql_schema_file name -> requires full path to file. Checking schema for compound PK, if did not find it checking for simple PK
 - If `.cql` not provided (but `.csv` was provided), will fall back to ignoring cql schema and use the 1st column from the `.csv` for the index `_id` field
@@ -179,5 +177,5 @@ $ curl -XGET 'http://127.0.0.1:9200/move.inventory_by_sku/_search?size=1&pretty'
 
 
 6. To delete Elasticsearch index run the following commands
-	- **Elasticsearch**:  ``$ curl -X DELETE "127.0.0.1:9200/<index_name>"`
+	- `$ curl -X DELETE "127.0.0.1:9200/<index_name>"`
 
