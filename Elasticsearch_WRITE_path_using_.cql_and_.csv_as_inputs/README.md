@@ -71,9 +71,7 @@ curl http://127.0.0.1:9200/_cluster/health?pretty
 
 
 5. Run the script (see below usage, important details and examples)
-	
-
-**Usage**
+	- **Usage**
 ```
 $ python ES_insert_data_per_schema.py -h
 usage: ES_insert_data_per_schema.py [-h] [-e ES_IP] [-c CSV_FILE_NAME]
@@ -88,16 +86,16 @@ optional arguments:
   -i IGNORE_CQL_SCHEMA
 ```
 
-**Important Details**
-- Use `-e` flag to insert a comma-separated list of IPs for Elasticsearch (ES) nodes. If ES is running locally, no need for this flag, default `127.0.0.1` will be used
-- `-i` ignore_cql_schema -> default: `True`. Meaning it will use the 1st column from the `.csv` for the index `_id` field. If you have a compound PK use `-i no` so not to ignore the `.cql` schema
-- `-c` csv_file_name -> requires full path to file. Needs to be in the format as described in the prerequisites
-- `-s` cql_schema_file name -> requires full path to file. Checking schema for compound PK, if did not find it checking for simple PK
-- If `.cql` not provided (but `.csv` was provided), will fall back to ignoring cql schema and use the 1st column from the `.csv` for the index `_id` field
-- If both `.cql` + `.csv` files are not provided, error is printed and script exists.
+- **Important Details**
+	- Use `-e` flag to insert a comma-separated list of IPs for Elasticsearch (ES) nodes. If ES is running locally, no need for this flag, default `127.0.0.1` will be used
+	- `-i` ignore_cql_schema -> default: `True`. Meaning it will use the 1st column from the `.csv` for the index `_id` field. If you have a compound PK use `-i no` so not to ignore the `.cql` schema
+	- `-c` csv_file_name -> requires full path to file. Needs to be in the format as described in the prerequisites
+	- `-s` cql_schema_file name -> requires full path to file. Checking schema for compound PK, if did not find it checking for simple PK
+	- If `.cql` not provided (but `.csv` was provided), will fall back to ignoring cql schema and use the 1st column from the `.csv` for the index `_id` field
+	- If both `.cql` + `.csv` files are not provided, error is printed and script exists.
 
 
-**Output Example Using Compound PK**
+- **Output Example Using Compound PK**
 ```
 $ python ES_insert_data_per_schema.py -c ./move.inventory_by_sku.csv -s ./move.inventory_by_sku.cql -i no
 
@@ -114,9 +112,8 @@ $ python ES_insert_data_per_schema.py -c ./move.inventory_by_sku.csv -s ./move.i
 ```
 
 
-**Print 1 doc from Index**
-
-Note the `_index`, `_type` and `_id` fields.
+- **Print 1 doc from Index**
+	- Note the `_index`, `_type` and `_id` fields.
 
 ```
 $ curl -XGET 'http://127.0.0.1:9200/move.inventory_by_sku/_search?size=1&pretty'
