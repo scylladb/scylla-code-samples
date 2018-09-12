@@ -3,10 +3,10 @@ General Info and Prerequisites
 
 The following script will use `.cql` schema file and `.csv` data file as inputs to create an index in Elasticsearch (ES) and insert the data.
 
-	- The ES index name will be created based on the `.csv` file name
-	- The index `_id` field (index partition key) is based on the `PRIMARY KEY` taken from `.cql` schema (simple/composite/compound).
-	- The index `_type` field will represent the partition key (PK), in case of a compund key it will use `-` to concatenate the column names.
-	- The script will print progress and total rows processed in its output.
+- The ES index name will be created based on the `.csv` file name
+- The index `_id` field (index partition key) is based on the `PRIMARY KEY` taken from `.cql` schema (simple/composite/compound).
+- The index `_type` field will represent the partition key (PK), in case of a compund key it will use `-` to concatenate the column names.
+- The script will print progress and total rows processed in its output.
 
 
 **Prerequisites**
@@ -15,7 +15,7 @@ The following script will use `.cql` schema file and `.csv` data file as inputs 
 - [Java 8 installed](http://openjdk.java.net/install/)
 - An instance for Elasticsearch installation and python scripts (can be separate instances)
 - `.cql` schema file that contains the table schema
-- `.csv` table data file in the following name format: <keyspace>.<table>.csv
+- `.csv` data file in the following name format: [keyspace].[table].csv
 - The data file contains a header line with the column names
 
 
@@ -24,11 +24,13 @@ Instructions
 ============
 
 **Procedure**
+
 1. Install the python drivers on the node to be used for the scripts
 ```
 $ sudo pip install cassandra-driver
 $ sudo pip install elasticsearch
 ```
+
 
 2. Install [Elasticsearch](https://www.elastic.co/guide/en/beats/libbeat/current/elasticsearch-installation.html)
 ```
@@ -36,6 +38,7 @@ $ sudo apt-get update
 $ curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.2.3.deb 
 $ sudo dpkg -i elasticsearch-6.2.3.deb
 ```
+
 
 3. Start Elasticsearch, verify status and health state
 ```
@@ -60,12 +63,14 @@ curl http://127.0.0.1:9200/_cluster/health?pretty
   "number_of_in_flight_fetch" : 0,
   "task_max_waiting_in_queue_millis" : 0,
   "active_shards_percent_as_number" : 100.0
+
 }
 ```
 
 4. Copy the file to the location from which you will run them, and make it executable
 	- ES_insert_data_per_schema.py
 	- Place your `.csv` and `.cql` files in an accesible location (can be same dir as the python script)
+
 
 5. Run the script
 	
