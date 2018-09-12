@@ -25,7 +25,7 @@ Instructions
 
 **Procedure**
 
-1. Install the python drivers on the node to be used for the scripts
+1. Install the python drivers on the node to be used for the script
 ```
 $ sudo pip install cassandra-driver
 $ sudo pip install elasticsearch
@@ -67,7 +67,7 @@ curl http://127.0.0.1:9200/_cluster/health?pretty
 }
 ```
 
-4. Copy the file to the location from which you will run them, and make it executable
+4. Copy the python file to the location from which you will run it, and make it executable
 	- ES_insert_data_per_schema.py
 	- Place your `.csv` and `.cql` files in an accesible location (can be same dir as the python script)
 
@@ -91,12 +91,12 @@ optional arguments:
 ```
 
 **Important Details**
-	- Use `-e` flag to insert a comma-separated list of IPs for Elasticsearch (ES) nodes. If ES is running locally, no need for this flag, default `127.0.0.1` will be used
-	- `-i` ignore_cql_schema -> default: True. Meaning it will use the 1st column from the `.csv` for the index `_id` field. If you have a compound PK use `-i no` so not to ignore the .cql schema
-	- `-c` csv_file_name -> requires full path to file. Needs to be in the format as described in the prerequisites
-	- `-s` cql_schema_file name -> requires full path to file. Checking schema for compound PK, if did not find it checking for simple PK
-	- If `.cql` not provided (but `.csv` was provided), will fall back to ignoring cql schema and use the 1st column from the `.csv` for the index `_id` field
-	- If both `.cql` + `.csv` files are not provided, error is printed and script exists.
+- Use `-e` flag to insert a comma-separated list of IPs for Elasticsearch (ES) nodes. If ES is running locally, no need for this flag, default `127.0.0.1` will be used
+- `-i` ignore_cql_schema -> default: True. Meaning it will use the 1st column from the `.csv` for the index `_id` field. If you have a compound PK use `-i no` so not to ignore the .cql schema
+- `-c` csv_file_name -> requires full path to file. Needs to be in the format as described in the prerequisites
+- `-s` cql_schema_file name -> requires full path to file. Checking schema for compound PK, if did not find it checking for simple PK
+- If `.cql` not provided (but `.csv` was provided), will fall back to ignoring cql schema and use the 1st column from the `.csv` for the index `_id` field
+- If both `.cql` + `.csv` files are not provided, error is printed and script exists.
 
 
 **Output Example Using Compound PK**
@@ -117,6 +117,7 @@ $ python ES_insert_data_per_schema.py -c ./move.inventory_by_sku.csv -s ./move.i
 
 
 **Print 1 doc from Index**
+
 Note the `_index`, `_type` and `_id` fields.
 
 ```
