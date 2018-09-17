@@ -6,7 +6,7 @@ The following script will use `.cql` schema file and `.csv` data file as inputs 
 - The ES index name will be created based on the `.csv` file name
 - The index `_id` field (index partition key) is based on the `PRIMARY KEY` taken from `.cql` schema (simple/composite/compound).
 - The index `_type` field will represent the partition key (PK), in case of a compund key it will use `-` to concatenate the column names.
-- The script will print progress and total rows processed in its output.
+- The script will print progress for every 1000 rows processed and total rows processed in its output.
 
 
 **Prerequisites**
@@ -98,18 +98,32 @@ optional arguments:
 
 - **Output Example Using Compound PK**
 ```
-$ python ES_insert_data_per_schema.py -c ./move.inventory_by_sku.csv -s ./move.inventory_by_sku.cql -i no
+ubuntu@ip-172-16-0-124:~/scylla_elastic$ python ES_insert_data_per_schema.py -c ./cp_prod.product_all.csv -s ./cp_prod_product_all.cql -i no
 
-## Check schema (./move.inventory_by_sku.cql) for compound primary key to be used as index id
+## Check schema (./cp_prod_product_all.cql) for compound primary key to be used as index id
 
-## Connecting to ES -> Creating 'move.inventory_by_sku' index, if not exist
+## Did not find a compound primary key, checking for regular primary key to be used as index id
 
-## Write csv file (./move.inventory_by_sku.csv) content into Elasticsearch
+## Connecting to ES -> Creating 'cp_prod.product_all' index, if not exist
+
+## Write csv file (./cp_prod.product_all.csv) content into Elasticsearch
+
+## Update every 1000 rows proccesed ##
+Rows processed: 1000
+Rows processed: 2000
+Rows processed: 3000
+Rows processed: 4000
+Rows processed: 5000
+Rows processed: 6000
+Rows processed: 7000
+Rows processed: 8000
+Rows processed: 9000
 
 ## After all inserts, refresh index (just in case)
 
 
-### Total Rows Processed: 160 ###
+### Total Rows Processed: 9715 ###
+
 ```
 
 

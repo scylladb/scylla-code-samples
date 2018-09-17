@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: latin-1 -*-
 #
 
@@ -96,7 +96,6 @@ def get_row_data(row, headers):
             val = row[i]
             
         data[headers[i]] = row[i]
-
     return data
 
 ## Insert the data
@@ -115,9 +114,12 @@ def insert_data(csv_filename, keys):
     print("")
     print("## Write csv file ({0}) content into Elasticsearch".format(csv_filename))
 
+    print("")
+    print("## Update every 1000 rows proccesed ##")
+
     rows_counter = 0
     with open(csv_filename, "r") as f:
-        reader = csv.reader(f)
+        reader = csv.reader(f, skipinitialspace=True, quoting=csv.QUOTE_ALL, escapechar='\\')
         headers, headers_index_mapping = get_headers(reader)
         doc_type = "by_{0}".format("-".join(keys))
 
@@ -127,6 +129,10 @@ def insert_data(csv_filename, keys):
 
             res = es.index(index=index_name, doc_type=doc_type, id=es_id, body=doc_data)
             rows_counter += 1
+
+            # Print update every 1000 rows
+            if rows_counter % 1000 == 0:
+                print("Rows processed: {0} ".format(rows_counter))
 
 
     # After all the inserts, make a refresh, just in case
