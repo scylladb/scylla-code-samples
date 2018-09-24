@@ -1,0 +1,121 @@
+version: '3'
+
+services:
+  scylla:
+    image: scylladb/scylla:2.2.0
+    networks:
+      - scylla
+    volumes:
+      - ./data/scylla:/var/lib/scylla
+    command: "--smp 1 --memory 256M --experimental 1"
+
+  spark-master:
+    image: gettyimages/spark:2.2.0-hadoop-2.7
+    command: bin/spark-class org.apache.spark.deploy.master.Master -h spark-master
+    hostname: master
+    environment:
+      MASTER: spark://spark-master:7077
+      SPARK_CONF_DIR: /conf
+      SPARK_PUBLIC_DNS: spark-master
+    networks:
+      - scylla
+    expose:
+      - 7001
+      - 7002
+      - 7003
+      - 7004
+      - 7005
+      - 7006
+      - 7077
+      - 6066
+      - 3000
+    ports:
+      - 4040:4040
+      - 6066:6066
+      - 7077:7077
+      - 8080:8080
+      - 3000:3000
+    volumes:
+      - ./data/spark-master:/tmp/data
+      - ./target/scala-2.11:/jars
+
+  spark-worker-1:
+    image: gettyimages/spark:2.2.0-hadoop-2.7
+    command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    hostname: spark-worker-1
+    environment:
+      SPARK_WORKER_CORES: 1
+      SPARK_WORKER_MEMORY: 1024m
+      SPARK_WORKER_PORT: 8881
+      SPARK_WORKER_WEBUI_PORT: 8081
+      SPARK_PUBLIC_DNS: spark-worker-1
+    networks:
+      - scylla
+    expose:
+      - 7012
+      - 7013
+      - 7014
+      - 7015
+      - 7016
+      - 8881
+    ports:
+      - 8081:8081
+    volumes:
+      - ./data/spark-worker-1:/tmp/data
+      - ./connector-log4j.properties:/connector-log4j.properties
+    depends_on:
+      - spark-master
+
+  spark-worker-2:
+    image: gettyimages/spark:2.2.0-hadoop-2.7
+    command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    hostname: spark-worker-2
+    environment:
+      SPARK_WORKER_CORES: 1
+      SPARK_WORKER_MEMORY: 1024m
+      SPARK_WORKER_PORT: 8881
+      SPARK_WORKER_WEBUI_PORT: 8082
+      SPARK_PUBLIC_DNS: spark-worker-2
+    networks:
+      - scylla
+    expose:
+      - 7012
+      - 7013
+      - 7014
+      - 7015
+      - 7016
+      - 8881
+    ports:
+      - 8082:8082
+    volumes:
+      - ./data/spark-worker-2:/tmp/data
+      - ./connector-log4j.properties:/connector-log4j.properties
+    depends_on:
+      - spark-master
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.0.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    networks:
+      - scylla
+    volumes:
+      - ./data/zookeeper/data:/var/lib/zookeeper/data
+      - ./data/zookeeper/txn-logs:/var/lib/zookeeper/log
+
+  kafka:
+    image: confluentinc/cp-kafka:5.0.0
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - scylla
+    volumes:
+      - ./data/kafka:/var/lib/kafka/data
+    depends_on:
+      - zookeeper
+      
+networks:
+  scylla:
