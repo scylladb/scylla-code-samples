@@ -1,0 +1,197 @@
+---
+
+# Hosts need to be provided via an existing inventory,
+# Example:
+# [scylla-agents]
+# 1.2.3.4
+# 1.2.3.5
+# etc...
+
+- hosts: scylla-agents
+
+  vars:
+  # Update the disk list according to the provided hardware
+  # This particular list adheres to the EC2 i3.16xlarge instance
+    disks:
+      - nvme0n1
+      - nvme1n1
+      - nvme2n1
+      - nvme3n1
+      - nvme4n1
+      - nvme5n1
+      - nvme6n1
+      - nvme7n1
+
+    array_name: md0
+    filesystem: xfs
+    mountpoint: '/scylla'
+    mount_opts: 'noatime,nofail,defaults'
+
+    # If overwrite_disk is set to false, and mkfs fails, the execution
+    # will stop. Setting to "true" is destructive
+    overwrite_disk: true
+
+    # Interface of the hosts which will be used to map Scylla services
+    host_if: ens3
+
+    # This list is CentOS specific
+    prereqs:
+      - epel-release
+      - python3-pyudev
+      - python34-PyYAML
+      - wget
+      - hwloc
+      - mdadm
+
+    scylla_ports:
+      - 7000
+      - 7001
+      - 9042
+      - 9160
+      - 10000
+
+  tasks:
+    - name: Install Scylla dependencies for system tuning
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items: "{{ prereqs }}"
+      become: true
+
+    - name: Push perftune to the hosts
+      template:
+        src: templates/perftune.py.j2
+        dest: /usr/bin/perftune.py
+        mode: 0755
+      become: true
+      ignore_errors: true
+
+    - name: Push perftune to the hosts
+      template:
+        src: templates/hex2list.py.j2
+        dest: /usr/bin/hex2list.py
+        mode: 0755
+      become: true
+      ignore_errors: true
+
+    - name: Ensure disk is not mounted
+      shell: |
+        umount -f "{{ mountpoint }}"
+      become: true
+      ignore_errors: true
+
+    - name: Clear disks
+      shell: |
+        dd if=/dev/zero of=/dev/"{{ item }}" bs=1M count=100
+      when: overwrite_disk == True
+      become: true
+      with_items: "{{ disks }}"
+
+    - name: Ensure "{{ array_name }}" is not present
+      shell: |
+        mdadm --stop /dev/"{{ array_name }}"
+        mdadm --remove /dev/"{{ array_name }}"
+      become: true
+      ignore_errors: true
+
+    - name: Create raid array
+      shell: |
+        yes | mdadm --create /dev/{{ array_name }} --level=0 --raid-devices={{ disks|count }} /dev/{{ disks | join (' /dev/') }}
+      register: "array_created"
+      become: true
+
+    - name: Clear the "{{ array_name }}" array
+      shell: |
+        dd if=/dev/zero of=/dev/"{{ array_name }}" bs=1M count=100
+      become: true
+
+    - name: Format disk
+      shell: |
+        mkfs."{{ filesystem }}" /dev/"{{ array_name }}"
+      become: true
+
+    - name: Create mountpoint
+      file:
+        path: "{{ mountpoint }}"
+        state: directory
+        mode: 1755
+      become: true
+
+    - name: Edit fstab
+      lineinfile:
+        path: /etc/fstab
+        line: "/dev/{{ array_name }} {{ mountpoint }} {{ filesystem }} {{ mount_opts }} 0 0"
+      become: true
+
+    - name: Open Scylla ports in iptables
+      iptables:
+        chain: INPUT
+        protocol: tcp
+        destination_port: "{{ item }}"
+        ctstate: NEW,ESTABLISHED
+        jump: ACCEPT
+      with_items: "{{ scylla_ports }}"
+      become: true
+
+    - name: Allow Scylla ports to leave iptables
+      iptables:
+        chain: OUTPUT
+        protocol: tcp
+        source_port: "{{ item }}"
+        ctstate: ESTABLISHED
+        jump: ACCEPT
+      with_items: "{{ scylla_ports }}"
+      become: true
+
+    - name: Mount the new disk
+      shell: |
+        mount -t "{{ filesystem }}" /dev/"{{ array_name }}" "{{ mountpoint }}"
+      become: true
+
+    - name: Clean out docker
+      shell: |
+        # Delete all containers
+        docker rm $(docker ps -a -q)
+        # Delete all images
+        docker rmi $(docker images -q)
+      become: true
+      ignore_errors: true
+
+    - name: Create data dir
+      file:
+        path: "{{ mountpoint }}/data"
+        state: directory
+        mode: 1755
+      become: true
+
+    - name: Create commitlog dir
+      file:
+        path: "{{ mountpoint }}/commitlog"
+        state: directory
+        mode: 1755
+      become: true
+
+    - name: Push scylla_tune unit to the agent
+      template:
+        src: templates/scylla_tune.service.j2
+        dest: /etc/systemd/system/scylla_tune.service
+        mode: 0644
+      become: true
+      ignore_errors: true
+
+    - name: Register and enable scylla_tune
+      shell: |
+        systemctl daemon-reload
+        systemctl enable scylla_tune.service
+        systemctl restart scylla_tune.service
+      become: true
+
+    - name: Get CPU sets
+      shell: |
+        perftune.py --nic "{{ host_if }}" --mode sq_split --tune net --get-cpu-mask|hex2list.py
+      become: true
+      register: cpuset
+
+    - name: Print the CPU sets for each host to use
+      debug:
+        msg: "For {{ ansible_hostname }} use taskset {{ cpuset.stdout }}"
