@@ -1,0 +1,6 @@
+[scylla-agents]
+10.0.0.14  ansible_ssh_user=centos
+10.0.0.173 ansible_ssh_user=centos
+10.0.0.46  ansible_ssh_user=centos
+
+
