@@ -56,6 +56,8 @@ Flags:
   -d, --print-rows              Print the output rows to a file
       --print-rows-output-file="/tmp/rows.txt"
                                 Output file that will contain the printed rows
+      --username                The username to use to connect to the cluster (default: no username)
+      --password                The password to use to connect to the cluster (default: no password)
 
 Args:
   <hosts>  Your Scylla nodes IP addresses, comma separated (i.e. 192.168.1.1,192.168.1.2,192.168.1.3)

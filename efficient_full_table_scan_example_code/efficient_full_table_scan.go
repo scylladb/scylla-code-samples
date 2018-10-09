@@ -43,6 +43,9 @@ var (
 	printRows           = kingpin.Flag("print-rows", "Print the output rows to a file").Short('d').Default("false").Bool()
 	printRowsOutputFile = kingpin.Flag("print-rows-output-file", "Output file that will contain the printed rows").Default(defaultPrintRowsOutputFile).String()
 
+	userName            = kingpin.Flag("username", "Username to use when connecting to the cluster").String()
+	password            = kingpin.Flag("password", "Password to use when connecting to the cluster").String()
+
 	numberOfParallelClientThreads = 1 // the calculated number of parallel threads the client should run
 
 )
@@ -137,6 +140,13 @@ func main() {
 	cluster.NumConns = *clusterNumConnections
 	cluster.CQLVersion = *clusterCQLVersion
 	cluster.PageSize = *clusterPageSize
+
+	if (*userName != "") {
+		cluster.Authenticator = gocql.PasswordAuthenticator{
+			Username: *userName,
+			Password: *password,
+		}
+	}
 
 	runParameters := fmt.Sprintf(`
 Execution Parameters:
