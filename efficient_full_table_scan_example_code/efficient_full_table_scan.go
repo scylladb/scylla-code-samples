@@ -18,7 +18,7 @@ const (
 	defaultNumberOfNodesInCluster     = 3
 	defaultNumberOfCoresInNode        = 8
 	defaultSmudgeFactor               = 3
-	defaultQueryTemplate              = "SELECT token(key) FROM keyspace1.standard1 WHERE token(key) >= %d AND token(key) <= %d;"
+	defaultQueryTemplate              = "SELECT token(key) FROM keyspace1.standard1 WHERE token(key) >= %s AND token(key) <= %s;"
 	defaultSelectStatementsOutputFile = "/tmp/select_statements.txt"
 	defaultPrintRowsOutputFile        = "/tmp/rows.txt"
 )
@@ -231,14 +231,17 @@ Print Rows Output File        : %s
 				// goroutines have opened a session successfully
 				sessionCreationWaitGroup.Done()
 				sessionCreationWaitGroup.Wait()
+				preparedQueryString := fmt.Sprintf(*queryTemplate, "?", "?")
+				preparedQuery := session.Query(preparedQueryString);
 
 				// Read ranges from the channel, until we have completed accessing all ranges
 				for r := range rangesChannel {
 					query := fmt.Sprintf(*queryTemplate, r.StartRange, r.EndRange)
+					preparedQuery.Bind(r.StartRange, r.EndRange)
 
 					selectStatementOutChannel <- query
 
-					iter := session.Query(query).Iter()
+					iter := preparedQuery.Iter();
 
 					var tokenKey int64
 					var rowsRetrieved uint64
