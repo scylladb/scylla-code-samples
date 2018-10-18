@@ -50,7 +50,6 @@ spec:
           - {{ template "scylladb.fullname" . }}-0.{{ template "scylladb.fullname" . }}.default.svc.cluster.local
           {{- if .Values.config.overprovisioned }}
           - --overprovisioned
-          - {{ .Values.config.overprovisioned | quote }}
           {{- end }}
           {{- if .Values.config.cpu }}
           - --smp

@@ -10,7 +10,7 @@ image:
   pullPolicy: IfNotPresent
 
 config:
-  overprovisioned: 1
+  overprovisioned: true
 
 service:
   cqlPort: 9042
