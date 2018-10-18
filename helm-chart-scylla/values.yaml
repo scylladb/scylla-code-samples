@@ -22,7 +22,10 @@ service:
   nodeExporterPort: 9100
   thriftPort: 9160
   # Check http://docs.scylladb.com/admin/
-  
+
+statefulset:
+  hostNetwork: false
+
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little

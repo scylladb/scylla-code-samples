@@ -18,6 +18,7 @@ spec:
         app: {{ template "scylladb.name" . }}
         release: {{ .Release.Name }}
     spec:
+      hostNetwork: {{ .Values.statefulset.hostNetwork }}
       terminationGracePeriodSeconds: 120
       containers:
       - name: {{ template "scylladb.fullname" . }}
