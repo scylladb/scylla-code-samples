@@ -113,3 +113,33 @@ A good introduction to Helm Charts by Amy Chen can be found [here](https://youtu
   * Delete your helm release
     
     `helm delete <releaseName>`
+
+
+## Configuration
+
+The following table lists the configurable parameters of the ScyllaDB chart and their default valuessdsdsd.
+
+Parameter | Description | Default
+--------- | ----------- | -------
+`config.cpu` | Restricts Scylla to N logical cores (numeric) | `nil`
+`config.overprovisioned` | If true, Scylla that the machine it is running on is used by other processes | `true`
+`image.repository` | Container image repository | `scylladb/scylla`
+`image.tag` | Container image tag | `2.1.3`
+`image.pullPolicy` | Container image pull policy | `IfNotPresent`
+`persistence.accessMode` | Persistent Volume access modes  | `ReadWriteOnce`
+`persistence.size` | Persistent Volume size | `15Gi`
+`persistence.storageClass` | Persistent Volume Storage Class | `scylla-ssd`
+`replicaCount` | Number of replicas in the StatefulSet | `3`
+`resources` | ScyllaDB StatefulSet pod resource requests & limits | `{}`
+`service.cqlPort` | CQL port | `9042`
+`service.internodePort` | Inter-node communication port | `7000`
+`service.sslinternodePort` | SSL inter-node communication port | `7001`
+`service.jmxPort` | JMX management port | `7199`
+`service.restPort` | Scylla REST API port | `10000`
+`service.prometheusPort` | Prometheus API port | `9180`
+`service.nodeExporterPort` | node_exporter port | `9100`
+`service.thriftPort` | Scylla client (Thrift) port | `9160`
+`statefulset.hostNetwork` | If true, ScyllaDB pods share the host network namespace | `false`
+`nodeSelector` | Node labels for ScyllaDB pod assignment | `{}`
+`tolerations` | Node taints to tolerate (requires Kubernetes >=1.6) | `[]`
+`affinity` | Pod affinity | `{}`
