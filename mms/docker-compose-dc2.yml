@@ -3,34 +3,34 @@ version: "3"
 services:
 
   scylla-node4:
-    build: ./scylla
+    image: scylladb/scylla
     restart: always
+    command: --seeds=scylla-node1,scylla-node4 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+    volumes:
+      - "./scylla/scylla.yaml:/etc/scylla/scylla.yaml"
+      - "./scylla/cassandra-rackdc.properties.dc2:/etc/scylla/cassandra-rackdc.properties"
     networks:
       web:
-    environment:
-      - DC2=DC2
-      - SEEDS=scylla-node4,scylla-node1
-      - CQLSH_HOST=scylla-node4
 
   scylla-node5:
-    build: ./scylla
+    image: scylladb/scylla
     restart: always
+    command: --seeds=scylla-node1,scylla-node4 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+    volumes:
+      - "./scylla/scylla.yaml:/etc/scylla/scylla.yaml"
+      - "./scylla/cassandra-rackdc.properties.dc2:/etc/scylla/cassandra-rackdc.properties"
     networks:
       web:
-    environment:
-      - DC2=DC2
-      - SEEDS=scylla-node4,scylla-node1
-      - CQLSH_HOST=scylla-node5
 
   scylla-node6:
-    build: ./scylla
+    image: scylladb/scylla
     restart: always
+    command: --seeds=scylla-node1,scylla-node4 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+    volumes:
+      - "./scylla/scylla.yaml:/etc/scylla/scylla.yaml"
+      - "./scylla/cassandra-rackdc.properties.dc2:/etc/scylla/cassandra-rackdc.properties"
     networks:
       web:
-    environment:
-      - DC2=DC2
-      - SEEDS=scylla-node4,scylla-node1
-      - CQLSH_HOST=scylla-node6
 
 networks:
   web:
