@@ -5,22 +5,8 @@
 ```
 cd mms
 docker-compose up -d
+docker exec -it mms_scylla-node1_1 sh
 ```
-
-Run bash in the node:
-```
-docker exec -it mms_scylla-node1_1 bash
-```
-
-Follows by scylla commands, like
-```
-> nodetool status
-```
-or
-```
-> cqlsh
-```
-
 ### Destroying the Scylla Cluster 
 ```
 cd mms
@@ -29,8 +15,10 @@ docker-compose rm -f
 ```
 ### Importing the MMS keyspaces and data automatically 
 
+Add the following argument under ```environment``` for ```scylla-node1:``` in docker-compose.yml:
+
 ```
-docker exec scylla-node1 cqlsh -f /mutant-data.txt
+  - IMPORT=IMPORT
 ```
 
 Then re-run docker-compose:
