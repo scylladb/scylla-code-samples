@@ -30,14 +30,8 @@ docker-compose rm -f
 ### Importing the MMS keyspaces and data automatically 
 
 ```
-docker exec scylla-node1 cqlsh -f /mutant-data.txt
+docker exec mms_scylla-node1_1 cqlsh -f /mutant-data.txt
 ```
 
-Then re-run docker-compose:
-```
-docker-compose kill
-docker-compose rm -f
-docker-compose up -d
-```
-The data will be imported about 60 seconds after the containers come up.
+The data will be imported after a few seconds.
 
