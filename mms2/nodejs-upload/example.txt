@@ -1,0 +1,16 @@
+#!/bin/bash
+docker exec -it mms_scylla-node1_1 cqlsh -e 'truncate tracking.tracking_data;';
+docker exec -it mms_scylla-node1_1 cqlsh -e 'ALTER table tracking.tracking_data DROP filename';
+docker exec -it mms_scylla-node1_1 cqlsh -e 'ALTER table tracking.tracking_data DROP data';
+docker rm -f test;
+docker build -t test .;
+docker run -d --net=mms_web -p 80:80 --name test test;
+docker logs -f test&
+sleep 5
+curl  http://localhost/alter
+sleep 5
+curl -d '{"first_name":"Jim", "last_name":"Jeffries", "file": "/bin/sh"}' -H "Content-Type: application/json" -X POST http://localhost/
+curl -d '{"first_name":"Bob", "last_name":"Loblaw", "file": "/etc/passwd"}' -H "Content-Type: application/json" -X POST http://localhost/
+sleep 5
+curl "localhost?first_name="Jim"&last_name="Jeffries"&file=/bin/sh"
+curl "localhost?first_name=Bob&last_name=Loblaw&file=/etc/passwd"

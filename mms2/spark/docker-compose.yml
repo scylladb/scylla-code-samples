@@ -1,0 +1,60 @@
+version: "3"
+
+services:
+  scylla-node1:
+    build: ../scylla
+    restart: always
+    networks:
+      web:
+    environment:
+      - DC1=DC1
+      - SEEDS=scylla-node1,scylla-node2
+      - CQLSH_HOST=scylla-node1
+      - IMPORT=IMPORT
+      
+  scylla-node2:
+    build: ../scylla
+    restart: always
+    networks:
+      web:
+    environment:
+      - DC1=DC1
+      - SEEDS=scylla-node1,scylla-node2
+      - CQLSH_HOST=scylla-node2
+
+  scylla-node3:
+    build: ../scylla
+    restart: always
+    networks:
+      web:
+    environment:
+      - DC1=DC1
+      - SEEDS=scylla-node1,scylla-node2
+      - CQLSH_HOST=scylla-node3
+
+  spark:
+    image: p7hb/docker-spark
+    restart: always
+    networks:
+      web:
+    entrypoint:
+      - /usr/bin/sleep 
+      - infinity
+  
+  loadgen:
+    build: ../loadgen
+    restart: always
+    networks:
+      web:        
+      
+  superset:
+    image: amancevice/superset
+    restart: always
+    networks:
+      web:
+    ports:
+      - 8088:8088    
+
+networks:
+  web:
+    driver: bridge
