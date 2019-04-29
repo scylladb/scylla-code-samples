@@ -9,7 +9,7 @@ docker-compose up -d
 
 Run bash in the node:
 ```
-docker exec -it mms_scylla-node1_1 bash
+docker exec -it mms2_scylla-node1_1 bash
 ```
 
 Followed by scylla commands, like
@@ -30,7 +30,7 @@ docker-compose rm -f
 ### Importing the MMS keyspaces and data automatically 
 
 ```
-docker exec mms_scylla-node1_1 cqlsh -f /mutant-data.txt
+docker exec mms2_scylla-node1_1 cqlsh -f /mutant-data.txt
 ```
 
 The data will be imported after a few seconds.
