@@ -6,7 +6,18 @@ RUN wget -q http://downloads.datastax.com/java-driver/cassandra-java-driver-3.5.
 RUN mv cassandra-java-driver-3.5.0/*.jar .;mv cassandra-java-driver-3.5.0/lib/* .
 WORKDIR /opt/code
 COPY . /opt/code/
-ADD build.xml /opt/code/
+WORKDIR /opt/code/libs
+RUN cp -r . /opt/code/java-app/libs/
+WORKDIR /opt/code/java-app
 RUN ant
-WORKDIR /opt/code/dist
+WORKDIR /opt/code/libs
+RUN cp -r . /opt/code/java-app-ps/libs/
+WORKDIR /opt/code/java-app-ps
+RUN ant
+WORKDIR /opt/code/libs
+RUN cp -r . /opt/code/java-datatypes/libs/
+WORKDIR /opt/code/java-datatypes
+RUN ant
+WORKDIR /opt/code
+
 CMD tail -f /dev/null
