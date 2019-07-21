@@ -27,7 +27,7 @@ public static void main(String[] args) {
                         if(mutants[i] != null) {
                                 String[] first_name = mutants[i].split(" ");
                                 String last_name = first_name[1];
-                                FILE = new File("/opt/code/" + first_name[0] + "_" + last_name + ".png");
+                                FILE = new File("/opt/code/java-datatypes/" + first_name[0] + "_" + last_name + ".png");
                                 System.out.print("\nProcessing image for: " + first_name[0] + " " + last_name);
                                 allocateAndInsert(session, first_name[0], last_name);
                                 insertConcurrent(session, first_name[0], last_name);
