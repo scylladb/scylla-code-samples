@@ -1,4 +1,4 @@
-## Scylla in Docker for the Mutant Monitoring Blog Series
+## Scylla in Docker for the Mutant Monitoring University Course
 
 ### Instructions for setting up a Scylla Cluster from this repo
 
