@@ -13,14 +13,7 @@ docker-compose exec spark-master spark-shell \
     --conf spark.driver.host=spark-master
 ```
 
-### Launching ScyllaDB
-
-To launch ScyllaDB, run the following command:
-```shell
-docker-compose up -d scylladb-node1 scylladb-node2 scylladb-node3
-```
-
-You can also launch the Spark shell afterwards with ScyllaDB support:
+To launch the Spark shell afterwards with ScyllaDB support:
 ```shell
 docker-compose exec spark-master spark-shell \
     --conf spark.driver.host=spark-master \
