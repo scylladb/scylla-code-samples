@@ -3,7 +3,7 @@
 ### Instructions for setting up a Scylla Cluster from this repo. For more details follow more details in the University lessons here: https://university.scylladb.com/courses/the-mutant-monitoring-system-training-course/
 
 ```
-cd mms2
+cd mms
 docker-compose up -d
 ```
 
@@ -33,7 +33,7 @@ INSERT INTO tracking.tracking_data ("first_name","last_name","timestamp","locati
 
 ### Destroying the Scylla Cluster 
 ```
-cd mms2
+cd mms
 docker-compose kill
 docker-compose rm -f
 ```

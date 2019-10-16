@@ -3,7 +3,7 @@
 ### Instructions for setting up a Scylla Cluster from this repo, prerequisites are a running 3 node cluster with the catalog/tracking keyspaces and tables. More info in the University Lessons. 
 
 ```
-cd mms2/java/
+cd mms/java/
 docker build -t java-app .
 docker run -d --net=mms2_web --name some-java-app java-app
 docker exec -it some-java-app sh
@@ -22,7 +22,7 @@ insert into mutant_data ("first_name","last_name","address","picture_location") 
 
 ### Destroying the Scylla Cluster 
 ```
-cd mms2
+cd mms
 docker-compose kill
 docker-compose rm -f
 ```
