@@ -1,0 +1,132 @@
+<html>
+<title>Mutant Monitoring Web Console</title>
+
+<head>
+	<script src="/jquery.min.js"></script>
+	<script src="/jquery-ui.js"></script>
+	<meta name="theme-color" content="#ffffff">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="theme-color" content="#ffffff">
+	<link rel="stylesheet" href="/menu.css">
+	<script>
+		var first_name = '';
+		var last_name = '';
+		var address = '';
+		var picture_location = '';
+
+		function alter() {
+			$.get("/alter", function(data) {
+				alert('Sent Request to add the blob columns.');
+			});
+		}
+
+		function load() {
+			$.get("/load", function(data) {
+				alert('Sent Request to start populating the tracking keyspace with data.');
+			});
+		}
+
+		function stopload() {
+			$.get("/stopload", function(data) {
+				alert('Sent Request to stop populating the tracking keyspace with data.');
+			});
+		}
+
+		function clear(callback) {
+			var iframe = document.getElementById('iframe_a').contentWindow.document;
+			iframe.write('<html>');
+			iframe.close();
+			callback();
+		}
+		$(document).ready(function() {
+			$('#catalog').click(function() {
+				$('#iframe_a').attr('src', '/catalog.html');
+			});
+
+			$('#alter').click(function() {
+				$('#iframe_a').attr('src', alter());
+			});
+			$('#add-mutant').click(function() {
+				$('#iframe_a').attr('src', '/add-mutant.html');
+			});
+			$('#load').click(function() {
+				$('#iframe_a').attr('onClick', load());
+			});
+			$('#stopload').click(function() {
+				$('#iframe_a').attr('onClick', stopload());
+			});
+		});
+	</script>
+	<script>
+		$("html").click(function() {
+			$(".dropdown").hide();
+		});
+		$("nav ul li a:not(:only-child)").click(function(e) {
+			$(this).siblings(".dropdown").toggle();
+			$(".dropdown").not($(this).siblings()).hide();
+			e.stopPropagation();
+		});
+
+		function hideshow(id) {
+			var e = document.getElementById(id);
+			if (e.style.display == 'block')
+				e.style.display = 'none';
+			else
+				e.style.display = 'block';
+		}
+		$(function() {
+			hideshow('menu');
+			hideshow('content');
+
+		});
+	</script>
+</head>
+
+<body>
+	<div id="menu">
+		<nav>
+			<ul>
+				<li><a href="#!">Mutant</a>
+					<ul class="dropdown">
+						<li><a href="#" id="catalog">Catalog</a></li>
+						<li><a href="#" id="add-mutant">Add Mutant</a></li>
+					</ul>
+				</li>
+				<li><a href="#!">Keyspaces</a>
+					<ul class="dropdown">
+						<li><a href="#" id="alter">Alter</a></li>
+					</ul>
+				</li>
+				<li><a href="#!">Tools</a>
+					<ul class="dropdown">
+						<li><a href="#" id="load">Start Load Generator</a></li>
+						<li><a href="#" id="stopload">Stop Load</a></li>
+					</ul>
+				</li>
+			</ul>
+			<label class="logo">Mutant Monitoring Web Console</label>
+		</nav>
+		</td>
+	</div>
+	<div id="content">
+		<div class="left">
+		</div>
+
+		<div style="clear: both;"> </div>
+	</div>
+
+	<script>
+		$("html").click(function() {
+			$(".dropdown").hide();
+		});
+		$("nav ul li a:not(:only-child)").click(function(e) {
+			$(this).siblings(".dropdown").toggle();
+			$(".dropdown").not($(this).siblings()).hide();
+			e.stopPropagation();
+		});
+	</script>
+	<p align=center>
+		<IFRAME SRC="/blank" id='iframe_a' name="iframe_a" WIDTH=100% HEIGHT=100%>
+  </body>
+
+  </html>

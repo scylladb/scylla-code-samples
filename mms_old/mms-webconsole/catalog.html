@@ -1,0 +1,157 @@
+<html>
+
+<head>
+  <title>Mutant Monitoring Web Console</title>
+  <script src="/jquery.min.js"></script>
+  <script src="/jquery-ui.js"></script>
+  <script src="/dropzone.js"></script>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <div id="main" class="modal">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <span class="close">&times;</span>
+        <h2>Mutant Catalog</h2>
+      </div>
+      <div id="main-body" class="modal-body">
+      </div>
+    </div>
+  </div>
+
+  <div id="output" class="modal">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <span class="close">&times;</span>
+        <h2>Mutant Info</h2>
+      </div>
+      <div id="mutant-info-body" class="modal-body">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function divChanger(div) {
+      var x = document.getElementById(div);
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+    }
+
+    function exec(first_name, last_name) {
+      var output_modal = document.getElementById('output');
+      var main = document.getElementById('main');
+      var mutant_body_div = document.getElementById('mutant-info-body');
+
+      mutant_body_div.innerHTML = '<br>';
+
+      $.get("/pictures", function(data) {
+        for (var i in data.rows) {
+          if (data.rows[i].first_name.indexOf(first_name) > -1 && data.rows[i].last_name.indexOf(last_name) > -1) {
+            Dropzone.autoDiscover = false;
+            var myDropzone = new Dropzone("div#mutant-info-body", {
+              url: "/upload",
+              params: {
+                'first_name': data.rows[i].first_name,
+                'last_name': data.rows[i].last_name,
+                'address': data.rows[i].address,
+                'picture_location': data.rows[i].picture_location
+              }
+            });
+            if (data.rows[i].data) {
+              mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<img class="imagesize" src="data:image/jpeg;base64,' + base64(data.rows[i].data.data) + '" ><br><b><label class="imageinfo"><hr>' + data.rows[
+                  i].first_name +
+                '</label> ' +
+                '<label class="imageinfo">' +
+                data.rows[i].last_name + '</label></b><br><label class="imageinfo"><b>Home Address:</b> ' + data.rows[i].address + '</label><br><br>';
+            } else {
+              mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<img class="imagesize" src="data:image/jpeg;base64,' + '" ><br><b><label class="imageinfo">' + data.rows[
+                  i].first_name +
+                '</label> ' +
+                '<label class="imageinfo">' +
+                data.rows[i].last_name + '</label></b><br><label class="imageinfo"><b>Home Address:</b> ' + data.rows[i].address + '</label><br><br>';
+            }
+            first_name = data.rows[i].first_name;
+            last_name = data.rows[i].last_name;
+            mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<a href="/add-mutant.html" onClick="edit(\'' + data.rows[i].first_name + '\',\'' + data.rows[i].last_name + '\',\'' + data.rows[i].address + '\',\'' + data.rows[i].picture_location +
+              '\');"> <img width="20" height="20" src="/edit.png"> Edit Details</a><br><br>';
+            mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<img width="25" height="25" src="/image.png"> Change Image</a><br><br>';
+            mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<a href="#" onClick="deleteMutant(\'' + data.rows[i].first_name + '\',\'' + data.rows[i].last_name +
+              '\');"> <img width="20" height="20" src="/delete.png"> Delete</a><br><br>';
+            $.post('/tracking', {
+              first_name: data.rows[i].first_name,
+              last_name: data.rows[i].last_name
+            }, function(tracking_data) {
+              if (tracking_data.rows[0]) {
+                mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<hr><b><font size="+2">Tracking Data:</font></b><br><br>'
+                mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<label class="imageinfo"><b>Current Location:</b> ' + tracking_data.rows[0].location + "</label>";
+                mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><label class="imageinfo"><b>Latest Heat Signature:</b> ' + tracking_data.rows[0].heat + "</label>";
+                mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><label class="imageinfo"><b>Latest Telepathy Powers:</b> ' + tracking_data.rows[0].telepathy_powers + "</b></label>";
+                mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><label class="imageinfo"><b>Latest Speed Reading:</b> ' + tracking_data.rows[0].speed + "</b></label>";
+              }
+            });
+          }
+        }
+
+        divChanger('main');
+        divChanger('output');
+      });
+
+    };
+    var output_modal = document.getElementById('output');
+    var output_span = document.getElementsByClassName("close")[1];
+    var main = document.getElementById('main');
+
+    divChanger('main');
+
+    function base64(blob) {
+      var base64 = btoa(
+        new Uint8Array(blob)
+        .reduce((data, byte) => data + String.fromCharCode(byte), '')
+      );
+      return base64;
+    }
+
+    function edit(first_name, last_name, address, picture_location) {
+      parent.first_name = first_name;
+      parent.last_name = last_name;
+      parent.address = address;
+      parent.picture_location = picture_location;
+    }
+
+    function deleteMutant(first_name, last_name) {
+      $.post('/delete', {
+        first_name,
+        last_name
+      }, function(tracking_data) {
+        alert('Sent request to delete mutant. Please refresh the catalog.');
+      });
+    }
+
+    function getImages() {
+      var div = document.getElementById('main-body');
+      div.innerHTML = '<br>';
+      $.get("/pictures", function(data) {
+        for (var i in data.rows) {
+          if (data.rows[i].data) {
+            div.innerHTML = div.innerHTML + '<a href="#" onClick=exec("' + data.rows[i].first_name + '","' + data.rows[i].last_name + '");> <img class="imagesize" src="data:image/jpeg;base64,' + base64(data.rows[i].data.data) +
+              '" ></a> <br><b><label class="imageinfo">' + data.rows[
+                i].first_name + '</label> ' + '<label class="imageinfo">' + data.rows[i].last_name + '</label></b><br><label class="imageinfo">' + data.rows[i].address + '</label><br><br>';
+          } else {
+            div.innerHTML = div.innerHTML + '<a href="#" onClick=exec("' + data.rows[i].first_name + '","' + data.rows[i].last_name + '");> <img class="imagesize" src="data:image/jpeg;base64,' +
+              '" ></a> <br><b><label class="imageinfo">' + data.rows[
+                i].first_name + '</label> ' + '<label class="imageinfo">' + data.rows[i].last_name + '</label></b><br><label class="imageinfo">' + data.rows[i].address + '</label><br><br>';
+          }
+        }
+        divChanger('main');
+        divChanger('output');
+      });
+    }
+    getImages();
+  </script>
+</body>
+
+</html>

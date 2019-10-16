@@ -1,0 +1,105 @@
+<html>
+
+<head>
+  <title>Mutant Monitoring Web Console</title>
+  <script src="/jquery.min.js"></script>
+  <script src="/jquery-ui.js"></script>
+  <script src="/dropzone.js"></script>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <div id="main" class="modal">
+    <div class="modal-content modal-small">
+      <div class="modal-header">
+        <span class="close">&times;</span>
+        <h2>Add/Modify A Mutant</h2>
+      </div>
+      <div id="add-mutant-body" class="modal-body">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var mutant_body_div = document.getElementById('add-mutant-body');
+    var first_name = document.createElement("input");
+    var last_name = document.createElement("input");
+    var address = document.createElement("input");
+    var picture_location = document.createElement("input");
+    address.setAttribute("id", "address");
+    address.setAttribute("class", "imageinfo");
+    picture_location.setAttribute("id", "picture_location");
+    picture_location.setAttribute("class", "imageinfo");
+    first_name.setAttribute("id", "first_name");
+    first_name.setAttribute("class", "imageinfo");
+    last_name.setAttribute("id", "last_name");
+    last_name.setAttribute("class", "imageinfo");
+    var first_name_label = document.createElement("Label");
+    var last_name_label = document.createElement("Label");
+    var address_label = document.createElement("Label");
+    var picture_location_label = document.createElement("Label");
+    address_label.setAttribute("class", "imageinfo");
+    picture_location_label.setAttribute("class", "imageinfo");
+    first_name_label.setAttribute("class", "imageinfo");
+    last_name_label.setAttribute("class", "imageinfo");
+    var btn = document.createElement("BUTTON");
+    btn.setAttribute("class", "imageinfo");
+    btn.setAttribute("onClick", "javascript: exec();");
+    var t = document.createTextNode("Add Mutant");
+    if (parent.first_name && parent.last_name && parent.picture_location && parent.address) {
+      t = document.createTextNode("Save Changes");
+      first_name.setAttribute('value', parent.first_name);
+      last_name.setAttribute('value', parent.last_name);
+      address.setAttribute('value', parent.address);
+      picture_location.setAttribute('value', parent.picture_location);
+      parent.first_name = '';
+      parent.last_name = '';
+      parent.address = '';
+      parent.picture_location = '';
+    }
+    first_name_label.innerHTML = "First Name: ";
+    last_name_label.innerHTML = "Last Name: ";
+    address_label.innerHTML = "Address: ";
+    picture_location_label.innerHTML = "Picture Location: ";
+    mutant_body_div.appendChild(first_name_label);
+    mutant_body_div.appendChild(first_name);
+    mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><br>';
+    mutant_body_div.appendChild(last_name_label);
+    mutant_body_div.appendChild(last_name);
+    mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><br>';
+    mutant_body_div.appendChild(address_label);
+    mutant_body_div.appendChild(address);
+    mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><br>';
+    mutant_body_div.appendChild(picture_location_label);
+    mutant_body_div.appendChild(picture_location);
+    mutant_body_div.innerHTML = mutant_body_div.innerHTML + '<br><br>';
+    btn.appendChild(t);
+    mutant_body_div.appendChild(btn);
+
+    function divChanger(div) {
+      var x = document.getElementById(div);
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+    }
+
+    function exec() {
+      $.post('/upload', {
+        first_name: document.getElementById('first_name').value,
+        last_name: document.getElementById('last_name').value,
+        address: document.getElementById('address').value,
+        picture_location: document.getElementById('picture_location').value
+      }, function(tracking_data) {
+
+      });
+      alert("Mutant Added. View the catalog to change the photo if needed.");
+    };
+
+    divChanger('main');
+    divChanger('main');
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,6 @@
+# List end points with node exporter
+
+- targets:
+  - 'scylla-node1:9100'
+  - 'scylla-node2:9100'
+  - 'scylla-node3:9100'
