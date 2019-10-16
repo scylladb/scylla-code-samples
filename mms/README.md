@@ -1,40 +1,47 @@
-## Scylla in Docker for the Mutant Monitoring Blog Series
+## Scylla in Docker for the Mutant Monitoring University Course
 
-### Instructions on setting up a Scylla Cluster from this repo
+### Instructions for setting up a Scylla Cluster from this repo. For more details follow more details in the University lessons here: https://university.scylladb.com/courses/the-mutant-monitoring-system-training-course/
 
 ```
-cd mms
+cd mms2
 docker-compose up -d
-docker exec -it mms_scylla-node1_1 sh
 ```
+
+Run bash in the node:
+```
+docker exec -it mms2_scylla-node1_1 bash
+```
+
+Followed by scylla commands, like
+```
+> nodetool status
+```
+or
+```
+> cqlsh
+```
+
+### TO manually add the tracking keyspace and data
+docker exec -it mms2_scylla-node1_1 cqlsh
+CREATE KEYSPACE tracking WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy','DC1' : 3};
+use tracking;
+CREATE TABLE tracking_data ( first_name text, last_name text, timestamp timestamp, location varchar, speed double, heat double, telepathy_powers int, primary key((first_name, last_name), timestamp)) WITH CLUSTERING ORDER BY (timestamp DESC) AND COMPACTION = {'class': 'DateTieredCompactionStrategy', 'base_time_seconds': 3600, 'max_sstable_age_days': 1};
+
+INSERT INTO tracking.tracking_data ("first_name","last_name","timestamp","location","speed","heat","telepathy_powers") VALUES ('Jim','Jeffries','2017-11-11 08:05+0000','New York',1.0,3.0,17) ; INSERT INTO tracking.tracking_data ("first_name","last_name","timestamp","location","speed","heat","telepathy_powers") VALUES ('Jim','Jeffries','2017-11-11 09:05+0000','New York',2.0,4.0,27) ; INSERT INTO tracking.tracking_data ("first_name","last_name","timestamp","location","speed","heat","telepathy_powers") VALUES ('Jim','Jeffries','2017-11-11 10:05+0000','New York',3.0,5.0,37) ; INSERT INTO tracking.tracking_data ("first_name","last_name","timestamp","location","speed","heat","telepathy_powers") VALUES ('Jim','Jeffries','2017-11-11 10:22+0000','New York',4.0,12.0,47) ; INSERT INTO tracking.tracking_data ("first_name","last_name","timestamp","location","speed","heat","telepathy_powers") VALUES ('Jim','Jeffries','2017-11-11 11:05+0000','New York',4.0,9.0,87) ; INSERT INTO tracking.tracking_data ("first_name","last_name","timestamp","location","speed","heat","telepathy_powers") VALUES ('Jim','Jeffries','2017-11-11 12:05+0000','New York',4.0,24.0,57) ;
+
+
+
 ### Destroying the Scylla Cluster 
 ```
-cd mms
+cd mms2
 docker-compose kill
 docker-compose rm -f
 ```
 ### Importing the MMS keyspaces and data automatically 
 
-Add the following argument under ```environment``` for ```scylla-node1:``` in docker-compose.yml:
-
 ```
-  - IMPORT=IMPORT
+docker exec mms2_scylla-node1_1 cqlsh -f /mutant-data.txt
 ```
 
-Then re-run docker-compose:
-```
-docker-compose kill
-docker-compose rm -f
-docker-compose up -d
-```
-The data will be imported about 60 seconds after the containers come up.
+The data will be imported after a few seconds.
 
-### Using Scylla Monitoring to monitor the Scylla Cluster
-See our guide [here](https://github.com/scylladb/scylla-code-samples/tree/master/mms/monitoring)
-
-
-### Using Presto to Run Queries from the Scylla Cluster
-See our guide [here](https://github.com/scylladb/scylla-code-samples/tree/master/mms/presto)
-
-### Using Zeppelin to Run Queries from the Scylla Cluster
-See our guide [here](https://github.com/scylladb/scylla-code-samples/tree/master/mms/zeppelin)
