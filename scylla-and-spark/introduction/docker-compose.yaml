@@ -2,21 +2,21 @@ version: '3'
 
 services:
   scylladb-node1:
-    image: scylladb/scylla:2.2.0
+    image: scylladb/scylla:3.0.10
     networks:
       - scylla
     volumes:
       - ./data/node1:/var/lib/scylla
     command: "--seeds scylladb-node1,scylladb-node2,scylladb-node3 --smp 1 --memory 256M"
   scylladb-node2:
-    image: scylladb/scylla:2.2.0
+    image: scylladb/scylla:3.0.10
     networks:
       - scylla
     volumes:
       - ./data/node2:/var/lib/scylla
     command: "--seeds scylladb-node1,scylladb-node2,scylladb-node3 --smp 1 --memory 256M"
   scylladb-node3:
-    image: scylladb/scylla:2.2.0
+    image: scylladb/scylla:3.0.10
     networks:
       - scylla
     volumes:

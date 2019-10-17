@@ -1,30 +1,6 @@
 version: '3'
 
 services:
-  scylladb-node1:
-    image: scylladb/scylla:3.0.10
-    networks:
-      - scylla
-    volumes:
-      - ./data/node1:/var/lib/scylla
-      - ./stocks.cql:/stocks.cql
-    command: "--seeds scylladb-node1,scylladb-node2,scylladb-node3 --smp 1 --memory 256M"
-
-  scylladb-node2:
-    image: scylladb/scylla:3.0.10
-    networks:
-      - scylla
-    volumes:
-      - ./data/node2:/var/lib/scylla
-    command: "--seeds scylladb-node1,scylladb-node2,scylladb-node3 --smp 1 --memory 256M"
-
-  scylladb-node3:
-    image: scylladb/scylla:3.0.10
-    networks:
-      - scylla
-    volumes:
-      - ./data/node3:/var/lib/scylla
-    command: "--seeds scylladb-node1,scylladb-node2,scylladb-node3 --smp 1 --memory 256M"
 
   spark-master:
     image: gettyimages/spark
@@ -34,8 +10,6 @@ services:
       MASTER: spark://spark-master:7077
       SPARK_CONF_DIR: /conf
       SPARK_PUBLIC_DNS: spark-master
-    networks:
-      - scylla
     expose:
       - 7001
       - 7002
@@ -63,15 +37,13 @@ services:
       SPARK_WORKER_PORT: 8881
       SPARK_WORKER_WEBUI_PORT: 8081
       SPARK_PUBLIC_DNS: spark-worker
-    networks:
-      - scylla
     expose:
-      - 7012
-      - 7013
-      - 7014
-      - 7015
-      - 7016
-      - 8881
+       - 7012
+       - 7013
+       - 7014
+       - 7015
+       - 7016
+       - 8881
     ports:
       - 8081:8081
     volumes:
@@ -80,4 +52,7 @@ services:
       - spark-master
 
 networks:
-  scylla:
+ default:
+    external:
+      name: mms_web
+
