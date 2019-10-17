@@ -5,14 +5,14 @@
 ```
 cd mms/java/
 docker build -t java-app .
-docker run -d --net=mms2_web --name some-java-app java-app
+docker run -d --net=mms_web --name some-java-app java-app
 docker exec -it some-java-app sh
 cd <dir-name>/dist
 java -jar <AppName>.jar
 ```
 
 ### TO manually add the catalog keyspace and data
-docker exec -it mms2_scylla-node1_1 cqlsh
+docker exec -it mms_scylla-node1_1 cqlsh
 CREATE KEYSPACE catalog WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy','DC1' : 3};
 use catalog;
 CREATE TABLE mutant_data ( first_name text, last_name text, address text, picture_location text, PRIMARY KEY((first_name, last_name)));

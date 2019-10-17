@@ -9,7 +9,7 @@ docker-compose up -d
 
 Run bash in the node:
 ```
-docker exec -it mms2_scylla-node1_1 bash
+docker exec -it mms_scylla-node1_1 bash
 ```
 
 Followed by scylla commands, like
@@ -22,7 +22,7 @@ or
 ```
 
 ### TO manually add the tracking keyspace and data
-docker exec -it mms2_scylla-node1_1 cqlsh
+docker exec -it mms_scylla-node1_1 cqlsh
 CREATE KEYSPACE tracking WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy','DC1' : 3};
 use tracking;
 CREATE TABLE tracking_data ( first_name text, last_name text, timestamp timestamp, location varchar, speed double, heat double, telepathy_powers int, primary key((first_name, last_name), timestamp)) WITH CLUSTERING ORDER BY (timestamp DESC) AND COMPACTION = {'class': 'DateTieredCompactionStrategy', 'base_time_seconds': 3600, 'max_sstable_age_days': 1};
@@ -40,7 +40,7 @@ docker-compose rm -f
 ### Importing the MMS keyspaces and data automatically 
 
 ```
-docker exec mms2_scylla-node1_1 cqlsh -f /mutant-data.txt
+docker exec mms_scylla-node1_1 cqlsh -f /mutant-data.txt
 ```
 
 The data will be imported after a few seconds.
