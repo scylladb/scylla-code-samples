@@ -11,40 +11,7 @@ import (
 	"go.uber.org/zap"
 )
 
-var (
-	deleteStmt  string
-	deleteNames []string
-
-	insertStmt  string
-	insertNames []string
-
-	selectStmt  string
-	selectNames []string
-
-	tbl *table.Table
-)
-
-type Record struct {
-	FirstName       string `db:"first_name"`
-	LastName        string `db:"last_name"`
-	Address         string `db:"address"`
-	PictureLocation string `db:"picture_location"`
-}
-
-func init() {
-	m := table.Metadata{
-		Name:    "mutant_data",
-		Columns: []string{"first_name", "last_name", "address", "picture_location"},
-		PartKey: []string{"first_name", "last_name"},
-	}
-	tbl = table.New(m)
-
-	deleteStmt, deleteNames = tbl.Delete()
-	insertStmt, insertNames = tbl.Insert()
-	// Normally a select statement such as this would use `tbl.Select()` to select by
-	// primary key but now we just want to display all the records...
-	selectStmt, selectNames = qb.Select(m.Name).Columns(m.Columns...).ToCql()
-}
+var stmts = createStatements()
 
 func main() {
 	logger := log.CreateLogger("info")
@@ -72,7 +39,7 @@ func deleteQuery(session *gocql.Session, firstName string, lastName string, logg
 		FirstName: firstName,
 		LastName:  lastName,
 	}
-	if err := gocqlx.Query(session.Query(deleteStmt), deleteNames).BindStruct(r).ExecRelease(); err != nil {
+	if err := gocqlx.Query(session.Query(stmts.del.stmt), stmts.del.names).BindStruct(r).ExecRelease(); err != nil {
 		logger.Error("delete catalog.mutant_data", zap.Error(err))
 	}
 }
@@ -85,20 +52,66 @@ func insertQuery(session *gocql.Session, firstName, lastName, address, pictureLo
 		Address:         address,
 		PictureLocation: pictureLocation,
 	}
-	if err := gocqlx.Query(session.Query(insertStmt), insertNames).BindStruct(r).ExecRelease(); err != nil {
+	if err := gocqlx.Query(session.Query(stmts.ins.stmt), stmts.ins.names).BindStruct(r).ExecRelease(); err != nil {
 		logger.Error("insert catalog.mutant_data", zap.Error(err))
 	}
 }
 
 func selectQuery(session *gocql.Session, logger *zap.Logger) {
-	logger.Info("executing", zap.String("query", selectStmt))
 	logger.Info("Displaying Results:")
 	var rs []Record
-	if err := gocqlx.Query(session.Query(selectStmt), selectNames).SelectRelease(&rs); err != nil {
+	if err := gocqlx.Query(session.Query(stmts.sel.stmt), stmts.sel.names).SelectRelease(&rs); err != nil {
 		logger.Warn("select catalog.mutant", zap.Error(err))
 		return
 	}
 	for _, r := range rs {
 		logger.Info("\t" + r.FirstName + " " + r.LastName + ", " + r.Address + ", " + r.PictureLocation)
 	}
+}
+
+func createStatements() *statements {
+	m := table.Metadata{
+		Name:    "mutant_data",
+		Columns: []string{"first_name", "last_name", "address", "picture_location"},
+		PartKey: []string{"first_name", "last_name"},
+	}
+	tbl := table.New(m)
+
+	deleteStmt, deleteNames := tbl.Delete()
+	insertStmt, insertNames := tbl.Insert()
+	// Normally a select statement such as this would use `tbl.Select()` to select by
+	// primary key but now we just want to display all the records...
+	selectStmt, selectNames := qb.Select(m.Name).Columns(m.Columns...).ToCql()
+	return &statements{
+		del: query{
+			stmt:  deleteStmt,
+			names: deleteNames,
+		},
+		ins: query{
+			stmt:  insertStmt,
+			names: insertNames,
+		},
+		sel: query{
+			stmt:  selectStmt,
+			names: selectNames,
+		},
+	}
+}
+
+type query struct {
+	stmt  string
+	names []string
+}
+
+type statements struct {
+	del query
+	ins query
+	sel query
+}
+
+type Record struct {
+	FirstName       string `db:"first_name"`
+	LastName        string `db:"last_name"`
+	Address         string `db:"address"`
+	PictureLocation string `db:"picture_location"`
 }
