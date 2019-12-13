@@ -39,7 +39,8 @@ func deleteQuery(session *gocql.Session, firstName string, lastName string, logg
 		FirstName: firstName,
 		LastName:  lastName,
 	}
-	if err := gocqlx.Query(session.Query(stmts.del.stmt), stmts.del.names).BindStruct(r).ExecRelease(); err != nil {
+	err := gocqlx.Query(session.Query(stmts.del.stmt), stmts.del.names).BindStruct(r).ExecRelease()
+	if err != nil {
 		logger.Error("delete catalog.mutant_data", zap.Error(err))
 	}
 }
@@ -52,7 +53,8 @@ func insertQuery(session *gocql.Session, firstName, lastName, address, pictureLo
 		Address:         address,
 		PictureLocation: pictureLocation,
 	}
-	if err := gocqlx.Query(session.Query(stmts.ins.stmt), stmts.ins.names).BindStruct(r).ExecRelease(); err != nil {
+	err := gocqlx.Query(session.Query(stmts.ins.stmt), stmts.ins.names).BindStruct(r).ExecRelease()
+	if err != nil {
 		logger.Error("insert catalog.mutant_data", zap.Error(err))
 	}
 }
@@ -60,7 +62,8 @@ func insertQuery(session *gocql.Session, firstName, lastName, address, pictureLo
 func selectQuery(session *gocql.Session, logger *zap.Logger) {
 	logger.Info("Displaying Results:")
 	var rs []Record
-	if err := gocqlx.Query(session.Query(stmts.sel.stmt), stmts.sel.names).SelectRelease(&rs); err != nil {
+	err := gocqlx.Query(session.Query(stmts.sel.stmt), stmts.sel.names).SelectRelease(&rs)
+	if err != nil {
 		logger.Warn("select catalog.mutant", zap.Error(err))
 		return
 	}
