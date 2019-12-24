@@ -14,7 +14,7 @@ RUN chmod +x /usr/local/bin/goapp
 COPY --from=builder /build/goappp /usr/local/bin/goappp
 RUN chmod +x /usr/local/bin/goappp
 RUN mkdir -p /usr/share/icons/mms
-COPY --from=builder /build/cmd/godatatypes/*.png /usr/share/icons/mms/
+COPY --from=builder /build/cmd/godatatypes/*.jpg /usr/share/icons/mms/
 COPY --from=builder /build/godatatypes /usr/local/bin/godatatypes
 RUN chmod +x /usr/local/bin/godatatypes
 
