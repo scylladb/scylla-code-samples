@@ -56,15 +56,15 @@ func readFile(session *gocql.Session, firstName string, lastName string, logger 
 		logger.Fatal("unable to read image", zap.String("first_name", firstName), zap.String("last_name", lastName), zap.Error(err))
 	}
 	logger.Info("file metadata", zap.Any("properties", m))
-	if err := ioutil.WriteFile("/tmp/"+firstName+"_"+lastName+".png", b, 0644); err != nil {
-		logger.Fatal("unable to write image", zap.String("name", "/tmp/"+firstName+"_"+lastName+".png"), zap.Error(err))
+	if err := ioutil.WriteFile("/tmp/"+firstName+"_"+lastName+".jpg", b, 0644); err != nil {
+		logger.Fatal("unable to write image", zap.String("name", "/tmp/"+firstName+"_"+lastName+".jpg"), zap.Error(err))
 	}
 	convertOptions := convert.DefaultOptions
 	convertOptions.FixedWidth = 100
 	convertOptions.FixedHeight = 40
 
 	converter := convert.NewImageConverter()
-	fmt.Print(converter.ImageFile2ASCIIString("/tmp/"+firstName+"_"+lastName+".png", &convertOptions))
+	fmt.Print(converter.ImageFile2ASCIIString("/tmp/"+firstName+"_"+lastName+".jpg", &convertOptions))
 }
 
 func alterSchema(session *gocql.Session, logger *zap.Logger) {
@@ -77,7 +77,7 @@ func alterSchema(session *gocql.Session, logger *zap.Logger) {
 }
 
 func insertFile(session *gocql.Session, firstName, lastName string, logger *zap.Logger) {
-	fName := "/usr/share/icons/mms/" + firstName + "_" + lastName + ".png"
+	fName := "/usr/share/icons/mms/" + firstName + "_" + lastName + ".jpg"
 	b, err := ioutil.ReadFile(fName)
 	if err != nil {
 		logger.Fatal("unable to read file", zap.String("file_name", fName), zap.Error(err))
