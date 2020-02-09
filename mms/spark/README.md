@@ -1,6 +1,7 @@
 ## Hooking up ScyllaDB and Spark - Introduction
 
 ### Launching Spark
+More information and detailed instructions can be found at [Scylla University](https://university.scylladb.com/courses/the-mutant-monitoring-system-training-course/lessons/analyzing-data-with-spark/).
 
 To set up your local Spark environment, run the following command:
 ```shell

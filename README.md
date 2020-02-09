@@ -2,6 +2,14 @@
 
 This repository holds Scylla usage example, from simple to the more complex.
 
+## Scylla Training
+
+Some of the usage examples are covered in [Scylla University](https://university.scylladb.com/). Topics covered include 
+Scylla data modeling, administration, architecture, basic NoSQL concepts, using drivers for application development, 
+Scylla setup, failover, compactions, multi-datacenters and how Scylla integrates with third-party applications.
+For detailed information see the README.md file in each directory. 
+
+
 ## Adding a new example
 
 Add a new direcotry with your example. Each examlpe (directory) should have a README.md file with the following:
