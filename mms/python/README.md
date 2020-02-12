@@ -2,12 +2,17 @@
 
 ### Instructions for setting up a Scylla Cluster from this repo, prerequisites are a running 3 node cluster with the catalog/tracking keyspaces and tables. More info in the University Lessons. 
 
-```
+```shell script
 cd mms/python/
 docker build -t python-app .
-docker run -d --net=mms_web --name some-python-app python-app
+docker run -d --net=mms_web --name scylla-python-app python-app [APP_NAME]
+# APP_NAME can be app.py or prepared_statement_app.py
 ```
-###to view the output of the python application check the logs using: docker logs some-python-app
+
+### To view the output of the python application check the logs using: 
+```shell script
+docker logs some-python-app
+```
 
 ### TO manually add the catalog keyspace and data
 docker exec -it mms_scylla-node1_1 cqlsh
@@ -19,7 +24,7 @@ insert into mutant_data ("first_name","last_name","address","picture_location") 
 
 
 ### Destroying the Scylla Cluster 
-```
+```shell script
 cd mms
 docker-compose kill
 docker-compose rm -f
