@@ -5,7 +5,7 @@
 ```shell script
 cd mms/python/
 docker build -t python-app .
-docker run -d --net=mms_web --name scylla-python-app python-app [APP_NAME]
+docker run -d --net=mms_web --name some-python-app python-app [APP_NAME]
 # APP_NAME can be app.py or prepared_statement_app.py
 ```
 
