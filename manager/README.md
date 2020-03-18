@@ -4,7 +4,6 @@
 
 ```
 cd manager
-docker-compose up -d
 ```
 
 Start MinIO in a container:
