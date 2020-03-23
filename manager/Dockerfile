@@ -1,4 +1,4 @@
-FROM scylladb/scylla:latest
+FROM scylladb/scylla:3.2.0
 
 RUN echo -e "#!/usr/bin/env bash\n\
 set -eu -o pipefail\n\
