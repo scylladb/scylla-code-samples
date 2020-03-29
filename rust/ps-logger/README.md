@@ -11,9 +11,16 @@ docker run   -p 9042:9042/tcp   --name some-scylla   --hostname some-scylla   -d
 The application uses [CDRS](https://github.com/AlexPikalov/cdrs) which is an open-source Scylla driver for Rust. 
 If you don’t already have Rust and Cargo installed, go ahead and install it using the rustup.rs toolchain:
 ```bash
+cd scylla-code-samples/rust/ps-logger
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
-Then run the code:
+The application will be able to store and query temperature time-series data. Each measurement will contain the following information:
+* The sensor ID for the sensor that measured the temperature
+* The time the temperature was measured
+* The temperature value 
+
+It will connect to the Scylla cluster, create a keyspace and a table, insert two rows into the created table and read those two rows from the database. 
+Run the code:
 ```bash
 $ cargo run
 ```
