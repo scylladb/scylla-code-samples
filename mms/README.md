@@ -1,6 +1,7 @@
 ## Scylla in Docker for the Mutant Monitoring University Course
 
-### Instructions for setting up a Scylla Cluster from this repo. For more details follow more details in the University lessons here: https://university.scylladb.com/courses/the-mutant-monitoring-system-training-course/
+### Instructions for setting up a Scylla Cluster from this repo. For more details check out the [Using Scylla Drivers](https://university.scylladb.com/courses/using-scylla-drivers/) and [Mutant Monitoring System](https://university.scylladb.com/courses/the-mutant-monitoring-system-training-course/
+) courses in Scylla University.
 
 ```
 cd mms

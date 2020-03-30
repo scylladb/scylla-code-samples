@@ -1,4 +1,6 @@
 ## Hooking up ScyllaDB and Spark - Introduction
+For more information check out the [Mutant Monitoring System](https://university.scylladb.com/courses/the-mutant-monitoring-system-training-course/) Scylla University course.
+
 
 ### Launching Spark
 
