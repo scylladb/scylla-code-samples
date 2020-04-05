@@ -6,7 +6,7 @@
 cd mms/python/
 docker build -t python-app .
 docker run -d --net=mms_web --name some-python-app python-app [APP_NAME]
-# APP_NAME can be app.py or prepared_statement_app.py
+# APP_NAME can be app.py, prepared_statement_app.py or python_data_types.py
 ```
 
 ### To view the output of the python application check the logs using: 
