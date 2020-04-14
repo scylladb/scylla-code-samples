@@ -15,6 +15,7 @@ sudo pip install --upgrade boto3
 
 ### Running the Example Application
 The application connects to the Scylla cluster, creates a table, inserts two rows into the created table and reads those two rows from the database. 
+In the three scripts create.py read.py and write.py change the value for “endpoint_url” to the IP address of the node. 
 To run it:
 ```bash
 python create.py
