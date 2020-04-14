@@ -24,6 +24,8 @@ python read.py
 ```
 
 ### Destroying the Scylla Cluster
+```bash
 docker-compose kill
 docker-compose rm -f
+```
 
