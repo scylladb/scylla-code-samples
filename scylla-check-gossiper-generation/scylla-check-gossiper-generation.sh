@@ -16,7 +16,7 @@ else
 fi
 
 #Get gossip generation only for current node
-GEN=`nodetool gossipinfo | awk -F':' '$1~/10.88.0.2/{ getline;print $2}'`
+GEN=`nodetool gossipinfo | awk -F':' '$1~/$IP/{ getline;print $2}'`
 if [[ ! "$GEN" =~ ^[1-9]+[0-9]*$ ]]; then
     printf "Faulty output from nodetool, please try again or contact Scylla support"
     exit 1
