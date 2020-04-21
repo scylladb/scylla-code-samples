@@ -11,7 +11,7 @@ cd <dir-name>/dist
 java -jar <AppName>.jar
 ```
 
-### TO manually add the catalog keyspace and data
+### To manually add the catalog keyspace and data
 docker exec -it mms_scylla-node1_1 cqlsh
 CREATE KEYSPACE catalog WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy','DC1' : 3};
 use catalog;
