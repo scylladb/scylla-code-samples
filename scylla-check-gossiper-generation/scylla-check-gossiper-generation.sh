@@ -6,17 +6,17 @@
 set -e
 
 # Check for varying broadcast address and listen address settings
-LISTN=`grep 'listen_address:' /etc/scylla/scylla.yaml|awk -F':' '{ print $2 }' | xargs`
-BCAST=`grep 'broadcast_address:' /etc/scylla/scylla.yaml`
-if [[ "$BCAST" =~ ^#.* ]]; then
+LISTN=`awk -F':' '$1~/^listen_address/{ print $2}' /etc/scylla/scylla.yaml`
+BCAST=`awk -F':' '$1~/^broadcast_address/{ printf $2}' /etc/scylla/scylla.yaml`
+if [ $BCAST ] 
+then
     IP="$LISTN"
 else
-    BCAST=`grep 'broadcast_address:' /etc/scylla/scylla.yaml|awk -F':' '{ print $2 }' | xargs`
     IP="$BCAST"
 fi
 
 #Get gossip generation only for current node
-GEN=`nodetool gossipinfo | grep -A1 "$IP" | grep 'generation:' | awk -F':' '{ print $2 }' | xargs`
+GEN=`nodetool gossipinfo | awk -F':' '$1~/$IP/{ getline;print $2}'`
 if [[ ! "$GEN" =~ ^[1-9]+[0-9]*$ ]]; then
     printf "Faulty output from nodetool, please try again or contact Scylla support"
     exit 1
