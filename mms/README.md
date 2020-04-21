@@ -1,7 +1,6 @@
-## Scylla in Docker for the Mutant Monitoring University Course
+## Scylla in Docker for the [Mutant Monitoring University Course](https://university.scylladb.com/courses/the-mutant-monitoring-system-training-course/)
 
-### Instructions for setting up a Scylla Cluster from this repo. For more details check out the [Using Scylla Drivers](https://university.scylladb.com/courses/using-scylla-drivers/) and [Mutant Monitoring System](https://university.scylladb.com/courses/the-mutant-monitoring-system-training-course/
-) courses in Scylla University.
+### Instructions for setting up a Scylla Cluster from this repo. For more details check out the [Using Scylla Drivers](https://university.scylladb.com/courses/using-scylla-drivers/) and [Mutant Monitoring System](https://university.scylladb.com/courses/the-mutant-monitoring-system-training-course/) courses in Scylla University.
 
 ```
 cd mms
@@ -22,7 +21,7 @@ or
 > cqlsh
 ```
 
-### TO manually add the tracking keyspace and data
+### To manually add the tracking keyspace and data
 docker exec -it mms_scylla-node1_1 cqlsh
 CREATE KEYSPACE tracking WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy','DC1' : 3};
 use tracking;

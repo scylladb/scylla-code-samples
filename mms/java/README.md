@@ -1,4 +1,4 @@
-## Scylla in Docker for the Mutant Monitoring University Course - Java Lessons 1 2 and 3
+## Scylla in Docker for the [Mutant Monitoring University Course](https://university.scylladb.com/courses/the-mutant-monitoring-system-training-course/) - Java Lessons 1 2 and 3
 
 ### Instructions for setting up a Scylla Cluster from this repo, prerequisites are a running 3 node cluster with the catalog/tracking keyspaces and tables. More info in the Scylla University course [Using Scylla Drivers](https://university.scylladb.com/courses/using-scylla-drivers/). 
 
