@@ -1,15 +1,21 @@
-## Scylla in Docker for the Mutant Monitoring University Course - Node.js Lesson 1 
+## Scylla in Docker for the [Mutant Monitoring University Course](https://university.scylladb.com/courses/the-mutant-monitoring-system-training-course/) - Node.js 
 
-### Instructions for setting up a Scylla Cluster from this repo, prerequisites are a running 3 node cluster with the catalog/tracking keyspaces and tables. More info in the Scylla University course [Using Scylla Drivers](https://university.scylladb.com/courses/using-scylla-drivers/).
+### Instructions for setting up a Scylla Cluster 
+Prerequisites are a running 3 node cluster with the catalog/tracking keyspaces and tables. More info in the Scylla University course [Using Scylla Drivers](https://university.scylladb.com/courses/using-scylla-drivers/).
 
-```
+```shell script
 cd mms/nodejs/
 docker build -t nodejs-app .
 docker run -d --net=mms_web --name some-nodejs-app nodejs-app
 ```
-###to view the output of the python application check the logs using: docker logs some-nodejs-app
 
-### TO manually add the catalog keyspace and data
+To view the output of the python application check the logs using: 
+
+```shell script
+docker logs some-nodejs-app
+```
+
+### To manually add the catalog keyspace and data
 docker exec -it mms_scylla-node1_1 cqlsh
 CREATE KEYSPACE catalog WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy','DC1' : 3};
 use catalog;

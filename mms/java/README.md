@@ -1,4 +1,4 @@
-## Scylla in Docker for the Mutant Monitoring University Course - Java Lessons 1 2 and 3
+## Scylla in Docker for the [Mutant Monitoring University Course](https://university.scylladb.com/courses/the-mutant-monitoring-system-training-course/) - Java Lessons 1 2 and 3
 
 ### Instructions for setting up a Scylla Cluster from this repo, prerequisites are a running 3 node cluster with the catalog/tracking keyspaces and tables. More info in the Scylla University course [Using Scylla Drivers](https://university.scylladb.com/courses/using-scylla-drivers/). 
 
@@ -11,7 +11,7 @@ cd <dir-name>/dist
 java -jar <AppName>.jar
 ```
 
-### TO manually add the catalog keyspace and data
+### To manually add the catalog keyspace and data
 docker exec -it mms_scylla-node1_1 cqlsh
 CREATE KEYSPACE catalog WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy','DC1' : 3};
 use catalog;
