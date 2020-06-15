@@ -72,13 +72,14 @@ sleep 5
 wait "Open Grafana web UI"
 xdg-open "http://0.0.0.0:3000/d/overview-4-0/overview?refresh=5s&orgId=1&from=now-30m&to=now"
 
-# Upgrade Scylla
-wait "Let's upgrade to Scylla 4.0.1"
-echo "kubectl -n scylla edit clusters.scylla.scylladb.com scylla-cluster"
-kubectl -n scylla edit clusters.scylla.scylladb.com scylla-cluster
-kubectl get pods -n scylla
-sleep 10
-kubectl get pods -n scylla
+# Cassandra stress showcase
+
+wait "Let's put some load on it with cassandra-stress"
+echo "kubectl apply -f cassandra-stress.yaml"
+kubectl apply -f cassandra-stress.yaml
+wait "How many jobs"
+echo "kubectl get pods | grep cassandra"
+kubectl get pods | grep cassandra
 
 # Scale up
 wait "Let's scale up the cluster size..."
@@ -89,12 +90,3 @@ echo "kubectl get pods -n scylla"
 kubectl get pods -n scylla
 sleep 10
 kubectl get pods -n scylla
-
-# Cassandra stress showcase
-
-wait "Let's put some load on it with cassandra-stress"
-echo "kubectl apply -f cassandra-stress.yaml"
-kubectl apply -f cassandra-stress.yaml
-wait "How many jobs"
-echo "kubectl get pods | grep cassandra"
-kubectl get pods | grep cassandra
