@@ -72,20 +72,20 @@ sleep 5
 wait "Open Grafana web UI"
 xdg-open "http://0.0.0.0:3000/d/overview-4-0/overview?refresh=5s&orgId=1&from=now-30m&to=now"
 
-# Scale up - while stressing the system...
+# Upgrade Scylla
+wait "Let's upgrade to Scylla 4.0.1"
+echo "kubectl -n scylla edit clusters.scylla.scylladb.com scylla-cluster"
+kubectl -n scylla edit clusters.scylla.scylladb.com scylla-cluster
+kubectl get pods -n scylla
+sleep 10
+kubectl get pods -n scylla
+
+# Scale up
 wait "Let's scale up the cluster size..."
 echo "kubectl -n scylla edit clusters.scylla.scylladb.com scylla-cluster"
 kubectl -n scylla edit clusters.scylla.scylladb.com scylla-cluster
 wait "\nHow many scylla pods do we get now?"
 echo "kubectl get pods -n scylla"
-kubectl get pods -n scylla
-sleep 10
-kubectl get pods -n scylla
-
-# Upgrade Scylla - while stressing the system...
-wait "Let's upgrade to Scylla 4.0.1"
-echo "kubectl -n scylla edit clusters.scylla.scylladb.com scylla-cluster"
-kubectl -n scylla edit clusters.scylla.scylladb.com scylla-cluster
 kubectl get pods -n scylla
 sleep 10
 kubectl get pods -n scylla
