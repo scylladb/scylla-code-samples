@@ -95,6 +95,6 @@ kubectl get pods -n scylla
 wait "Let's put some load on it with cassandra-stress"
 echo "kubectl apply -f cassandra-stress.yaml"
 kubectl apply -f cassandra-stress.yaml
-wait "How many jobs?"
+wait "How many jobs"
 echo "kubectl get pods | grep cassandra"
 kubectl get pods | grep cassandra
