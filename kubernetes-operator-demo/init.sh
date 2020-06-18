@@ -7,7 +7,7 @@ fi
 
 function wait() {
     if [ $interactive -gt 0 ]; then
-        echo -ne "$1. Press any key to contine"
+        echo -ne "$1. Press any key to continue"
         while [ true ] ; do
             read -t 10 -n 1
             if [ $? = 0 ] ; then
