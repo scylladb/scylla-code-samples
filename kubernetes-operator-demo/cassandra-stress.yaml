@@ -1,0 +1,246 @@
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cassandra-stress-0
+  namespace: default
+  labels:
+    app: cassandra-stress
+spec:
+  template:
+    spec:
+      containers:
+      - name: cassandra-stress
+        image: scylladb/scylla:4.0.0
+        command:
+          - "/bin/bash"
+          - "-c"
+          - 'cassandra-stress write no-warmup cl=QUORUM duration=60m -schema "replication(factor=2)" -port jmx=6868 -mode cql3 native -rate threads=20 -pop seq=1..30000000 -node scylla-cluster-client.scylla.svc'
+        resources:
+          limits:
+            cpu: 2
+            memory: 2G
+      restartPolicy: Never
+      nodeSelector:
+        
+      tolerations:
+        - key: role
+          operator: Equal
+          value: cassandra-stress
+          effect: NoSchedule
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app: cassandra-stress
+       
+
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cassandra-stress-1
+  namespace: default
+  labels:
+    app: cassandra-stress
+spec:
+  template:
+    spec:
+      containers:
+      - name: cassandra-stress
+        image: scylladb/scylla:4.0.0
+        command:
+          - "/bin/bash"
+          - "-c"
+          - 'cassandra-stress write no-warmup cl=QUORUM duration=60m -schema "replication(factor=2)" -port jmx=6868 -mode cql3 native -rate threads=20 -pop seq=1..30000000 -node scylla-cluster-client.scylla.svc'
+        resources:
+          limits:
+            cpu: 2
+            memory: 2G
+      restartPolicy: Never
+      nodeSelector:
+        
+      tolerations:
+        - key: role
+          operator: Equal
+          value: cassandra-stress
+          effect: NoSchedule
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app: cassandra-stress
+       
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cassandra-stress-2
+  namespace: default
+  labels:
+    app: cassandra-stress
+spec:
+  template:
+    spec:
+      containers:
+        - name: cassandra-stress
+          image: scylladb/scylla:4.0.0
+          command:
+            - "/bin/bash"
+            - "-c"
+            - 'cassandra-stress write no-warmup cl=QUORUM duration=60m -schema "replication(factor=2)" -port jmx=6868 -mode cql3 native -rate threads=20 -pop seq=1..30000000 -node scylla-cluster-client.scylla.svc'
+          resources:
+            limits:
+              cpu: 2
+              memory: 2G
+      restartPolicy: Never
+      nodeSelector:
+
+      tolerations:
+        - key: role
+          operator: Equal
+          value: cassandra-stress
+          effect: NoSchedule
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app: cassandra-stress
+
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cassandra-stress-3
+  namespace: default
+  labels:
+    app: cassandra-stress
+spec:
+  template:
+    spec:
+      containers:
+        - name: cassandra-stress
+          image: scylladb/scylla:4.0.0
+          command:
+            - "/bin/bash"
+            - "-c"
+            - 'cassandra-stress write no-warmup cl=QUORUM duration=60m -schema "replication(factor=2)" -port jmx=6868 -mode cql3 native -rate threads=20 -pop seq=1..30000000 -node scylla-cluster-client.scylla.svc'
+          resources:
+            limits:
+              cpu: 2
+              memory: 2G
+      restartPolicy: Never
+      nodeSelector:
+
+      tolerations:
+        - key: role
+          operator: Equal
+          value: cassandra-stress
+          effect: NoSchedule
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app: cassandra-stress
+
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cassandra-stress-4
+  namespace: default
+  labels:
+    app: cassandra-stress
+spec:
+  template:
+    spec:
+      containers:
+        - name: cassandra-stress
+          image: scylladb/scylla:4.0.0
+          command:
+            - "/bin/bash"
+            - "-c"
+            - 'cassandra-stress write no-warmup cl=QUORUM duration=60m -schema "replication(factor=2)" -port jmx=6868 -mode cql3 native -rate threads=20 -pop seq=1..30000000 -node scylla-cluster-client.scylla.svc'
+          resources:
+            limits:
+              cpu: 2
+              memory: 2G
+      restartPolicy: Never
+      nodeSelector:
+
+      tolerations:
+        - key: role
+          operator: Equal
+          value: cassandra-stress
+          effect: NoSchedule
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app: cassandra-stress
+
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cassandra-stress-5
+  namespace: default
+  labels:
+    app: cassandra-stress
+spec:
+  template:
+    spec:
+      containers:
+        - name: cassandra-stress
+          image: scylladb/scylla:4.0.0
+          command:
+            - "/bin/bash"
+            - "-c"
+            - 'cassandra-stress write no-warmup cl=QUORUM duration=60m -schema "replication(factor=2)" -port jmx=6868 -mode cql3 native -rate threads=20 -pop seq=1..30000000 -node scylla-cluster-client.scylla.svc'
+          resources:
+            limits:
+              cpu: 2
+              memory: 2G
+      restartPolicy: Never
+      nodeSelector:
+
+      tolerations:
+        - key: role
+          operator: Equal
+          value: cassandra-stress
+          effect: NoSchedule
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app: cassandra-stress
+
