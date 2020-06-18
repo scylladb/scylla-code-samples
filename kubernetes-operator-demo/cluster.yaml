@@ -92,7 +92,7 @@ spec:
       - name: <gcp_region>
         scyllaConfig: "scylla-config"
         scyllaAgentConfig: "scylla-agent-config"
-        members: 2
+        members: 3
         storage:
           storageClassName: local-raid-disks
           capacity: 2995G

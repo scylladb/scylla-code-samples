@@ -15,7 +15,7 @@ spec:
         command:
           - "/bin/bash"
           - "-c"
-          - 'cassandra-stress write no-warmup cl=QUORUM duration=20m -schema "replication(factor=2)" -port jmx=6868 -mode cql3 native -rate threads=100 -pop seq=1..30000000 -node scylla-cluster-client.scylla.svc'
+          - 'cassandra-stress write no-warmup cl=QUORUM duration=60m -schema "replication(factor=2)" -port jmx=6868 -mode cql3 native -rate threads=20 -pop seq=1..30000000 -node scylla-cluster-client.scylla.svc'
         resources:
           limits:
             cpu: 2
@@ -57,7 +57,7 @@ spec:
         command:
           - "/bin/bash"
           - "-c"
-          - 'cassandra-stress write no-warmup cl=QUORUM duration=20m -schema "replication(factor=2)" -port jmx=6868 -mode cql3 native -rate threads=100 -pop seq=1..30000000 -node scylla-cluster-client.scylla.svc'
+          - 'cassandra-stress write no-warmup cl=QUORUM duration=60m -schema "replication(factor=2)" -port jmx=6868 -mode cql3 native -rate threads=20 -pop seq=1..30000000 -node scylla-cluster-client.scylla.svc'
         resources:
           limits:
             cpu: 2
@@ -98,7 +98,7 @@ spec:
           command:
             - "/bin/bash"
             - "-c"
-            - 'cassandra-stress write no-warmup cl=QUORUM duration=20m -schema "replication(factor=2)" -port jmx=6868 -mode cql3 native -rate threads=100 -pop seq=1..30000000 -node scylla-cluster-client.scylla.svc'
+            - 'cassandra-stress write no-warmup cl=QUORUM duration=60m -schema "replication(factor=2)" -port jmx=6868 -mode cql3 native -rate threads=20 -pop seq=1..30000000 -node scylla-cluster-client.scylla.svc'
           resources:
             limits:
               cpu: 2
@@ -139,7 +139,7 @@ spec:
           command:
             - "/bin/bash"
             - "-c"
-            - 'cassandra-stress write no-warmup cl=QUORUM duration=20m -schema "replication(factor=2)" -port jmx=6868 -mode cql3 native -rate threads=100 -pop seq=1..30000000 -node scylla-cluster-client.scylla.svc'
+            - 'cassandra-stress write no-warmup cl=QUORUM duration=60m -schema "replication(factor=2)" -port jmx=6868 -mode cql3 native -rate threads=20 -pop seq=1..30000000 -node scylla-cluster-client.scylla.svc'
           resources:
             limits:
               cpu: 2
@@ -180,7 +180,7 @@ spec:
           command:
             - "/bin/bash"
             - "-c"
-            - 'cassandra-stress write no-warmup cl=QUORUM duration=20m -schema "replication(factor=2)" -port jmx=6868 -mode cql3 native -rate threads=100 -pop seq=1..30000000 -node scylla-cluster-client.scylla.svc'
+            - 'cassandra-stress write no-warmup cl=QUORUM duration=60m -schema "replication(factor=2)" -port jmx=6868 -mode cql3 native -rate threads=20 -pop seq=1..30000000 -node scylla-cluster-client.scylla.svc'
           resources:
             limits:
               cpu: 2
@@ -221,7 +221,7 @@ spec:
           command:
             - "/bin/bash"
             - "-c"
-            - 'cassandra-stress write no-warmup cl=QUORUM duration=20m -schema "replication(factor=2)" -port jmx=6868 -mode cql3 native -rate threads=100 -pop seq=1..30000000 -node scylla-cluster-client.scylla.svc'
+            - 'cassandra-stress write no-warmup cl=QUORUM duration=60m -schema "replication(factor=2)" -port jmx=6868 -mode cql3 native -rate threads=20 -pop seq=1..30000000 -node scylla-cluster-client.scylla.svc'
           resources:
             limits:
               cpu: 2
