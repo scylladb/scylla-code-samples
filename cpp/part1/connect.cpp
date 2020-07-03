@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
 
   // Add the contact points. These can be either IPs or domain names.
   // You can specify more than one, comma-separated, but you don’t have to - driver will discover other nodes by itself. You should do it if you expect some of your contact points to be down.
-  cass_cluster_set_contact_points(cluster, "172.21.0.2"); // set the IP according to your setup
+  cass_cluster_set_contact_points(cluster, "172.18.0.2"); // set the IP according to your setup
 
   // Connect. `cass_session_connect` returns a pointer to "future"
   // Also, this allocates the object pointed to by `connect_future`,
