@@ -1,5 +1,5 @@
-// Compile with: g++ iter.cpp [-L <path_to_libcassandra.so> -I <path_to_cassandra.h>] -lcassandra -o iter
-// Demonstration of iterating through results. DB is expected to have some data in `ks.mutant_data`!
+// Compile with: g++ param_simple.cpp [-L <path_to_libcassandra.so> -I <path_to_cassandra.h>] -lcassandra -o param_simple
+// Example of parametrized simple query. DB is expected to have some data in `ks.mutant_data`!
 #include <cassandra.h>
 #include <iostream>
 
@@ -12,7 +12,6 @@ int main(int argc, char* argv[]) {
   // You can specify more than one, comma-separated, but you don’t have to - driver will discover other nodes by itself. You should do it if you expect some of your contact points to be down.
   cass_cluster_set_contact_points(cluster, "172.18.0.2"); // set the IP according to your setup
 
-
   // Connect. `cass_session_connect` returns a pointer to "future"
   // Also, this allocates the object pointed to by `connect_future`,
   //   which must be freed manually (see below).
@@ -24,26 +23,31 @@ int main(int argc, char* argv[]) {
     
     // Fetch data sample from ScyllaDB after the connection is established
     const char* query = "SELECT first_name, last_name, address, picture_location FROM ks.mutant_data";
-    CassStatement* statement = cass_statement_new(query, 0); // the 2nd argument (zero) is be explained in section “Prepared Statements”
+    // Parameterized simple statement, not to be confused with prepared statements!
+    CassStatement* statement = cass_statement_new("SELECT * FROM ks.mutant_data WHERE first_name=? and last_name=?", 2); // `2` is the number of parameters
     
+    cass_statement_bind_string(statement, 0, "Bob");
+    cass_statement_bind_string(statement, 1, "Loblaw");
+    
+    // Proceed with `statement` as usual
     CassFuture* result_future = cass_session_execute(session, statement);
     
     if (cass_future_error_code(result_future) == CASS_OK) {
       const CassResult* result = cass_future_get_result(result_future);
-      // Iterate all rows of `mutant_data` after `result` is fetched
-      CassIterator* iterator = cass_iterator_from_result(result);
-      while (cass_iterator_next(iterator)) {
-        const CassRow* row = cass_iterator_get_row(iterator);
-      
-        // Proceed with `row` as usual:
-        const CassValue* value = cass_row_get_column_by_name(row, "first_name");
-        const char* first_name;
-        size_t first_name_length;
-        cass_value_get_string(value, &first_name, &first_name_length);
-        std::cout.write(first_name, first_name_length);
-        std::cout << '\n';
+      const CassRow* row = cass_result_first_row(result);
+    
+      if (row) {
+        const CassValue* value = cass_row_get_column_by_name(row, "address");
+    
+        const char* address;
+        size_t address_length;
+        cass_value_get_string(value, &address, &address_length);
+	std::cout << "Address for Bob Loblaw is: "; 
+	std::cout.write(address, address_length);
+	std::cout << std::endl;
+
       }
-      cass_iterator_free(iterator);
+    
       cass_result_free(result);
     } else {
       // Handle error - omitted for brevity

@@ -1,5 +1,5 @@
 # Scylla CPP Driver  
-Instructions for setting up a three node Scylla cluster in Docker and running an example CPP application that interacts with the cluster and performs simple queries. This example uses the [CPP Driver](https://github.com/datastax/cpp-driver)
+Instructions for using prepared statements and parameterized simple statements. Before running the code you should have a three-node cluster running with the ks.mutant_data table, and some data in it. This example uses the [CPP Driver](https://github.com/datastax/cpp-driver)
 More info in the Scylla University Course [Using Scylla Drivers](https://university.scylladb.com/courses/using-scylla-drivers/). 
 
 ### ### Instructions for setting up a Scylla Cluster from this repo.
@@ -38,16 +38,17 @@ INSERT INTO ks.mutant_data ("first_name","last_name","address","picture_location
 
 ### Running the CPP Example
 The application uses [CPP Driver](https://github.com/datastax/cpp-driver) which is an open-source Scylla driver for CPP. Start by installing the driver, you can read more about installation in the [Scylla University lesson CPP Driver – Part 1](https://university.scylladb.com/courses/using-scylla-drivers/lessons/cpp-driver-part-1/)
-To connect to a cluster, edit the file connect.cpp and change the IP according to the setup of your cluster. Now compile and run the code:
+To run the prepared statement example change the IP according to the setup of your cluster. Now compile and run the code:
 ```bash
-g++ connect.cpp -lcassandra -o connect
-./connect
+g++ prepared_statements.cpp -lcassandra -o prepared_statement
+./prepared_statement 
 ```
 
-To run a simple query, edit the file query.cpp and change the IP according to the setup of your cluster. Now compile and run the code:
+To run the parameterized simple statements example change the IP according to the setup of your cluster. Now compile and run the code:
 ```bash
-g++ query.cpp -lcassandra -o query
-./query
+g++ param_simple.cpp -lcassandra -o param_simple
+./param_simple
+
 ```
 
 ### Destroying the Scylla Cluster 
