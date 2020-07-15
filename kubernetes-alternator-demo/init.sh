@@ -6,15 +6,16 @@ if [[ "$1" == "--non-interactive" ]]; then
 fi
 
 function wait() {
-    if [ $interactive -gt 0 ]; then
-        echo -ne "$1. Press any key to continue"
+    if [[ ${interactive} -gt 0 ]]; then
+        echo -ne "\n\n$1. Press any key to continue"
         while [ true ] ; do
             read -t 10 -n 1
-            if [ $? = 0 ] ; then
+            if [[ $? = 0 ]] ; then
                 return
             fi
         done
+        echo
     else
-        echo -ne "$1."
+        echo -ne "\n\n$1."
     fi
 }

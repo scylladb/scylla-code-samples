@@ -7,13 +7,12 @@ Your shell needs the following properties set for the scripts to work:
 * `GCP_USER=$(gcloud config list account --format "value(core.account)")`
 * `GCP_PROJECT=$(gcloud config list project --format "value(core.project)")`
 * `GCP_ZONE="us-west1-b"`
-* `GCP_REGION="us-west1"`
 
 You can of course set these however you like but this is the tried and known working set of properties.
 
 ## TLDR
 
-1. `./gke.sh -u $GCP_USER -p "$GCP_PROJECT" -z "$GCP_ZONE" -c "future_name_of_the_k8s_cluster"`
+1. `./gke.sh -u $GCP_USER -p "$GCP_PROJECT" -z "$GCP_ZONE" -c "kubernetes-alternator-demo"`
 2. `./webinar.sh`
 
 This will launch a series a commands some of which are interactive requiring key press to continue.
