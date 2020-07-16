@@ -17,9 +17,9 @@ kubectl -n scylla get ingress tictactoe-ingress -o yaml
 
 echo "Let's wait until the service is properly routed"
 
-until kubectl -n get scylla service tictactoe -o json | jq '.status.loadBalancer.ingress[0].ip' | tr -d '"' | grep -v null; do sleep 2; echo "Still no IP assigned"; done
+until kubectl -n scylla get service tictactoe -o json | jq '.status.loadBalancer.ingress[0].ip' | tr -d '"' | grep -v null; do sleep 2; echo "Still no IP assigned"; done
 
-IP=$(kubectl -n get scylla service tictactoe -o json | jq '.status.loadBalancer.ingress[0].ip' | tr -d '"')
+IP=$(kubectl -n scylla get service tictactoe -o json | jq '.status.loadBalancer.ingress[0].ip' | tr -d '"')
 
 until curl http://${IP}/ 2>/dev/null | grep Amazon > /dev/null; do sleep 10; echo "App is not exposed yet"; done
 
