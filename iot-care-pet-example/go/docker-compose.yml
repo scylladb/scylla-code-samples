@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  carepet-scylla:
+    image: scylladb/scylla
+    container_name: carepet-scylla1
+    command: --cpuset 0
+
+  carepet-scylla2:
+    image: scylladb/scylla
+    container_name: carepet-scylla2
+    command: --seeds=carepet-scylla1 --cpuset 0
+
+  carepet-scylla3:
+    image: scylladb/scylla
+    container_name: carepet-scylla3
+    command: --seeds=carepet-scylla1 --cpuset 0
