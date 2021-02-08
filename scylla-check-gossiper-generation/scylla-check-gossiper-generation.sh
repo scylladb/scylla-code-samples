@@ -35,6 +35,9 @@ if ! $NODETOOL_CMD status &> /dev/null; then
     exit 1
 fi
 
+NOW=`date +%s`
+YEAR=31536000 #seconds = 365 * 24 * 60 * 60
+
 #Get gossip generation for all nodes
 $NODETOOL_CMD gossipinfo | grep -B1 'generation:' | while read line
 do
@@ -46,9 +49,7 @@ do
         exit 1
     fi
 
-    NOW=`date +%s`
     DIF=$(( $NOW - $GEN ))
-    YEAR=31536000 #seconds = 365 * 24 * 60 * 60
 
     if [[ $DIF -gt $YEAR ]]; then
         printf "Gossiper generation for $IP is older than 1 year, please refrain from restarting Scylla service or node reboot.\nPlease contact Scylla support for next steps, prior to upgrade.\n"
