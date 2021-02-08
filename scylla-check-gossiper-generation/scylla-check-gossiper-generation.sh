@@ -28,6 +28,13 @@ while getopts ':hled:n:' option; do
   esac
 done
 
+# Check the nodetool command
+if ! $NODETOOL_CMD status &> /dev/null; then
+    echo "'$NODETOOL_CMD' is not a valid nodetool command. Please, provide a valid one using -n switch."
+    usage
+    exit 1
+fi
+
 #Get gossip generation for all nodes
 $NODETOOL_CMD gossipinfo | grep -B1 'generation:' | while read line
 do
