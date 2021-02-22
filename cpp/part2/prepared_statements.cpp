@@ -1,4 +1,4 @@
-// Compile with: g++ prepared_statements.cpp [-L <path_to_libcassandra.so> -I <path_to_cassandra.h>] -lcassandra -o prepared_statements
+// Compile with: g++ prepared_statements.cpp [-L <dir_containing_libscylla-cpp-driver.so> -Wl,-rpath,<dir_containing_libscylla-cpp-driver.so> -I <path_to_cassandra.h>] -lscylla-cpp-driver -o prepared_statements
 // Demonstration of prepared statements. Table `ks.mutant_data` is expected to exist!
 #include <cassandra.h>
 #include <iostream>
