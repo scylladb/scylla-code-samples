@@ -54,8 +54,6 @@ spec:
             exec:
               command:
                 - /bin/bash
-                - -c
-                - exec
                 - /opt/ready-probe.sh
             initialDelaySeconds: 15
             timeoutSeconds: 5
