@@ -18,6 +18,7 @@ spec:
         app: {{ template "scylladb.name" . }}
         release: {{ .Release.Name }}
     spec:
+      hostNetwork: {{ .Values.statefulset.hostNetwork }}
       terminationGracePeriodSeconds: 120
       containers:
       - name: {{ template "scylladb.fullname" . }}
@@ -49,7 +50,6 @@ spec:
           - {{ template "scylladb.fullname" . }}-0.{{ template "scylladb.fullname" . }}.default.svc.cluster.local
           {{- if .Values.config.overprovisioned }}
           - --overprovisioned
-          - {{ .Values.config.overprovisioned | quote }}
           {{- end }}
           {{- if .Values.config.cpu }}
           - --smp
