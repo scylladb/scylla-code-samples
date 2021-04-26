@@ -1,0 +1,171 @@
+# Namespace where the Scylla Cluster will be created
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: scylla
+
+---
+
+# ServiceAccount for scylla members.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: scylla-cluster-member
+  namespace: scylla
+
+---
+# Role for scylla members.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: scyllacluster-member
+  namespace: scylla
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - get
+  - list
+  - patch
+  - watch
+- apiGroups:
+  - "apps"
+  resources:
+  - statefulsets
+  verbs:
+  - get
+  - list
+  - patch
+  - watch
+- apiGroups:
+  - scylla.scylladb.com
+  resources:
+  - scyllaclusters
+  verbs:
+  - get
+
+
+---
+
+# RoleBinding for scylla members.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: scylla-cluster-member
+  namespace: scylla
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: scyllacluster-member
+subjects:
+  - kind: ServiceAccount
+    name: scylla-cluster-member
+    namespace: scylla
+
+---
+
+# Scylla Cluster
+apiVersion: scylla.scylladb.com/v1
+kind: ScyllaCluster
+metadata:
+  name: scylla-cluster
+  namespace: scylla
+spec:
+  version: 4.4.2
+  agentVersion: 2.3.0
+  cpuset: true
+  # Alternator
+  alternator:
+    port: 8000
+    writeIsolation: always
+  # Disable IO tune
+  scyllaArgs: "--io-setup 0 --io-properties-file=/etc/scylla.d/io_properties.yaml"
+  sysctls:
+    - "fs.aio-max-nr=2097152"
+  network:
+    hostNetworking: true
+  datacenter:
+    name: us-west1
+    racks:
+    - name: us-west1-b
+      members: 3
+      storage:
+        storageClassName: local-raid-disks
+        capacity: 700G
+      resources:
+        limits:
+          cpu: 3
+          memory: 12G
+        requests:
+          cpu: 3
+          memory: 12G
+      # Mount prepared io_properties
+      volumes:
+        - name: ioproperties
+          configMap:
+            name: ioproperties
+      volumeMounts:
+        - name: ioproperties
+          mountPath: /etc/scylla.d/io_properties.yaml
+          subPath: io_properties.yaml
+      placement:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: topology.kubernetes.io/zone
+                  operator: In
+                  values:
+                    - us-west1-b
+        tolerations:
+          - key: role
+            operator: Equal
+            value: scylla-clusters
+            effect: NoSchedule
+      scyllaConfig: "scylla-config"
+      scyllaAgentConfig: "scylla-agent-config"
+    - name: us-west1-c
+      members: 3
+      storage:
+        storageClassName: local-raid-disks
+        capacity: 700G
+      resources:
+        limits:
+          cpu: 3
+          memory: 12G
+        requests:
+          cpu: 3
+          memory: 12G
+      # Mount prepared io_properties
+      volumes:
+        - name: ioproperties
+          configMap:
+            name: ioproperties
+      volumeMounts:
+        - name: ioproperties
+          mountPath: /etc/scylla.d/io_properties.yaml
+          subPath: io_properties.yaml
+      placement:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: topology.kubernetes.io/zone
+                  operator: In
+                  values:
+                    - us-west1-c
+        tolerations:
+          - key: role
+            operator: Equal
+            value: scylla-clusters
+            effect: NoSchedule
+      scyllaConfig: "scylla-config"
+      scyllaAgentConfig: "scylla-agent-config"
