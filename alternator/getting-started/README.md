@@ -4,7 +4,7 @@ Instructions for setting up a one node Scylla cluster and performing some basic 
 ### Starting a Scylla Cluster
 To get Scylla up and running with Alternator enabled, start a local scylla instance:
 ```bash
-docker run  --name some-scylla   --hostname some-scylla -p 8000:8000  -d scylladb/scylla:4.1.0    --smp 1 --memory=750M --overprovisioned 1 --alternator-port=8000
+docker run  --name some-scylla   --hostname some-scylla -p 8000:8000  -d scylladb/scylla:4.4.0    --smp 1 --memory=750M --overprovisioned 1 --alternator-port=8000
 ```
 
 ### Installing the Boto 3 Python library
