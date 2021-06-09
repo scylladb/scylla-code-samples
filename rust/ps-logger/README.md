@@ -4,7 +4,7 @@ Instructions for setting up a one node Scylla cluster in Docker and running an e
 ### Starting a Scylla Cluster
 To get Scylla up and running start a local scylla instance on port 9042:
 ```bash
-docker run   -p 9042:9042/tcp   --name some-scylla   --hostname some-scylla   -d scylladb/scylla:3.3.0    --smp 1 --memory=750M --overprovisioned 1
+docker run   -p 9042:9042/tcp   --name some-scylla   --hostname some-scylla   -d scylladb/scylla:4.4.0    --smp 1 --memory=750M --overprovisioned 1
 ```
 
 ### Running the RUST Application
