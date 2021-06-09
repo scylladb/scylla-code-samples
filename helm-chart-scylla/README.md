@@ -24,12 +24,14 @@ A good introduction to Helm Charts by Amy Chen can be found [here](https://youtu
     
     `https://console.cloud.google.com/kubernetes/add?<your-project-id>`
 
-    ```clusterName: helm-test
+    ```yaml
+    clusterName: helm-test
     yourZone: us-central1-a
     clusterVersion: 1.9.7-gke.0
     machineType: 1vCPU 3.75GB
     nodeImage: Container-Optimized OS (cos)
-    size: 3```
+    size: 3
+    ```
     
   * Get credentials for your GKE cluster
     
