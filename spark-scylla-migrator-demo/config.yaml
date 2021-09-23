@@ -1,0 +1,49 @@
+source:
+  type: scylla
+  host: tublat
+  port: 9043
+  keyspace: mykeyspace
+  table: users
+  preserveTimestamps: true
+  splitCount: 256
+  connections: 8
+  fetchSize: 1000
+  stripTrailingZerosForDecimals: false
+
+target:
+  type: scylla
+  host: tublat
+  port: 9044
+  keyspace: mykeyspace
+  table: users
+  connections: 16
+  stripTrailingZerosForDecimals: false
+
+savepoints:
+  path: /tmp/savepoints
+  intervalSeconds: 300
+
+renames: []
+skipTokenRanges: []
+#- - type: long
+#    value: !!float '-964808715118009612'
+#  - type: long
+#    value: !!float '-858612603374509691'
+#- - type: long
+#    value: !!float '3693086969007574147'
+#  - type: long
+#    value: !!float '3796058386908050939'
+
+stripTrailingZerosForDecimals: false
+
+validation:
+  # Should WRITETIMEs and TTLs be compared?
+  compareTimestamps: true
+  # What difference should we allow between TTLs?
+  ttlToleranceMillis: 60000
+  # What difference should we allow between WRITETIMEs?
+  writetimeToleranceMillis: 1000
+  # How many differences to fetch and print
+  failuresToFetch: 100
+  # What difference should we allow between floating point numbers?
+  floatingPointTolerance: 0.001
