@@ -1,0 +1,10 @@
+
+export HOSTIP=$HOSTNAME
+
+export CORES=2
+export MEMORY=4G
+
+export SPARK_WORKER_INSTANCES=2
+
+export SLAVESIZE="-c $CORES -m $MEMORY"
+
