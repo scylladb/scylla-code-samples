@@ -1,6 +1,14 @@
 Prepared statements spring demo on top of default Spring Boot
 
 This demo expects JDK 11 to be used.
+Components used for testing:
+Scylla 4.4.6 on local docker
+Scylla driver 4.13
+Spring Boot 2.6.0
+Kotlin 1.6
+JDK 11
+Gradle 7.2
+run from Idea 2021.2.3 CE
 
 After this is run using `bootRun` gradle target, you will have a REST API server
 listening on :8080
