@@ -1,0 +1,56 @@
+{
+	"info": {
+		"_postman_id": "45c478f6-fc52-4bdf-b51f-4dc0573e31ab",
+		"name": "Springdemo-default",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create monster",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Scylla\",\r\n    \"description\": \"Greek underwater creature\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/monsters",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"monsters"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get monsters",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/monsters",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"monsters"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
