@@ -1,0 +1,34 @@
+# ----------------------------------------------------------
+# Spring Boot Config
+# ----------------------------------------------------------
+spring:
+  application:
+    name: Scylla Spring Demo
+  main:
+    banner-mode: 'OFF'
+  reactor:
+    # Defaults to `true` if Spring Boot devtools is on the classpath; should be set to false
+    # in production for best performance.
+    stacktrace-mode:
+      enabled: true
+
+# The HTTP port that the REST controller will listen to.
+server:
+  port: 8082
+
+# ----------------------------------------------------------
+# java Driver Config
+# ----------------------------------------------------------
+# Important: driver settings defined in a Spring application file (YAML or XML) will NOT be
+# automatically detected by the driver. You need to manually apply such settings to the driver
+# configuration, possibly inside a Spring configuration class, and using the driver's
+# ProgrammaticDriverConfigLoaderBuilder. See DriverConfiguration class
+# for an example of how to achieve this.
+driver: # below can come out of application.properties, if you won't use config object DriverConfiguration
+  contactPoints: 127.0.0.1
+#  port: 9042
+  localdc: datacenter1
+  username: cassandra
+  password: cassandra
+  keyspace: springdemo
+  consistency: LOCAL_QUORUM

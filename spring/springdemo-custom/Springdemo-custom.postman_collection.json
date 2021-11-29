@@ -1,0 +1,116 @@
+{
+	"info": {
+		"_postman_id": "2e4045bc-4b53-4773-88f4-a22c984d87bb",
+		"name": "Springdemo-custom",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create stock AAPL",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"symbol\": \"AAPL\",\r\n    \"date\":\"202111181200\",\r\n    \"value\": \"26\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8082/api/v1/stocks",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"v1",
+						"stocks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create stock MSFT",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"symbol\": \"MSFT\",\r\n    \"date\":\"202111121200\",\r\n    \"value\": \"12\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8082/api/v1/stocks",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"v1",
+						"stocks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete stock MSFT",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"symbol\": \"MSFT\",\r\n    \"date\":\"202111121200\",\r\n    \"value\": \"12\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8082/api/v1/stocks",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"v1",
+						"stocks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get stocks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8082/api/v1/stocks",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"v1",
+						"stocks"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
