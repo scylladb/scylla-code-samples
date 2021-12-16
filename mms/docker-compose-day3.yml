@@ -3,7 +3,7 @@ version: "3"
 services:
 
   scylla-node7:
-    image: scylladb/scylla:4.4.0
+    image: scylladb/scylla:4.5.0
     restart: always
     command: --seeds=scylla-node1,scylla-node2 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
     volumes:

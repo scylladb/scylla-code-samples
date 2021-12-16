@@ -3,7 +3,7 @@ version: "3"
 services:
 
   scylla-node4:
-    image: scylladb/scylla:4.4.0
+    image: scylladb/scylla:4.5.0
     restart: always
     command: --seeds=scylla-node1,scylla-node4 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
     volumes:
@@ -13,7 +13,7 @@ services:
       web:
 
   scylla-node5:
-    image: scylladb/scylla:4.4.0
+    image: scylladb/scylla:4.5.0
     restart: always
     command: --seeds=scylla-node1,scylla-node4 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
     volumes:
@@ -23,7 +23,7 @@ services:
       web:
 
   scylla-node6:
-    image: scylladb/scylla:4.4.0
+    image: scylladb/scylla:4.5.0
     restart: always
     command: --seeds=scylla-node1,scylla-node4 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
     volumes:
