@@ -1,0 +1,27 @@
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cassandra-stress-0
+  labels:
+    app: cassandra-stress
+spec:
+  template:
+    spec:
+      containers:
+      - name: cassandra-stress
+        image: scylladb/scylla:4.4.2
+        command:
+          - "/bin/bash"
+          - "-c"
+          - 'cassandra-stress write no-warmup n=100000000 cl=ONE -node "scylla-cluster-us-west1-us-west1-c-0.scylla.svc" -mode native cql3 connectionsPerHost=3 -col n=FIXED\(5\) size=FIXED\(64\)  -pop seq=1..100000000 -rate threads=150  -log file=/cassandra-stress.load.data -schema "replication(factor=1)" -errors ignore; cat /cassandra-stress.load.data'
+        resources:
+          requests:
+            cpu: 6
+            memory: 18G
+          limits:
+            cpu: 6
+            memory: 18G
+      restartPolicy: Never
+      nodeSelector:
+        pool: app

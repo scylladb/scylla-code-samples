@@ -1,0 +1,20 @@
+alertmanager:
+  alertManagerSpec:
+    nodeSelector:
+      pool: utilities
+
+grafana:
+  nodeSelector:
+    pool: utilities
+
+prometheus-node-exporter:
+  nodeSelector:
+    pool: utilities
+
+prometheusOperator:
+  nodeSelector:
+    pool: utilities
+
+prometheus:
+  nodeSelector:
+    pool: utilities
