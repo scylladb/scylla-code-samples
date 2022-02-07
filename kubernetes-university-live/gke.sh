@@ -132,31 +132,35 @@ function wait-for-object-creation {
 check_prerequisites
 
 # gcloud: Create GKE cluster
-
-# Nodepool for scylla clusters
-gcloud container --project "${GCP_PROJECT}" \
+gcloud container \
 clusters create "${CLUSTER_NAME}" \
+--cluster-version "${CLUSTER_VERSION}" \
+--node-version "${CLUSTER_VERSION}" \
 --zone "us-west1-b" \
 --node-locations "us-west1-b,us-west1-c" \
---release-channel "rapid" \
---machine-type "n1-standard-4" \
---num-nodes "3" \
---disk-type "pd-ssd" --disk-size "20" \
---local-ssd-count "2" \
---node-taints role=scylla-clusters:NoSchedule \
---image-type "UBUNTU_CONTAINERD" \
---system-config-from-file=systemconfig.yaml \
---enable-stackdriver-kubernetes
-
-# Nodepool for scylla operator and monitoring
-gcloud container --project "${GCP_PROJECT}" \
-node-pools create "utilities-pool" \
---cluster "${CLUSTER_NAME}" \
---zone "us-west1-b" \
 --machine-type "n1-standard-8" \
 --num-nodes "1" \
 --disk-type "pd-ssd" --disk-size "20" \
---image-type "UBUNTU_CONTAINERD"
+--image-type "UBUNTU_CONTAINERD" \
+--system-config-from-file=systemconfig.yaml \
+--enable-stackdriver-kubernetes \
+--no-enable-autoupgrade \
+--no-enable-autorepair \
+--no-enable-ip-alias
+
+gcloud beta container \
+node-pools create "scylla-pool" \
+--cluster "${CLUSTER_NAME}" \
+--zone "us-west1-b" \
+--node-locations "us-west1-b,us-west1-c" \
+--machine-type "n1-standard-4" \
+--num-nodes "3" \
+--disk-type "pd-ssd" --disk-size "20" \
+--ephemeral-storage local-ssd-count="2" \
+--node-taints role=scylla-clusters:NoSchedule \
+--image-type "UBUNTU_CONTAINERD" \
+--no-enable-autoupgrade \
+--no-enable-autorepair
 
 # After gcloud returns, it's going to upgrade the master
 # making the cluster unavailable for a while.
@@ -174,22 +178,17 @@ gcloud container clusters get-credentials "${CLUSTER_NAME}" --zone="us-west1-b"
 echo "Setting up GKE RBAC..."
 kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user "${GCP_USER}"
 
-# Install RAID Daemonset
-echo "Installing RAID Daemonset..."
-kubectl apply -f raid-daemonset.yaml
-sleep 60
+# Install xfs-formatter Daemonset
+echo "Installing xfs-format Daemonset..."
+kubectl apply -f xfs-formatter-daemonset.yaml
+wait-for-object-creation default daemonset.apps/xfs-formatter
+kubectl rollout status --timeout=5m daemonset.apps/xfs-formatter
 
 # Install local volume provisioner
 echo "Installing local volume provisioner..."
 helm install local-provisioner ./provisioner
 echo "Your disks are ready to use."
 
-
 echo "Label nodes pools"
-kubectl label node $(kubectl get nodes -l topology.gke.io/zone=us-west1-b,cloud.google.com/gke-nodepool=utilities-pool --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}') pool="utilities"
-kubectl label node $(kubectl get nodes -l topology.gke.io/zone=us-west1-c,cloud.google.com/gke-nodepool=utilities-pool --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}') pool="app"
-
-echo "Set cache write through"
-# Workaround https://github.com/scylladb/scylla/issues/7341
-kubectl get nodes -l cloud.google.com/gke-nodepool=default-pool,topology.gke.io/zone=us-west1-b --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | xargs -I {} gcloud compute ssh --zone us-west1-b root@{} --command "echo 'write through' > /sys/block/sda/queue/write_cache && echo 'write through' > /sys/block/sdb/queue/write_cache && echo 'write through' > /sys/block/sdc/queue/write_cache && echo 'write through' > /sys/block/md0/queue/write_cache" || true
-kubectl get nodes -l cloud.google.com/gke-nodepool=default-pool,topology.gke.io/zone=us-west1-c --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | xargs -I {} gcloud compute ssh --zone us-west1-c root@{} --command "echo 'write through' > /sys/block/sda/queue/write_cache && echo 'write through' > /sys/block/sdb/queue/write_cache && echo 'write through' > /sys/block/sdc/queue/write_cache && echo 'write through' > /sys/block/md0/queue/write_cache" || true
+kubectl label node $(kubectl get nodes -l topology.gke.io/zone=us-west1-b,cloud.google.com/gke-nodepool=default-pool --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}') pool="utilities"
+kubectl label node $(kubectl get nodes -l topology.gke.io/zone=us-west1-c,cloud.google.com/gke-nodepool=default-pool --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}') pool="app"

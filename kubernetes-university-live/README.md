@@ -36,7 +36,10 @@
     # Wait until installation is complete and ready to go.
    
     kubectl wait --for condition=established crd/scyllaclusters.scylla.scylladb.com
+    kubectl wait --for condition=established crd/nodeconfigs.scylla.scylladb.com
+    kubectl wait --for condition=established crd/scyllaoperatorconfigs.scylla.scylladb.com
     kubectl -n scylla-operator rollout status deployment.apps/scylla-operator
+    kubectl -n scylla-operator rollout status deployment.apps/webhook-server
     ```
 
 1. Install Prometheus monitoring
