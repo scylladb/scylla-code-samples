@@ -115,6 +115,10 @@ Start spark:
 UI should be listening on $HOSTNAME:8080
 (or any bigger free port, e.g. 8081)
 
+Make sure you validate the `config.yaml` and fix anything missing (or sync it
+with https://github.com/scylladb/scylla-migrator/blob/master/config.yaml.example 
+to avoid any configuration load errors from migrator)
+
 Submit the app:
 
 ```
