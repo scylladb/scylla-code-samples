@@ -2,6 +2,9 @@ source:
   type: scylla
   host: tublat
   port: 9043
+  #credentials:
+  #  username: <user>
+  #  password: <pass>
   keyspace: mykeyspace
   table: users
   preserveTimestamps: true
@@ -14,6 +17,9 @@ target:
   type: scylla
   host: tublat
   port: 9044
+  #credentials:
+  #  username: <user>
+  #  password: <pass>
   keyspace: mykeyspace
   table: users
   connections: 16
@@ -47,3 +53,4 @@ validation:
   failuresToFetch: 100
   # What difference should we allow between floating point numbers?
   floatingPointTolerance: 0.001
+  timestampMsTolerance: 0

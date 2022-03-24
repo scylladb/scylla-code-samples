@@ -20,4 +20,6 @@ mkdir /tmp/savepoints
   --conf spark.cassandra.connection.localConnectionsPerExecutor=4 \
   scylla-migrator/target/scala-2.11/scylla-migrator-assembly-0.0.1.jar
 
-
+#sometimes you will need a tuning for driver memory size
+#add this config to above to tune it:
+#  --conf spark.driver.memory=4G \
