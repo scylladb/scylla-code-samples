@@ -4,14 +4,14 @@
 
 ```
 cd mms/janusgraph/
-docker-compose  -f ./docker-compose-jc.yml up -d
+docker-compose  -f ./docker-compose-cql.yml up -d
 
 ```
 
 ### Destroying the Scylla Cluster 
 ```
-cd mms
-docker-compose -f ./docker-compose-jc.yml kill
-docker-compose rm -f ./docker-compose-jc.yml
+cd mms/janusgraph
+docker-compose -f ./docker-compose-cql.yml kill
+docker-compose rm -f ./docker-compose-cql.yml
 ```
 
