@@ -35,5 +35,5 @@ $ cargo run
 
 ### Destroying the Scylla Cluster
 
-docker-compose kill
-docker-compose rm -f
+docker stop some-scylla
+docker rm some-scylla
