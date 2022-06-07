@@ -17,27 +17,29 @@ public class DataTypes_App {
 static File FILE;
 
 public static void main(String[] args) {
-        try {
-                Cluster cluster = Cluster.builder().addContactPoints("scylla-node1", "scylla-node2", "scylla-node3").build();
-                Session session = cluster.connect("catalog");
-                createSchema(session);
+        Cluster cluster = Cluster.builder().addContactPoints("scylla-node1", "scylla-node2", "scylla-node3").build();
+        Session session = cluster.connect("catalog");
+        createSchema(session);
 
-                String[] mutants = new String[] {"Jim Jefferies", "Bob Loblaw", "Bob Zemuda"};
-                for (int i=0; i != mutants.length; i++) {
-                        if(mutants[i] != null) {
-                                String[] first_name = mutants[i].split(" ");
-                                String last_name = first_name[1];
-                                FILE = new File("/opt/code/java-datatypes/" + first_name[0] + "_" + last_name + ".png");
-                                System.out.print("\nProcessing image for: " + first_name[0] + " " + last_name);
-                                allocateAndInsert(session, first_name[0], last_name);
-                                insertConcurrent(session, first_name[0], last_name);
+        String[] mutants = new String[] {"Jim Jefferies", "Bob Loblaw", "Bob Zemuda"};
+        for (int i=0; i != mutants.length; i++) {
+                if(mutants[i] != null) {
+                        String[] first_name = mutants[i].split(" ");
+                        String last_name = first_name[1];
+                        FILE = new File("/opt/code/java-datatypes/" + first_name[0] + "_" + last_name + ".png");
+                        System.out.print("\nProcessing image for: " + first_name[0] + " " + last_name);
+                        allocateAndInsert(session, first_name[0], last_name);
+                        insertConcurrent(session, first_name[0], last_name);
+                        try {
                                 insertFromAndRetrieveToFile(session, first_name[0], last_name);
+                        } catch (IOException e) {
+                                System.out.println("Got IOException while retrieving data and writing to file:");
+                                e.printStackTrace();
                         }
+                        
                 }
-                cluster.close();
-        } catch (Exception main) {
-                System.out.print("\n" + main.getMessage());
         }
+        cluster.close();
 
 }
 private static void createSchema(Session session) {

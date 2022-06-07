@@ -7,8 +7,8 @@ cd mms/java/
 docker build -t java-app .
 docker run -d --net=mms_web --name some-java-app java-app
 docker exec -it some-java-app sh
-cd <dir-name>/dist
-java -jar <AppName>.jar
+cd <dir-name>/target
+java -jar <AppName>-jar-with-dependencies.jar
 ```
 
 ### To manually add the catalog keyspace and data
