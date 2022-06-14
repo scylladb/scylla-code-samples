@@ -1,0 +1,62 @@
+version: "3.7"
+
+services:
+  scylla-manager:
+    image: scylladb/scylla-manager:2.6.3
+    networks:
+      public:
+    depends_on:
+      - scylla-manager-db
+
+  scylla-manager-db:
+    build: .
+    volumes:
+      - scylla_manager_db_data:/var/lib/scylla
+    networks:
+      public:
+    command: --smp 1 --memory 100M
+
+  scylla-node1:
+    container_name: scylla-node1
+    build: .
+    restart: always
+    command: --seeds=scylla-node1,scylla-node2 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+    networks:
+      public:
+
+  scylla-node2:
+    container_name: scylla-node2
+    build: .
+    restart: always
+    command: --seeds=scylla-node1,scylla-node2 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+    networks:
+      public:
+
+  scylla-node3:
+    container_name: scylla-node3
+    build: .
+    restart: always
+    command: --seeds=scylla-node1,scylla-node2 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+    networks:
+      public:
+
+  minio:
+    image: minio/minio
+    volumes:
+      - minio_data:/data
+    networks:
+      public:
+    ports:
+      - "9001:9000"
+    environment:
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
+    command: server /data
+
+volumes:
+  minio_data:
+  scylla_data:
+  scylla_manager_db_data:
+
+networks:
+  public:
