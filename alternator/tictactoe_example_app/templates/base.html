@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="/static/customize/index.css" rel="stylesheet">
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   </head> 
+   <body>
+
+   <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+          </button>
+          <a class="navbar-brand" href="/">Tic Tac Toe</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          {% if user == None %}
+          <form class="navbar-form navbar-right" action="/index" method="post">
+            <div class="form-group">
+              <input type="text" name="username" placeholder="i.e. John" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Log In</button>
+          </form>
+          {% else %}
+            {% if user != "" %}
+                <a href="/logout" class="logout"> Logout? </a>
+                <p class="logout" style="display:inline;color:white;padding-right:5px"> Hi {{user}},  </p>
+            {% endif %}
+          {% endif %}
+        </div><!--/.navbar-collapse -->
+      </div>
+    </div>
+
+      {% block content %} {% endblock %}
+    <div>
+        <footer>
+            <center>
+            <p>
+                <small>
+                    &copy; 2014, Amazon Web Services LLC or its affiliates. All rights reserved.
+                </small>
+            </p>
+             
+        <img width="160" vspace="8" height="21" src="//d36cz9buwru1tt.cloudfront.net/awsmedia/logo_an_amazon_company.gif"></img>
+            </center>
+        </footer>
+   </body>
+
+</html>
