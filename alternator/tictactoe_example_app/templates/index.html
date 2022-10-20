@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="jumbotron">
+    <div class="container">
+        <div style="padding-top:10px">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="alert alert-info">
+                    <center>
+                      {{ msg }}
+                    </center>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+        </div>
+        <center>
+            <h1>
+                <a href="/create">
+                    <button style="height:75;width:200px;font-size:40px" class="btn btn-success">CREATE</button>
+                </a>
+            </h1>
+        </center>
+    </div>
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-4">
+          <h2><b>Pending Invitations</b></h2>
+          <p>
+            {% if invites == [] %}
+            <p> You currently have no invites. </p>
+            {% else %}
+            <table>
+                <tbody>
+                    <tr>
+                        <td style="padding-right:100px"> <p class="columnLabels"> From: </p></td>
+                        <td > <p class="columnLabels">Accept? </p></td>
+                    </tr>
+                    {% for invite in invites %}
+                    <tr>
+                        <td style="padding-right:100px">
+                            <div> {{invite.hostId}} </div>
+                            <div> {{invite.date}} </div>
+                        </td>
+                        <td>
+                        <form action="/accept={{invite.gameId}}" method="post">
+                            <button name="response" value={{invite.gameId}}> accept </button> 
+                        </form>
+                        <form action="/reject={{invite.gameId}}" method="post" >
+                            <button name="response" value={{invite.gameId}}> reject </button>
+                        </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+          </p>
+        </div>
+        <div class="col-md-4">
+          <h2><b>Games In-Progress</b></h2>
+          <p>
+            {% if inprogress == [] %}
+            <p> You currently have no games in progress. </p>
+            {% else %}
+            <table>
+                <tr>
+                    <td style="padding-right:125px"> <p class="columnLabels"> Game: </p> </td>
+                    <td> <p class="columnLabels"> Turn: </p> </td>
+                </tr>
+                {% for ipGame in inprogress %}
+                <tr>
+                    <td style="padding-right:125px"> <a href="/game={{ipGame.gameId}}"> {{ipGame.getOpposingPlayer(user)}} </a> </td>
+                    <td> {{ipGame.turn}} </td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+          </p>
+       </div>
+        <div class="col-md-4">
+          <h2><b>Recent History</b></h2>
+            {% if finished == [] %}
+            <p> You don't have any recent games. </p>
+            {% else %}
+            <table>
+               <tr>
+                    <td style="padding-right:100px"> <p class="columnLabels"> Opponent: </p></td>
+                    <td> <p class="columnLabels"> Result:   </p> </td>
+               </tr>
+               {% for games in finished %}
+               <tr>
+                    <td style="padding=right:100px"> <a href="/game={{games.gameId}}"> {{games.getOpposingPlayer(user)}} </a> </td>
+                    <td> {{games.getResult(user)}} </td>
+               </tr>
+               {% endfor %}
+            </table>
+            {% endif %}
+        </div>
+      </div>
+    </div> 
+</div>
+{% endblock %}
