@@ -1,3 +1,5 @@
+To learn more see the [Spring Boot, ScyllaDB, and Time Series Data lesson](https://university.scylladb.com/courses/the-mutant-monitoring-system-training-course/lessons/spring-boot-scylladb-and-time-series-data/) on ScyllaDB University.
+
 Prepared statements spring demo on top of Scylla driver
 
 This demo expects JDK 17 to be used.
