@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  scylla-node1:
+    container_name: scylla-node1
+    image: scylladb/scylla:5.1.0
+    ports:
+      - 9042:9042
+    restart: always
+    command: --seeds=scylla-node1,scylla-node2 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+
+  scylla-node2:
+    container_name: scylla-node2
+    image: scylladb/scylla:5.1.0
+    restart: always
+    command: --seeds=scylla-node1,scylla-node2 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+
+  scylla-node3:
+    container_name: scylla-node3
+    image: scylladb/scylla:5.1.0
+    restart: always
+    command: --seeds=scylla-node1,scylla-node2 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+
