@@ -4,6 +4,8 @@ import com.datastax.oss.driver.api.core.DriverException
 import com.scylladb.springdemo_custom.async.repository.AsyncStockRepository
 import com.scylladb.springdemo_custom.common.controller.StockUriHelper
 import com.scylladb.springdemo_custom.common.model.Stock
+//import jakarta.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.lang.NonNull
@@ -13,7 +15,6 @@ import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.CompletionStage
 import java.util.stream.Stream
-import javax.servlet.http.HttpServletRequest
 
 /** A REST controller that performs CRUD actions on [Stock] instances.  */
 @CrossOrigin(origins = ["http://localhost:8082"])
@@ -117,21 +118,15 @@ class AsyncStockController(private val stockRepository: AsyncStockRepository, pr
      * Lists the available stocks for the given symbol and date range (GET method).
      *
      * @param symbol The symbol to list stocks for.
-     * @param start The start of the date range (inclusive).
-     * @param end The end of the date range (exclusive).
      * @param offset The zero-based index of the first result to return.
      * @param limit The maximum number of results to return.
      * @return The available stocks for the given symbol and date range.
      */
     @GetMapping("/stocks/{symbol}")
     fun listStock(
-        @PathVariable(name = "symbol") @NonNull symbol: String?,
-        @RequestParam(name = "start") @NonNull start: Instant?,
-        @RequestParam(name = "end") @NonNull end: Instant?,
-        @RequestParam(name = "offset") offset: Int,
-        @RequestParam(name = "limit") limit: Int
+        @PathVariable(name = "symbol") @NonNull symbol: String?
     ): CompletionStage<Stream<Stock>> {
-        return stockRepository.findAllBySymbol(symbol!!, start!!, end!!, offset.toLong(), limit.toLong())
+        return stockRepository.findStockBySymbol(symbol!!)
     }
 
     /**

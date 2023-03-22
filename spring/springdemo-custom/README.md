@@ -34,7 +34,7 @@ Make sure to adjust src/resources/application.yml , if you will use a different 
 Check `./start-scylla-container.sh` script that can help you run a ScyllaDB single VM
 
 Import to your local Postman ( https://www.postman.com/ ) app a postman collection v 2.1
-`./Springdemo-custom.postman_collection.json`
+`./Springdemo-prepared.postman_collection.json`
 to run sample queries against REST API
 
 Requests are prepared - hence routed to appropriate node and thanks to scylla driver also directly to appropriate (cpu) shard.

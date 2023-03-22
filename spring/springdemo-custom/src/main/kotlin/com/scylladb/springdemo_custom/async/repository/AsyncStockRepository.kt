@@ -26,6 +26,7 @@ class AsyncStockRepository(
     @param:Qualifier("stocks.prepared.deleteById") private val deleteById: PreparedStatement,
     @param:Qualifier("stocks.prepared.findById") private val findById: PreparedStatement,
     @param:Qualifier("stocks.prepared.findBySymbol") private val findBySymbol: PreparedStatement,
+    @param:Qualifier("stocks.prepared.findStockBySymbol") private val findStockBySymbol: PreparedStatement,
     @param:Qualifier("stocks.simple.findAll") private val findAll: SimpleStatement,
     private val rowMapper: Function<Row, Stock>
 ) {
@@ -101,6 +102,35 @@ class AsyncStockRepository(
             .thenCompose(Function<AsyncResultSet, CompletionStage<List<Row>>> { first: AsyncResultSet? ->
                 RowCollector(
                     first!!, offset, limit
+                )
+            })
+            .thenApply { rows: List<Row> ->
+                rows.stream().map(
+                    rowMapper
+                )
+            }
+    }
+
+    /**
+     * Retrieves all the stock values for a given symbol in a given date range, page by page.
+     *
+     * @param symbol The stock symbol to find.
+     * @param start The date range start (inclusive).
+     * @param end The date range end (exclusive).
+     * @param offset The zero-based index of the first result to return.
+     * @param limit The maximum number of results to return.
+     * @return A future that will complete with a [Stream] of results.
+     */
+    @NonNull
+    fun findStockBySymbol(
+        @NonNull symbol: String?
+    ): CompletionStage<Stream<Stock>> {
+        val bound = findStockBySymbol.bind(symbol)
+        val stage = session.executeAsync(bound)
+        return stage
+            .thenCompose(Function<AsyncResultSet, CompletionStage<List<Row>>> { first: AsyncResultSet? ->
+                UnlimitedRowCollector(
+                    first!!
                 )
             })
             .thenApply { rows: List<Row> ->

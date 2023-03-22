@@ -1,8 +1,9 @@
 package com.scylladb.springdemo_custom.common.controller
 
 import java.time.Instant
-import javax.servlet.http.HttpServletRequest
 import com.scylladb.springdemo_custom.common.model.Stock
+//import jakarta.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletRequest
 import org.springframework.core.convert.converter.Converter
 import org.springframework.lang.NonNull
 import org.springframework.stereotype.Component

@@ -84,6 +84,16 @@ class StockQueriesConfiguration {
             .build()
     }
 
+    @Bean("stocks.simple.findStockBySymbol")
+    fun findStockBySymbol(@NonNull keyspace: CqlIdentifier?): SimpleStatement {
+        return QueryBuilder.selectFrom(keyspace, STOCKS)
+            .columns(SYMBOL, DATE, VALUE)
+            .where(
+                Relation.column(SYMBOL).isEqualTo(QueryBuilder.bindMarker(SYMBOL))  // start inclusive
+            )
+            .build()
+    }
+
     // a very ineffective way to do a full scan
     @Bean("stocks.simple.findAll")
     fun findAll(@NonNull keyspace: CqlIdentifier?): SimpleStatement {
@@ -117,6 +127,14 @@ class StockQueriesConfiguration {
     fun prepareFindBySymbol(
         session: CqlSession,
         @Qualifier("stocks.simple.findBySymbol") stockFindBySymbol: SimpleStatement?
+    ): PreparedStatement {
+        return session.prepare(stockFindBySymbol!!)
+    }
+
+    @Bean("stocks.prepared.findStockBySymbol")
+    fun prepareFindStockBySymbol(
+        session: CqlSession,
+        @Qualifier("stocks.simple.findStockBySymbol") stockFindBySymbol: SimpleStatement?
     ): PreparedStatement {
         return session.prepare(stockFindBySymbol!!)
     }
