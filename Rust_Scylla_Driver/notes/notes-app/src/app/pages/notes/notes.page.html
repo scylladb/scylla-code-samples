@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>My notes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" pulling-text="Pull to refresh..." (ionRefresh)="handleRefresh($any($event))">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <ion-item button *ngFor="let item of notesData" [routerLink]="['/note', item.id]" >
+
+      <ion-label class="ion-text-wrap">
+        <h3>{{ item.topic }}</h3>
+      </ion-label>
+
+    </ion-item>
+  </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="loadMore($any($event))">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more notes..."> </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button routerLink="/addnote" routerDirection="forward">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

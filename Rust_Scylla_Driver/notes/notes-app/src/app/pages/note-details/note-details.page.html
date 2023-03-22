@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/notes"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ note?.topic }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- why is this flickering in lab when it loads???  router problem? -->
+
+<ion-content>
+  <ion-card *ngIf="note as note;">
+
+    <ion-card-header>
+      <ion-card-title> {{ note?.topic }} </ion-card-title>
+
+    </ion-card-header>
+    <ion-card-content>
+      <ion-label color="medium">{{ note.content }}</ion-label>
+
+
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
