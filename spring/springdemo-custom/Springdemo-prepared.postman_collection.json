@@ -98,14 +98,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/monsters",
+					"raw": "localhost:8082/api/v1/stocks",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8082",
 					"path": [
 						"api",
-						"monsters"
+						"v1",
+						"stocks"
 					]
 				}
 			},
