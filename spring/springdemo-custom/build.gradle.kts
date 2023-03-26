@@ -17,8 +17,8 @@ repositories {
 }
 
 dependencies {
-//	implementation("com.scylladb:java-driver-core:4.14.1.0")
-//	implementation("com.scylladb:java-driver-query-builder:4.14.1.0")
+	implementation("com.scylladb:java-driver-core:4.14.1.0")
+	implementation("com.scylladb:java-driver-query-builder:4.14.1.0")
 	// 3.2.7 has 4.11 driver, 3.3.0 has 4.13 driver !!!
 	// since 2.6.0 spring boot uses 3.3.0 spring-data-cassandra
 	implementation("org.springframework.boot:spring-boot-starter-data-cassandra")
