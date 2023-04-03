@@ -8,5 +8,5 @@ edition = "2018"
 cdrs = {version = "2", features = ["v4"]}
 cdrs_helpers_derive = "0.1.0"
 uuid = {version = "0.7", features = ["v4"]}
-time = "0.1"
+time = "0.2"
 r2d2 = "0.8.2"
