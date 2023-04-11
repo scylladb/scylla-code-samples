@@ -28,7 +28,7 @@ CREATE TABLE tracking_data (
        telepathy_powers int,
        primary key((first_name, last_name), timestamp))
        WITH CLUSTERING ORDER BY (timestamp DESC)
-       AND COMPACTION = {'class': 'DateTieredCompactionStrategy',
+       AND COMPACTION = {'class': 'TimeWindowCompactionStrategy',
            'base_time_seconds': 3600,
            'max_sstable_age_days': 1};
 
