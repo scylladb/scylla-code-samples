@@ -2,18 +2,18 @@ mod config;
 mod data;
 mod db;
 
-extern crate serde_json;
 extern crate num_cpus;
+extern crate serde_json;
 
 use crate::config::Config;
 use crate::db::scylladb::ScyllaDbService;
 use actix_web::error::ErrorInternalServerError;
 use actix_web::middleware::Logger;
 use actix_web::web::Json;
-use actix_web::{get, post, web, web::Data, App, Error, HttpResponse, HttpServer, delete};
+use actix_web::{delete, get, post, web, web::Data, App, Error, HttpResponse, HttpServer};
 use color_eyre::Result;
 use data::model::Note;
-use data::rest_api::{AddNoteRequest};
+use data::rest_api::AddNoteRequest;
 use std::sync::Arc;
 use std::time::Instant;
 use tokio::sync::{AcquireError, OwnedSemaphorePermit, Semaphore};
@@ -21,23 +21,21 @@ use tokio::task;
 use tokio::task::JoinHandle;
 use tracing::{debug, error, info};
 
-use std::string::ToString;
-use scylla::transport::errors::QueryError;
-use uuid::Uuid;
 use crate::db::model::DbNote;
+use scylla::transport::errors::QueryError;
+use std::string::ToString;
+use uuid::Uuid;
 
 use actix_cors::Cors;
 //use actix_web::http::header;
 
 struct AppState {
     db_svc: ScyllaDbService,
-    semaphore: Arc<Semaphore>
+    semaphore: Arc<Semaphore>,
 }
 
 #[get("/notes")]
-async fn get_all_notes(
-    state: Data<AppState>,
-) -> Result<HttpResponse, Error> {
+async fn get_all_notes(state: Data<AppState>) -> Result<HttpResponse, Error> {
     let now = Instant::now();
     info!("get_all_notes");
 
@@ -49,28 +47,20 @@ async fn get_all_notes(
     Ok(HttpResponse::Ok().json(ret))
 }
 
-async fn get_notes(
-    db: &ScyllaDbService
-) -> Result<Vec<Json<Note>>, Error> {
-    let db_notes = db
-        .get_notes()
-        .await
-        .map_err(ErrorInternalServerError)?;
+async fn get_notes(db: &ScyllaDbService) -> Result<Vec<Json<Note>>, Error> {
+    let db_notes = db.get_notes().await.map_err(ErrorInternalServerError)?;
 
     let notes = Note::from_all(db_notes);
-    let mut jiter = notes.into_iter();
+    let jiter = notes.into_iter();
     let mut ret = vec![];
-    while let Some(note) = jiter.next() {
+    for note in jiter {
         ret.push(web::Json(note));
     }
     Ok(ret)
 }
 
 #[get("/note/{id}")]
-async fn get_by_id(
-    path: web::Path<String>,
-    state: Data<AppState>,
-) -> Result<HttpResponse, Error> {
+async fn get_by_id(path: web::Path<String>, state: Data<AppState>) -> Result<HttpResponse, Error> {
     let now = Instant::now();
     let id = path.into_inner();
     info!("get_by_id {}", id);
@@ -95,31 +85,20 @@ async fn delete_by_id(
 
     let elapsed = now.elapsed();
     info!("delete_by_id time: {:.2?}", elapsed);
-    if !ret.is_none() {
+    if ret.is_some() {
         Err(ErrorInternalServerError(ret.unwrap().to_string()))
     } else {
-    Ok(HttpResponse::Ok().json(r#"{ "status": "OK"}"#)) }
+        Ok(HttpResponse::Ok().json(r#"{ "status": "OK"}"#))
+    }
 }
 
-async fn delete_note(
-    db: &ScyllaDbService,
-    id: &str,
-) -> Result<Option<QueryError>, Error> {
-    let ret = db
-        .delete_note(id)
-        .await
-        .map_err(ErrorInternalServerError);
+async fn delete_note(db: &ScyllaDbService, id: &str) -> Result<Option<QueryError>, Error> {
+    let ret = db.delete_note(id).await.map_err(ErrorInternalServerError);
     ret
 }
 
-async fn get_note(
-    db: &ScyllaDbService,
-    id: &str,
-) -> Result<Json<Option<Note>>, Error> {
-    let db_notes = db
-        .get_note(id)
-        .await
-        .map_err(ErrorInternalServerError)?;
+async fn get_note(db: &ScyllaDbService, id: &str) -> Result<Json<Option<Note>>, Error> {
+    let db_notes = db.get_note(id).await.map_err(ErrorInternalServerError)?;
 
     let note = Note::from(db_notes);
 
@@ -138,7 +117,11 @@ async fn insert_note(
 
     let jid = payload.id.clone().unwrap_or_default();
     let permit = state.semaphore.clone().acquire_owned().await;
-    let id = if jid!="" {Uuid::parse_str(jid.as_str()).unwrap()} else { Uuid::new_v4() };
+    let id = if !jid.is_empty() {
+        Uuid::parse_str(jid.as_str()).unwrap()
+    } else {
+        Uuid::new_v4()
+    };
     handlers.push(task::spawn(add_note(
         id,
         state.clone(),
@@ -172,14 +155,14 @@ async fn add_note(
     content: String,
     permit: Result<OwnedSemaphorePermit, AcquireError>,
 ) -> Result<(), Box<dyn std::error::Error + Sync + Send>> {
-    let ltopic= topic.clone();
-    info!(
-        "Processing note {} with ID {}. ",
-        ltopic, id
-    );
+    let ltopic = topic.clone();
+    info!("Processing note {} with ID {}. ", ltopic, id);
     let now = Instant::now();
     // persist in DB and wait
-    state.db_svc.save_note(DbNote{id,topic,content}).await?;
+    state
+        .db_svc
+        .save_note(DbNote { id, topic, content })
+        .await?;
 
     let elapsed = now.elapsed();
     info!("Note {} processed. Took {:.2?}", ltopic, elapsed);
@@ -204,24 +187,30 @@ async fn main() -> Result<()> {
         num_cpus, parallel_inserts, db_parallelism
     );
 
-    let db = ScyllaDbService::new(config.db_dc, config.db_url,
-        config.db_user, config.db_password,
-        db_parallelism, config.schema_file).await;
+    let db = ScyllaDbService::new(
+        config.db_dc,
+        config.db_url,
+        config.db_user,
+        config.db_password,
+        db_parallelism,
+        config.schema_file,
+    )
+    .await;
 
     let sem = Arc::new(Semaphore::new(parallel_inserts));
     let data = Data::new(AppState {
         db_svc: db,
-        semaphore: sem
+        semaphore: sem,
     });
 
     info!("Starting server at http://{}:{}/", host, port);
-//     let cors = Cors::default() //if you want production safe code, you need to send Cors headers in your server
-// //        .allowed_origin("http://localhost")
-//         .send_wildcard()
-//         .allowed_methods(vec!["GET", "POST", "DELETE"])
-//         .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT])
-//         .allowed_header(header::CONTENT_TYPE)
-//         .max_age(3600);
+    //     let cors = Cors::default() //if you want production safe code, you need to send Cors headers in your server
+    // //        .allowed_origin("http://localhost")
+    //         .send_wildcard()
+    //         .allowed_methods(vec!["GET", "POST", "DELETE"])
+    //         .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT])
+    //         .allowed_header(header::CONTENT_TYPE)
+    //         .max_age(3600);
 
     HttpServer::new(move || {
         let cors_develop = Cors::permissive(); //temporary development trick

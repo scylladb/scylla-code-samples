@@ -1,5 +1,5 @@
-use serde::Serialize;
 use serde::Deserialize;
+use serde::Serialize;
 
 #[derive(Serialize, Deserialize)]
 pub struct AddNoteRequest {
@@ -11,5 +11,5 @@ pub struct AddNoteRequest {
 
 #[derive(Debug, Serialize)]
 pub struct AppError {
-    message: String
+    message: String,
 }
