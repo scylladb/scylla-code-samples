@@ -3,7 +3,7 @@ use dotenv::dotenv;
 use eyre::WrapErr;
 
 use serde::Deserialize;
-use tracing::{info, debug};
+use tracing::{debug, info};
 use tracing_subscriber::EnvFilter;
 
 #[derive(Debug, Deserialize, Clone)]
@@ -29,7 +29,6 @@ fn init_tracer() {
 }
 
 impl Config {
-
     pub fn from_env() -> Result<Config> {
         dotenv().ok();
 
@@ -38,17 +37,19 @@ impl Config {
         info!("Loading configuration");
 
         let c = config::Config::builder()
-            .set_default("host","localhost")?
-            .set_default("port",3001)?
-            .set_default("db_url","localhost:9042")?
-            .set_default("db_user","cassandra")?
-            .set_default("db_password","cassandra")?
-            .set_default("parallel_inserts",100)?
-            .set_default("db_parallelism",100)?
+            .set_default("host", "localhost")?
+            .set_default("port", 3001)?
+            .set_default("db_url", "localhost:9042")?
+            .set_default("db_user", "cassandra")?
+            .set_default("db_password", "cassandra")?
+            .set_default("parallel_inserts", 100)?
+            .set_default("db_parallelism", 100)?
             .add_source(config::Environment::default())
-            .build().unwrap();
+            .build()
+            .unwrap();
 
-        let config = c.try_deserialize()
+        let config = c
+            .try_deserialize()
             .context("loading configuration from environment");
 
         debug!("Config: {:?}", config);

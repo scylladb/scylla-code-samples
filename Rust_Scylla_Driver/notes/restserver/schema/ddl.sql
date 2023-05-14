@@ -4,8 +4,7 @@ CREATE TABLE IF NOT EXISTS mykb.notes (
    topic text,
    content text,
    PRIMARY KEY (id)
-) WITH comment = 'Notes Table' AND caching = {'enabled': 'true'}
-    AND compression = {'sstable_compression': 'LZ4Compressor'};
+) WITH comment = 'Notes Table' AND caching = {'enabled': 'true'} AND compression = {'sstable_compression': 'LZ4Compressor'};
 -- add eventually a timestamp column? or use writetimestamp to sort?
 
 -- interesting idea - remodel above to support "Notebooks" which contain notes
@@ -15,13 +14,11 @@ CREATE TABLE IF NOT EXISTS mykb.notes (
 
 -- bucketing for notebooks?
 -- add eventually a timestamp column?
+-- can below be done with MV? :-) ?
 CREATE TABLE IF NOT EXISTS mykb.notebooks (
    id uuid,
    bucket int,
    createdat timestamp,
    noteid uuid,
    PRIMARY KEY ((id, bucket), createdat)
-)  WITH CLUSTERING ORDER BY (createdat DESC) AND comment = 'Notebooks Table' AND caching = {'enabled': 'true'}
-    AND compression = {'sstable_compression': 'LZ4Compressor'};
-
--- can above be done with MV? :-) ?
+)  WITH CLUSTERING ORDER BY (createdat DESC) AND comment = 'Notebooks Table' AND caching = {'enabled': 'true'} AND compression = {'sstable_compression': 'LZ4Compressor'};
