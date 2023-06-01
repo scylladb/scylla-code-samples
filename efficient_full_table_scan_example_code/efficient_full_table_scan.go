@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/gocql/gocql"
-	"gopkg.in/alecthomas/kingpin.v2"
+	"github.com/alecthomas/kingpin/v2"
 )
 
 const (
@@ -34,10 +34,10 @@ var (
 	clusterConsistency    = kingpin.Flag("consistency", "Cluster consistency level. Use 'localone' for multi DC").Short('o').Default("one").String()
 	clusterTimeout        = kingpin.Flag("timeout", "Maximum duration for query execution in millisecond").Short('t').Default("15000").Int()
 	clusterNumConnections = kingpin.Flag("cluster-number-of-connections", "Number of connections per host per session (in our case, per thread)").Short('b').Default("1").Int()
-	clusterCQLVersion     = kingpin.Flag("cql-version", "The CQL version to use").Short('l').Default("3.0.0").String()
+	clusterCQLVersion     = kingpin.Flag("cql-version", "The CQL version to use").Short('l').Default("3.3.1").String()
 	clusterPageSize       = kingpin.Flag("cluster-page-size", "Page size of results").Short('p').Default("5000").Int()
 
-	queryTemplate              = kingpin.Flag("query-template", "The template of the query to run. Make sure to have 2 '%d' parameters in it to embed the token ranges").Short('q').Default(defaultQueryTemplate).String()
+	queryTemplate              = kingpin.Flag("query-template", "The template of the query to run. Make sure to have 2 '%s' parameters in it to embed the token ranges (or use '%d' in case of decimal token)").Short('q').Default(defaultQueryTemplate).String()
 	selectStatementsOutputFile = kingpin.Flag("select-statements-output-file", "Location of select statements output file").Default(defaultSelectStatementsOutputFile).String()
 
 	printRows           = kingpin.Flag("print-rows", "Print the output rows to a file").Short('d').Default("false").Bool()
