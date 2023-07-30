@@ -11,3 +11,5 @@ buildNumber.properties
 *iml
 *.jar
 *.csv
+presto/resources/etc/node.properties
+presto/.docker
