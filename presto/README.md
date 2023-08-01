@@ -18,10 +18,19 @@ Instructions
 3. Open Jaeger HotRod sample application at http://localhost:8081 and click on buttons to generate traces.
 4. Open Metabase at http://localhost:3000 and complete admin onboarding.
 5. Add Presto as a data source in Metabase. 
-Use `http://presto:8080` as a host and `scylladb` as a catalog name. 
+Use `presto` as a host, `8080` as a port and `scylladb` as a catalog name. 
 During filling presto connection details fill `Username` with arbitrary string 
 and leave user `Password` empty.
-6. Observe traces insights in Metabase.
+6. Observe traces insights in Metabase. For example from home screen do:
+    * Click on "Browse data" button
+    * Choose created Presto data source
+    * Select jaeger_v1_test schema
+    * Open Operation Names V2 table
+    * On the right top Click green "Summarize" button
+    * Select Group By "Service Name"
+    * On the left bottom size click "Visualization" button
+    * Choose "Pie" visualization
+    * Save "Question" as "Spans by Service Name"
 
 **Cleanup**
 1. Run `docker-compose down --volumes` to stop and remove the containers and created volumes
