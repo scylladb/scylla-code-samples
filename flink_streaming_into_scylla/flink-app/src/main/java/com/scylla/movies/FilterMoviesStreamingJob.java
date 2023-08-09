@@ -75,7 +75,7 @@ public class FilterMoviesStreamingJob {
 		Cluster cluster = null;
 		Session session = null;
 
-		final String CREATE_KEYSPACE = "CREATE KEYSPACE flink_example WITH replication= {'class':'SimpleStrategy', 'replication_factor':1};";
+		final String CREATE_KEYSPACE = "CREATE KEYSPACE flink_example WITH replication= {'class':'NetworkTopologyStrategy', 'replication_factor':1};";
 		final String CREATE_TABLE = "CREATE TABLE flink_example.movies (title text PRIMARY KEY, genres list<text>);";
 
 		try{

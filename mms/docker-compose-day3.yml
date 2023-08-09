@@ -4,7 +4,7 @@ services:
 
   scylla-node7:
     container_name: scylla-node7
-    image: scylladb/scylla:5.1.0
+    image: scylladb/scylla:5.2.0
     restart: always
     command: --seeds=scylla-node1,scylla-node2 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
     volumes:

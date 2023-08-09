@@ -22,7 +22,7 @@ opts = parser.parse_args()
 IP_C1 = opts.C1.split(',')
 
 # Creating the DB Schema - need to run the CREATE MATERIALIZED VIEW manually using cqlsh, since it does not work from the script
-create_ks = "create keyspace if not exists direct_ts with replication = {'class' : 'SimpleStrategy', 'replication_factor' : 3};"
+create_ks = "create keyspace if not exists direct_ts with replication = {'class' : 'NetworkTopologyStrategy', 'replication_factor' : 3};"
 create_t1 = "create table if not exists direct_ts.data_points (rack_id text, sensor_id text, curr_epoch timestamp, value int, primary key ((rack_id,sensor_id),curr_epoch)) WITH CLUSTERING ORDER BY (curr_epoch DESC);"
 # create_2i = "CREATE INDEX data_points_curr_epoch_idx ON direct_ts.data_points (curr_epoch); CREATE INDEX data_points_value_idx ON direct_ts.data_points (value);"
 

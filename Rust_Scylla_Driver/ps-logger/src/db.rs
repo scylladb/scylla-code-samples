@@ -6,7 +6,7 @@ use crate::{Duration, Result, TemperatureMeasurement};
 static CREATE_KEYSPACE_QUERY: &str = r#"
   CREATE KEYSPACE IF NOT EXISTS fast_logger
     WITH REPLICATION = {
-      'class': 'SimpleStrategy',
+      'class': 'NetworkTopologyStrategy',
       'replication_factor': 1
     };
 "#;
