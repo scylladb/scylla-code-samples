@@ -33,7 +33,8 @@ services:
 
   scylladb:
     restart: always
-    image: scylladb/scylla:5.1.7
+    build:
+      dockerfile: Dockerfile
     ports:
       - 9042:9042
     volumes:
@@ -45,53 +46,3 @@ services:
       interval: 1s
       retries: 120
       timeout: 1s
-
-  collector:
-    restart: always
-    image: jaegertracing/jaeger-collector:1.43
-    environment:
-      SPAN_STORAGE_TYPE: cassandra
-      CASSANDRA_SERVERS: scylladb
-      CASSANDRA_KEYSPACE: jaeger_v1_test
-    networks:
-      - presto
-    depends_on:
-      - scylladb
-
-  web:
-    image: jaegertracing/jaeger-query:1.43
-    restart: unless-stopped
-    ports:
-      - 16686:16686
-      - 16687:16687
-    environment:
-      SPAN_STORAGE_TYPE: cassandra
-      CASSANDRA_SERVERS: scylladb
-      CASSANDRA_KEYSPACE: jaeger_v1_test
-    networks:
-      - presto
-    depends_on:
-      - scylladb
-
-  cassandra-schema:
-    image: jaegertracing/jaeger-cassandra-schema:1.43
-    environment:
-      CQLSH_HOST: scylladb
-      DATACENTER: test
-      MODE: test
-    networks:
-      - presto
-    depends_on:
-      - scylladb
-
-  hotrod:
-    image: jaegertracing/example-hotrod:1.43
-    ports:
-      - 8081:8080
-    command: [ "all" ]
-    environment:
-      - OTEL_EXPORTER_JAEGER_ENDPOINT=http://collector:14268/api/traces
-    networks:
-      - presto
-    depends_on:
-      - collector
