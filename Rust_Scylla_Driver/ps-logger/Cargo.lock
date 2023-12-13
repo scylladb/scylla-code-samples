@@ -685,10 +685,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "test-cdrs"
+name = "temperature"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "futures",
  "scylla",
  "tokio",
  "uuid",
