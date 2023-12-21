@@ -146,6 +146,12 @@ Make sure you validate the `config.yaml` and fix anything missing (or sync it
 with https://github.com/scylladb/scylla-migrator/blob/master/config.yaml.example 
 to avoid any configuration load errors from migrator)
 Also, edit submit_job.sh to comment out the JAVA_HOME variable as it is hard set and should be in your environment now.
+You will likely need to add the following row under both source and target in config.yaml:
+
+```
+  consistencyLevel: LOCAL_QUORUM
+
+```
 
 Submit the app:
 
