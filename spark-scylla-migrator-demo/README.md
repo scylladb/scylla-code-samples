@@ -25,8 +25,15 @@ You can verify with one of bonus commands (select or some describe quuery).
 Make sure you have OpenJDK 8 installed in /usr/lib/jvm/java-1.8.0
 If it's elsewhere, fix paths in *.sh scripts !!!
 
+For RPM based distros:
 ```
 sudo dnf -y install java-1.8.0-openjdk-devel
+```
+
+For DEB based distros:
+```
+sudo apt install -y openjdk-8-jre-headless
+sudo apt install -y openjdk-8-jdk-headless
 ```
 
 Get Spark 2.4.8:
@@ -45,9 +52,17 @@ ln -s spark-2.4.8-bin-hadoop2.7 spark
 
 Get local cqlsh
 
+For RPM based distros:
 ```
 sudo dnf -y install git
+```
 
+For DB based distros:
+```
+sudo apt install -y git
+```
+
+```
 git clone https://github.com/scylladb/scylla-tools-java.git
 
 ```
@@ -62,7 +77,7 @@ Check if scylla container really runs after checkout of above:
 Make sure you have latest sbt:
 https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Linux.html
 
-Get over the migrator repo:
+Clone the migrator repo:
 ```
 git clone https://github.com/scylladb/scylla-migrator
 ```
@@ -85,12 +100,13 @@ Prepare schema in target DB:
 Build the project:
 
 ```
-java --version
+java -version
 ```
 
 should say OpenJDK 1.8
 then build:
 
+Redhat based:
 ```
 cd scylla-migrator
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0/
@@ -98,13 +114,24 @@ export PATH=$JAVA_HOME/bin:$PATH
 ./build.sh
 ```
 
+Debian based:
+```
+cd scylla-migrator
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/
+export PATH=$JAVA_HOME/bin:$PATH
+./build.sh
+```
+
+
 Verify you have the jar built:
 ```
+cd ..
 ls -la scylla-migrator/target/scala-2.11/scylla-migrator-assembly-0.0.1.jar
 ```
 
 Verify in `spark-env` size of your spark cluster,
 ev. adjust sizes or number of workers
+Also, edit star-spark.sh to comment out the JAVA_HOME variable as it is hard set and should be in your environment now.
 
 Start spark:
 
@@ -118,6 +145,7 @@ UI should be listening on $HOSTNAME:8080
 Make sure you validate the `config.yaml` and fix anything missing (or sync it
 with https://github.com/scylladb/scylla-migrator/blob/master/config.yaml.example 
 to avoid any configuration load errors from migrator)
+Also, edit submit_job.sh to comment out the JAVA_HOME variable as it is hard set and should be in your environment now.
 
 Submit the app:
 

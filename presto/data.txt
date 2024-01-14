@@ -1,0 +1,93 @@
+CREATE KEYSPACE merch_store WITH REPLICATION = {'class': 'NetworkTopologyStrategy', 'datacenter1': 1};
+
+CREATE TABLE merch_store.goods (
+    id TEXT PRIMARY KEY,
+    name TEXT,
+    description TEXT,
+    price DECIMAL,
+    stock_quantity INT
+);
+
+CREATE TABLE merch_store.transactions (
+    transaction_id TEXT PRIMARY KEY,
+    user_id UUID,
+    transaction_date TIMESTAMP,
+    total_amount DECIMAL,
+    items LIST<TEXT>
+);
+
+CREATE TABLE merch_store.users (
+    user_id TEXT PRIMARY KEY,
+    username TEXT,
+    email TEXT
+);
+
+INSERT INTO merch_store.goods (id, name, description, price, stock_quantity) VALUES ('ca4c13c3-bdf0-4187-bb5b-883f5e0c82a0', 'Product 1', 'Description for Product 1', 19.99, 75);
+INSERT INTO merch_store.goods (id, name, description, price, stock_quantity) VALUES ('7db3d9c7-522e-4ad6-a4bf-51ee907ac036', 'Product 2', 'Description for Product 2', 29.99, 60);
+INSERT INTO merch_store.goods (id, name, description, price, stock_quantity) VALUES ('64a1d0b2-554e-4f4e-b475-cb3a74e57c4c', 'Product 3', 'Description for Product 3', 39.99, 100);
+INSERT INTO merch_store.goods (id, name, description, price, stock_quantity) VALUES ('ec631648-1df5-4f94-bbb1-b5ed5f3652e7', 'Product 4', 'Description for Product 4', 49.99, 85);
+INSERT INTO merch_store.goods (id, name, description, price, stock_quantity) VALUES ('9906a7d2-4c3b-4a27-b517-e6c73e26b8dd', 'Product 5', 'Description for Product 5', 59.99, 50);
+
+INSERT INTO merch_store.users (user_id, username, email) VALUES ('4e119b59-75f7-4eb0-bcf5-c1a48d563475', 'user1', 'user1@example.com');
+INSERT INTO merch_store.users (user_id, username, email) VALUES ('9f0450f6-05fe-47db-9e57-9e4e0ca1b839', 'user2', 'user2@example.com');
+INSERT INTO merch_store.users (user_id, username, email) VALUES ('3d70a274-4e87-4437-9a74-1cda1e51d54e', 'user3', 'user3@example.com');
+INSERT INTO merch_store.users (user_id, username, email) VALUES ('5c3f5d9c-52b1-4c19-a072-d67e75b12059', 'user4', 'user4@example.com');
+INSERT INTO merch_store.users (user_id, username, email) VALUES ('24b28e27-ccfc-4ce3-94ad-97c858a2d1b0', 'user5', 'user5@example.com');
+
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('9a939f43-b07b-4b26-a660-4347dc1c0381', 4e119b59-75f7-4eb0-bcf5-c1a48d563475, '2023-08-13 17:00+0000', 49.99, ['ca4c13c3-bdf0-4187-bb5b-883f5e0c82a0']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('42c1b764-b842-48e0-898a-777f417b8cae', 9f0450f6-05fe-47db-9e57-9e4e0ca1b839, '2023-08-13 17:00+0000', 69.99, ['7db3d9c7-522e-4ad6-a4bf-51ee907ac036']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('440ffa63-a7f2-46ad-b2c3-ad5f8b1b1641', 3d70a274-4e87-4437-9a74-1cda1e51d54e, '2023-08-13 17:00+0000', 89.99, ['64a1d0b2-554e-4f4e-b475-cb3a74e57c4c']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('620d01c7-18f2-4f5c-bc3e-451e0cf36f80', 5c3f5d9c-52b1-4c19-a072-d67e75b12059, '2023-08-13 17:00+0000', 59.99, ['ec631648-1df5-4f94-bbb1-b5ed5f3652e7']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('70aaf132-2fb9-40b6-a08d-848e4d639785', 24b28e27-ccfc-4ce3-94ad-97c858a2d1b0, '2023-08-13 17:00+0000', 79.99, ['9906a7d2-4c3b-4a27-b517-e6c73e26b8dd']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('5e2b3662-9081-4140-aa78-65063836efb4', 4e119b59-75f7-4eb0-bcf5-c1a48d563475, '2023-08-13 17:00+0000', 49.99, ['ca4c13c3-bdf0-4187-bb5b-883f5e0c82a0']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('41302a97-bbb3-40da-8e63-f91f835cc1c4', 9f0450f6-05fe-47db-9e57-9e4e0ca1b839, '2023-08-14 17:00+0000', 69.99, ['7db3d9c7-522e-4ad6-a4bf-51ee907ac036']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('cc0f3a05-93c2-4002-8b26-cf8e3318593e', 3d70a274-4e87-4437-9a74-1cda1e51d54e, '2023-08-14 17:00+0000', 89.99, ['64a1d0b2-554e-4f4e-b475-cb3a74e57c4c']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('b4252690-fdc2-4be2-83f6-d263ef11d568', 5c3f5d9c-52b1-4c19-a072-d67e75b12059, '2023-08-15 17:00+0000', 59.99, ['ec631648-1df5-4f94-bbb1-b5ed5f3652e7']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('4baeeb6c-5cda-4880-b58b-51c63fee56f0', 24b28e27-ccfc-4ce3-94ad-97c858a2d1b0, '2023-08-16 17:00+0000', 79.99, ['9906a7d2-4c3b-4a27-b517-e6c73e26b8dd']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('7f8097dd-2d68-4a04-9f8f-b139cffbd320', 4e119b59-75f7-4eb0-bcf5-c1a48d563475, '2023-08-13 17:00+0000', 49.99, ['ca4c13c3-bdf0-4187-bb5b-883f5e0c82a0']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('829e3c76-2951-4ebe-b8fe-818f2ebcf1e5', 9f0450f6-05fe-47db-9e57-9e4e0ca1b839, '2023-08-14 17:00+0000', 69.99, ['7db3d9c7-522e-4ad6-a4bf-51ee907ac036']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('760e920d-22e6-499b-8303-c4e213ebd6fe', 3d70a274-4e87-4437-9a74-1cda1e51d54e, '2023-08-14 17:00+0000', 89.99, ['64a1d0b2-554e-4f4e-b475-cb3a74e57c4c']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('508d0cc1-0686-4cb3-aff8-12b9915aef53', 5c3f5d9c-52b1-4c19-a072-d67e75b12059, '2023-08-15 17:00+0000', 59.99, ['ec631648-1df5-4f94-bbb1-b5ed5f3652e7']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('63795a70-b2d9-4ceb-8334-90e14eec6fa5', 24b28e27-ccfc-4ce3-94ad-97c858a2d1b0, '2023-08-15 17:00+0000', 79.99, ['9906a7d2-4c3b-4a27-b517-e6c73e26b8dd']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('46208ab9-706f-4ce7-a969-bd8b3ccbeeca', 4e119b59-75f7-4eb0-bcf5-c1a48d563475, '2023-08-15 17:00+0000', 49.99, ['ca4c13c3-bdf0-4187-bb5b-883f5e0c82a0']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('f1ff05c2-50d2-4f59-9c80-ee62be866393', 9f0450f6-05fe-47db-9e57-9e4e0ca1b839, '2023-08-15 17:00+0000', 69.99, ['7db3d9c7-522e-4ad6-a4bf-51ee907ac036']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('dc0c4c53-903e-4099-977e-978612a659e9', 3d70a274-4e87-4437-9a74-1cda1e51d54e, '2023-08-15 17:00+0000', 89.99, ['64a1d0b2-554e-4f4e-b475-cb3a74e57c4c']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('e25eaf75-3d67-4e43-bb21-8f2eaf1b2163', 5c3f5d9c-52b1-4c19-a072-d67e75b12059, '2023-08-15 17:00+0000', 59.99, ['ec631648-1df5-4f94-bbb1-b5ed5f3652e7']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('b468ca8d-3e8b-4099-9d56-4bde475b68ea', 24b28e27-ccfc-4ce3-94ad-97c858a2d1b0, '2023-08-16 17:00+0000', 79.99, ['9906a7d2-4c3b-4a27-b517-e6c73e26b8dd']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('b907c8c2-11f9-47e6-a83e-78d196b304f3', 4e119b59-75f7-4eb0-bcf5-c1a48d563475, '2023-08-16 17:00+0000', 49.99, ['ca4c13c3-bdf0-4187-bb5b-883f5e0c82a0']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('c8810995-7295-49ea-acb7-6b48c5d63f7b', 9f0450f6-05fe-47db-9e57-9e4e0ca1b839, '2023-08-16 17:00+0000', 69.99, ['7db3d9c7-522e-4ad6-a4bf-51ee907ac036']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('9e237738-d78f-44aa-8681-2e2f1883dfd8', 3d70a274-4e87-4437-9a74-1cda1e51d54e, '2023-08-16 17:00+0000', 89.99, ['64a1d0b2-554e-4f4e-b475-cb3a74e57c4c']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('4fd806ab-12fc-4a16-8650-be9ff16cd887', 5c3f5d9c-52b1-4c19-a072-d67e75b12059, '2023-08-16 17:00+0000', 59.99, ['ec631648-1df5-4f94-bbb1-b5ed5f3652e7']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('bcd2c7b2-ff2e-498a-ad6c-6261b3de5177', 24b28e27-ccfc-4ce3-94ad-97c858a2d1b0, '2023-08-16 17:00+0000', 79.99, ['9906a7d2-4c3b-4a27-b517-e6c73e26b8dd']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('f69fe338-2066-496f-8152-b8ae9a302810', 4e119b59-75f7-4eb0-bcf5-c1a48d563475, '2023-08-16 17:00+0000', 49.99, ['ca4c13c3-bdf0-4187-bb5b-883f5e0c82a0']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('9d4ce273-563f-4e2e-afe8-862290bb5bd5', 9f0450f6-05fe-47db-9e57-9e4e0ca1b839, '2023-08-16 17:00+0000', 69.99, ['7db3d9c7-522e-4ad6-a4bf-51ee907ac036']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('8336cbd4-e335-4db8-95a1-97a6033bf3b8', 3d70a274-4e87-4437-9a74-1cda1e51d54e, '2023-08-16 17:00+0000', 89.99, ['64a1d0b2-554e-4f4e-b475-cb3a74e57c4c']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('9feb6009-944b-4eeb-8c4e-8642bb3a8cbc', 5c3f5d9c-52b1-4c19-a072-d67e75b12059, '2023-08-16 17:00+0000', 59.99, ['ec631648-1df5-4f94-bbb1-b5ed5f3652e7']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('54324667-5d24-46a8-a40e-152b25691453', 24b28e27-ccfc-4ce3-94ad-97c858a2d1b0, '2023-08-17 17:00+0000', 79.99, ['9906a7d2-4c3b-4a27-b517-e6c73e26b8dd']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('d599847e-1a3f-436c-8174-19b21e622b07', 4e119b59-75f7-4eb0-bcf5-c1a48d563475, '2023-08-17 17:00+0000', 49.99, ['ca4c13c3-bdf0-4187-bb5b-883f5e0c82a0']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('a75f3a3f-8c17-4b78-bab8-2264824e4adb', 9f0450f6-05fe-47db-9e57-9e4e0ca1b839, '2023-08-17 17:00+0000', 69.99, ['7db3d9c7-522e-4ad6-a4bf-51ee907ac036']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('7ce284f5-2391-42d0-ba67-2a37f4c92486', 3d70a274-4e87-4437-9a74-1cda1e51d54e, '2023-08-17 17:00+0000', 89.99, ['64a1d0b2-554e-4f4e-b475-cb3a74e57c4c']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('90a37cd4-81e4-4348-b406-7e49deef0cfb', 5c3f5d9c-52b1-4c19-a072-d67e75b12059, '2023-08-17 17:00+0000', 59.99, ['ec631648-1df5-4f94-bbb1-b5ed5f3652e7']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('6d29a1b2-0d5f-4ecd-ae7b-5e403f1a17d6', 24b28e27-ccfc-4ce3-94ad-97c858a2d1b0, '2023-08-17 17:00+0000', 79.99, ['9906a7d2-4c3b-4a27-b517-e6c73e26b8dd']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('18b3bb5f-ef4a-42fc-a845-b551b8fd1457', 4e119b59-75f7-4eb0-bcf5-c1a48d563475, '2023-08-14 17:00+0000', 49.99, ['ca4c13c3-bdf0-4187-bb5b-883f5e0c82a0']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('5048692d-c85c-483a-894a-d166ca01e3ad', 9f0450f6-05fe-47db-9e57-9e4e0ca1b839, '2023-08-14 17:00+0000', 69.99, ['7db3d9c7-522e-4ad6-a4bf-51ee907ac036']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('42b921e3-f117-440a-8443-9314321439e7', 3d70a274-4e87-4437-9a74-1cda1e51d54e, '2023-08-14 17:00+0000', 89.99, ['64a1d0b2-554e-4f4e-b475-cb3a74e57c4c']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('25ff582a-a69d-416b-849c-3f8badd5ad24', 5c3f5d9c-52b1-4c19-a072-d67e75b12059, '2023-08-14 17:00+0000', 59.99, ['ec631648-1df5-4f94-bbb1-b5ed5f3652e7']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('be305352-ad93-4487-ab4d-95d2b1a8be76', 24b28e27-ccfc-4ce3-94ad-97c858a2d1b0, '2023-08-15 17:00+0000', 79.99, ['9906a7d2-4c3b-4a27-b517-e6c73e26b8dd']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('3d08fa8e-2258-4acd-abb9-694b7df60f0a', 4e119b59-75f7-4eb0-bcf5-c1a48d563475, '2023-08-15 17:00+0000', 49.99, ['ca4c13c3-bdf0-4187-bb5b-883f5e0c82a0']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('b6fc26a5-9c48-4acb-bf82-c8c860cac218', 9f0450f6-05fe-47db-9e57-9e4e0ca1b839, '2023-08-15 17:00+0000', 69.99, ['7db3d9c7-522e-4ad6-a4bf-51ee907ac036']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('c0e76d52-d45f-4af3-8926-2cd1ee675a5c', 3d70a274-4e87-4437-9a74-1cda1e51d54e, '2023-08-15 17:00+0000', 89.99, ['64a1d0b2-554e-4f4e-b475-cb3a74e57c4c']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('7383dcfb-0b6c-44ec-841b-1b0b266fdeb0', 5c3f5d9c-52b1-4c19-a072-d67e75b12059, '2023-08-12 17:00+0000', 59.99, ['ec631648-1df5-4f94-bbb1-b5ed5f3652e7']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('e9bbd880-9fbd-4218-8b88-6d6ecdd917ba', 24b28e27-ccfc-4ce3-94ad-97c858a2d1b0, '2023-08-12 17:00+0000', 79.99, ['9906a7d2-4c3b-4a27-b517-e6c73e26b8dd']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('063a293b-ccbf-4198-bfea-d6817ae7842a', 4e119b59-75f7-4eb0-bcf5-c1a48d563475, '2023-08-12 17:00+0000', 49.99, ['ca4c13c3-bdf0-4187-bb5b-883f5e0c82a0']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('1872158f-b2b6-4f35-b738-79ffbe68fc12', 9f0450f6-05fe-47db-9e57-9e4e0ca1b839, '2023-08-12 17:00+0000', 69.99, ['7db3d9c7-522e-4ad6-a4bf-51ee907ac036']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('b4db2897-119c-4312-85d8-b6070c4caf3a', 3d70a274-4e87-4437-9a74-1cda1e51d54e, '2023-08-12 17:00+0000', 89.99, ['64a1d0b2-554e-4f4e-b475-cb3a74e57c4c']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('39c4e25a-d62c-4e6d-acf3-14f494abd083', 5c3f5d9c-52b1-4c19-a072-d67e75b12059, '2023-08-12 17:00+0000', 59.99, ['ec631648-1df5-4f94-bbb1-b5ed5f3652e7']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('f34d40e8-e787-4e2f-9fa1-3959ad4d4a17', 24b28e27-ccfc-4ce3-94ad-97c858a2d1b0, '2023-08-12 17:00+0000', 79.99, ['9906a7d2-4c3b-4a27-b517-e6c73e26b8dd']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('f34d40e8-e787-4e2f-9fa1-3959ad4d4a19', 24b28e27-ccfc-4ce3-94ad-97c858a2d1b0, '2023-08-11 17:00+0000', 79.99, ['9906a7d2-4c3b-4a27-b517-e6c73e26b8dd']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('f34d40e8-e787-4e2f-9fa1-3959ad4d4a20', 24b28e27-ccfc-4ce3-94ad-97c858a2d1b0, '2023-08-11 17:00+0000', 79.99, ['9906a7d2-4c3b-4a27-b517-e6c73e26b8dd']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('f34d40e8-e787-4e2f-9fa1-3959ad4d4a21', 24b28e27-ccfc-4ce3-94ad-97c858a2d1b0, '2023-08-11 17:00+0000', 79.99, ['9906a7d2-4c3b-4a27-b517-e6c73e26b8dd']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('f34d40e8-e787-4e2f-9fa1-3959ad4d4a22', 5c3f5d9c-52b1-4c19-a072-d67e75b12059, '2023-08-11 17:00+0000', 79.99, ['ec631648-1df5-4f94-bbb1-b5ed5f3652e7']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('f34d40e8-e787-4e2f-9fa1-3959ad4d4a23', 5c3f5d9c-52b1-4c19-a072-d67e75b12059, '2023-08-11 17:00+0000', 79.99, ['ec631648-1df5-4f94-bbb1-b5ed5f3652e7']);
+INSERT INTO merch_store.transactions (transaction_id, user_id, transaction_date, total_amount, items) VALUES ('f34d40e8-e787-4e2f-9fa1-3959ad4d4a24', 3d70a274-4e87-4437-9a74-1cda1e51d54e, '2023-08-11 17:00+0000', 79.99, ['64a1d0b2-554e-4f4e-b475-cb3a74e57c4c']);
+

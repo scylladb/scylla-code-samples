@@ -12,6 +12,8 @@ source:
   connections: 8
   fetchSize: 1000
   stripTrailingZerosForDecimals: false
+  consistencyLevel: LOCAL_QUORUM
+
 
 target:
   type: scylla
@@ -24,6 +26,7 @@ target:
   table: users
   connections: 16
   stripTrailingZerosForDecimals: false
+  consistencyLevel: LOCAL_QUORUM
 
 savepoints:
   path: /tmp/savepoints
