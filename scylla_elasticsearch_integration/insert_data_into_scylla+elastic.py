@@ -27,7 +27,7 @@ ES_IP = opts.ES_IP.split(',')
 
 
 ## Define KS + Table
-create_ks = "CREATE KEYSPACE IF NOT EXISTS catalog WITH replication = {'class' : 'SimpleStrategy', 'replication_factor' : 3};"
+create_ks = "CREATE KEYSPACE IF NOT EXISTS catalog WITH replication = {'class' : 'NetworkTopologyStrategy', 'replication_factor' : 3};"
 create_t1 = "CREATE TABLE IF NOT EXISTS catalog.apparel (sku text, brand text, group text, sub_group text, color text, size text, gender text, PRIMARY KEY ((sku),color,size));"
 
 

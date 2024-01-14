@@ -1,4 +1,4 @@
-CREATE KEYSPACE billy WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
+CREATE KEYSPACE billy WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': '1'}  AND durable_writes = true;
 
 CREATE TABLE billy.readings (
     sensor_id int,

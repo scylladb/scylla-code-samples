@@ -1,4 +1,4 @@
-CREATE KEYSPACE myOwnKeyspace WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1};
+CREATE KEYSPACE myOwnKeyspace WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy', 'replication_factor' : 1};
 
 use myOwnKeyspace;
 

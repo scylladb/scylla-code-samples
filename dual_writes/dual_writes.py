@@ -31,7 +31,7 @@ def log(message):
 
 logging.basicConfig(filename=LOG_FILE,level=logging.DEBUG,format="%(asctime)s %(message)s",datefmt="%b %d %Y %H:%M:%S")
 
-create_ks = "create keyspace if not exists dual_writes with replication = {'class' : 'SimpleStrategy', 'replication_factor' : 3};"
+create_ks = "create keyspace if not exists dual_writes with replication = {'class' : 'NetworkTopologyStrategy', 'replication_factor' : 3};"
 create_t1 = "create table if not exists dual_writes.t1 (c1 int, c2 varchar, primary key (c1) );"
 create_t2 = "create table if not exists dual_writes.t2 (c1 int, c2 varchar, primary key (c1) );"
 

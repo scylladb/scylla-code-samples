@@ -75,7 +75,7 @@ What to Expect
 The program creates the following schema.
 
 ```
-CREATE KEYSPACE flink_example WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
+CREATE KEYSPACE flink_example WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': '1'}  AND durable_writes = true;
 
 CREATE TABLE flink_example.movies (
     title text PRIMARY KEY,

@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: scylla
-          image: scylladb/scylla:2.0.0
+          image: scylladb/scylla:5.2.0
           imagePullPolicy: IfNotPresent
           args: ["--seeds", "scylla-0.scylla.default.svc.cluster.local"]
           ports:

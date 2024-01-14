@@ -7,7 +7,7 @@ use tokio::io::{stdin, AsyncBufReadExt, BufReader};
 static CREATE_KEYSPACE_QUERY: &str = r#"
   CREATE KEYSPACE IF NOT EXISTS log
     WITH REPLICATION = {
-      'class': 'SimpleStrategy',
+      'class': 'NetworkTopologyStrategy',
       'replication_factor': 1
     };
 "#;

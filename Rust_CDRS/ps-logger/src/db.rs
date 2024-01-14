@@ -28,7 +28,7 @@ pub type CurrentSession = Session<SingleNode<TcpConnectionPool<NoneAuthenticator
 static CREATE_KEYSPACE_QUERY: &'static str = r#"
   CREATE KEYSPACE IF NOT EXISTS fast_logger
     WITH REPLICATION = {
-      'class': 'SimpleStrategy',
+      'class': 'NetworkTopologyStrategy',
       'replication_factor': 1
     };
 "#;

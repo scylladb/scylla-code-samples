@@ -1,5 +1,5 @@
 CREATE KEYSPACE stocks
-  WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1};
+  WITH REPLICATION = {'class': 'NetworkTopologyStrategy', 'replication_factor': 1};
 
 CREATE TABLE stocks.stocks
   (symbol text,

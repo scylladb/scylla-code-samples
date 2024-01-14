@@ -35,7 +35,7 @@ Example:
 
 You can easily get an Alternator instance started by running the following:
 
-      docker run --name scylladb-alternator scylladb/scylla:latest --smp 1 --memory 512M --alternator-port 8000 --alternator-write-isolation always
+      docker run --name scylladb-alternator scylladb/scylla:5.2.0 --smp 1 --memory 512M --alternator-port 8000 --alternator-write-isolation always
       sleep 1m
       yourAlternatorIP="$(docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' scylladb-alternator)"
       # then you can run the application.py passing variable $yourAlternatorIP
