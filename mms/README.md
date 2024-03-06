@@ -30,14 +30,20 @@ docker exec -it scylla-node1 cqlsh
 CREATE KEYSPACE tracking WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy','DC1' : 3};
 use tracking;
 CREATE TABLE tracking_data (
-    first_name text, last_name text,
-    timestamp timestamp,
-    location varchar,
-    speed double,
-    heat double,
-    telepathy_powers int,
-    primary key((first_name, last_name), timestamp)
-) WITH CLUSTERING ORDER BY (timestamp DESC) AND COMPACTION = {'class': 'TimeWindowCompactionStrategy', 'base_time_seconds': 3600, 'max_sstable_age_days': 1};
+       first_name text,
+       last_name text,
+       timestamp timestamp,
+       location varchar,
+       speed double,
+       heat double,
+       telepathy_powers int,
+       primary key((first_name, last_name), timestamp))
+       WITH CLUSTERING ORDER BY (timestamp DESC)
+       AND default_time_to_live = 72000 
+       AND gc_grace_seconds = 0
+       AND COMPACTION = {'class': 'TimeWindowCompactionStrategy',
+                                  'compaction_window_unit' : 'HOURS',
+                                  'compaction_window_size' : 1}; 
 ```
 
 ```
