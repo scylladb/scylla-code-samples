@@ -28,9 +28,11 @@ CREATE TABLE tracking_data (
        telepathy_powers int,
        primary key((first_name, last_name), timestamp))
        WITH CLUSTERING ORDER BY (timestamp DESC)
+       AND default_time_to_live = 72000 
+       AND gc_grace_seconds = 0
        AND COMPACTION = {'class': 'TimeWindowCompactionStrategy',
-           'base_time_seconds': 3600,
-           'max_sstable_age_days': 1};
+                                  'compaction_window_unit' : 'HOURS',
+                                  'compaction_window_size' : 1}; 
 
 
  INSERT INTO tracking.tracking_data ("first_name","last_name","timestamp","location","speed","heat","telepathy_powers") VALUES ('Jim','Jeffries','2017-11-11 08:05+0000','New York',1.0,3.0,17) ;
