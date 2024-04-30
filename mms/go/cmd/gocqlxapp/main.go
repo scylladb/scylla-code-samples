@@ -5,9 +5,9 @@ import (
 	"goapp/internal/scylla"
 
 	"github.com/gocql/gocql"
-	"github.com/scylladb/gocqlx"
-	"github.com/scylladb/gocqlx/qb"
-	"github.com/scylladb/gocqlx/table"
+	"github.com/scylladb/gocqlx/v2"
+	"github.com/scylladb/gocqlx/v2/qb"
+	"github.com/scylladb/gocqlx/v2/table"
 	"go.uber.org/zap"
 )
 
