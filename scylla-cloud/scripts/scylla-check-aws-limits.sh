@@ -26,6 +26,8 @@ get_quota() {
   fi
 }
 
+get_quota vpc L-0EA8095F
+echo "Amazon Virtual Private Cloud (Amazon VPC) - Inbound or outbound rules per security group: $quota"
 get_quota vpc L-F678F1CE
 echo "Amazon Virtual Private Cloud (Amazon VPC) - VPCs per region: $quota"
 get_quota ec2 L-0263D0A3
