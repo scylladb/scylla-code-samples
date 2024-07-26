@@ -20,7 +20,7 @@ Instructions
 First, spin a fresh ScyllaDB Cluster:
 
 ```sh
-docker run --name nodeX -d scylladb/scylla:6.0.1 --overprovisioned 1 --smp 1
+docker run --name nodeX --publish '9042:9042' --rm -d scylladb/scylla:6.0.1 --overprovisioned 1 --smp 1
 ```
 
 Then, make sure to install our Driver into your Python environment: 
