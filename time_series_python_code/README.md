@@ -1,23 +1,42 @@
 General Info and Prerequisites
 ==============================
 
+This sample shows how to work with time series data in ScyllaDB using the Scylla Python Driver.
+
 The following scripts performs the following:
 - Create the schema (keyspace, table and secondary indexes)
 - Emulate 10K sensors, each sensor emitting 2000 data points, while using prepared statements
 
 
 **Pre-requisites**
-- [python 2.7](https://www.python.org/download/releases/2.7/)
-- Cassandra driver: ```pip install cassandra-driver```
-- [Scylla cluster up and running](https://www.scylladb.com/download/)
-- ```experimental: true``` enabled in ```scylla.yaml``` file (needed for secondary indexes in v2.1)
-
+- [python 2.7, 3.5, 3.6, 3.7 or 3.8](https://www.python.org/download)
+- [pip](https://pip.pypa.io/en/stable/installing/)
+- [Scylla Python Driver](https://python-driver.docs.scylladb.com/stable/installation.html)
+- [ScyllaDB Node or Cluster up and running](https://www.scylladb.com/download/)
 
 Instructions
 ============
 
-**How to run**
-1. Download the file
-2. Run: ```python [file_name].py -c [scylla nodes IP, comma separated] &```
-	- Example: ```python 1_insert_ts_direct_new.py -c 172.16.0.62,172.16.0.204,172.16.0.67 &```
-3. If you need to emulate more sensors, just clone the script and change ```start_range1``` to the start of the next range.
+First, spin a fresh ScyllaDB Cluster:
+
+```sh
+docker run --name nodeX --publish '9042:9042' --rm -d scylladb/scylla:6.0.1 --overprovisioned 1 --smp 1
+```
+
+Then, make sure to install our Driver into your Python environment: 
+
+```shell
+pip install scylla-driver
+```
+
+and run the script:
+
+```shell
+python timeseries.py -c localhost &
+```
+
+> [!TIP]
+> If you're running a cluster instead a single ScyllaDB node, you can add other node addresses splitted by comma:  "-c node1,node2,node3".
+
+
+You can learn more about drivers at [ScyllaDB University: S210 Using Drivers](https://university.scylladb.com/courses/using-scylla-drivers/)
