@@ -33,6 +33,9 @@ File [/Note rust app.postman_collection.json](/Note rust app.postman_collection.
 
 ## Env Vars
 
+see .env for dev builds
+or set in env of your shell:
+
 - `PORT`: Port to run the REST API.
 - `REGION`: AWS Region where the bucket is located.
 - `RUST_LOG`: Log level

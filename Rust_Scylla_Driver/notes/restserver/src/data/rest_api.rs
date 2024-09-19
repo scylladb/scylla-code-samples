@@ -9,7 +9,3 @@ pub struct AddNoteRequest {
     pub content: String,
 }
 
-#[derive(Debug, Serialize)]
-pub struct AppError {
-    message: String,
-}

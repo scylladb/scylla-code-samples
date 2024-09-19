@@ -57,6 +57,8 @@ yarn-error.log
 /.angular
 /.angular/cache
 .sass-cache/
+/.nx
+/.nx/cache
 /connect.lock
 /coverage
 /libpeerconnection.log
@@ -66,5 +68,3 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-
-/.idea
