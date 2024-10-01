@@ -59,6 +59,7 @@ impl ScyllaDbService {
             .known_node(host.clone())
             .default_execution_profile_handle(handle)
             .compression(Some(Compression::Lz4))
+            .schema_agreement_timeout(Duration::from_secs(10))
             .build()
             .await
             .expect("Error Connecting to ScyllaDB");
@@ -81,16 +82,16 @@ impl ScyllaDbService {
             if !query.starts_with("--") && query.len() > 1 {
                 info!("Running Query {}", query);
                 session
-                    .query(query, &[])
+                    .query_unpaged(query, &[])
                     .await
                     .expect("Error creating schema!");
             }
         }
 
         if session
-            .await_timed_schema_agreement(Duration::from_secs(10))
+            .await_schema_agreement()
             .await
-            .expect("Error Awaiting Schema Creation")
+            .is_ok()
         {
             info!("Schema Created!");
         } else {
@@ -135,7 +136,7 @@ impl ScyllaDbService {
         let q = DELETE_ONE_QUERY;
 
         let session = self.db_session.clone();
-        let result = session.query(q, (uuid,)).await;
+        let result = session.query_unpaged(q, (uuid,)).await;
 
         let elapsed = now.elapsed();
         info!(
@@ -196,7 +197,7 @@ impl ScyllaDbService {
         let q = GET_ONE_QUERY;
 
         let session = self.db_session.clone();
-        let result = session.query(q, (uuid,)).await?;
+        let result = session.query_unpaged(q, (uuid,)).await?;
 
         if let Some(rows) = result.rows {
             for r in rows {
@@ -234,7 +235,7 @@ impl ScyllaDbService {
         handlers.push(tokio::task::spawn(async move {
             debug!("save_nodes: Running query for node {}", entry.topic);
             let result = session
-                .execute(&prepared, (entry.id, entry.content, entry.topic))
+                .execute_unpaged(&prepared, (entry.id, entry.content, entry.topic))
                 .await;
 
             let _permit = permit;
