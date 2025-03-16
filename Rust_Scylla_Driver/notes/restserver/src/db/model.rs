@@ -1,7 +1,7 @@
-use scylla::macros::FromRow;
+use scylla::DeserializeRow;
 use uuid::Uuid;
 
-#[derive(Default, Debug, Clone, FromRow)]
+#[derive(Default, Debug, Clone, DeserializeRow)]
 pub struct DbNote {
     pub id: Uuid,
     pub content: String,
