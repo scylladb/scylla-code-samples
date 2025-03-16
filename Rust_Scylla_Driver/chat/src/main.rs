@@ -1,6 +1,8 @@
 use chrono::Utc;
 use futures::stream::StreamExt;
-use scylla::{query::Query, Session, SessionBuilder};
+use scylla::client::session::Session;
+use scylla::client::session_builder::SessionBuilder;
+use scylla::statement::unprepared::Statement;
 use std::error::Error;
 use tokio::io::{stdin, AsyncBufReadExt, BufReader};
 
@@ -24,12 +26,14 @@ static CREATE_ENTRIES_TABLE_QUERY: &str = r#"
 async fn main() -> Result<(), Box<dyn Error>> {
     println!("connecting to db");
     let session: Session = SessionBuilder::new()
-        .known_node("127.0.0.1:9042".to_string())
+        .known_node("127.0.0.1:9042")
         .build()
         .await?;
 
-    session.query(CREATE_KEYSPACE_QUERY, &[]).await?;
-    session.query(CREATE_ENTRIES_TABLE_QUERY, &[]).await?;
+    session.query_unpaged(CREATE_KEYSPACE_QUERY, &[]).await?;
+    session
+        .query_unpaged(CREATE_ENTRIES_TABLE_QUERY, &[])
+        .await?;
 
     println!("done create keyspace and table");
 
@@ -41,19 +45,18 @@ async fn main() -> Result<(), Box<dyn Error>> {
     while let Some(line) = lines_from_stdin.next_line().await? {
         let id: i64 = Utc::now().timestamp_millis();
 
-        session.execute(&insert_message, (id, line)).await?;
+        session.execute_unpaged(&insert_message, (id, line)).await?;
     }
-    
+
     println!("session executed");
 
-
-    let mut select_query = Query::new("SELECT id, message FROM log.messages");
+    let mut select_query = Statement::new("SELECT id, message FROM log.messages");
     select_query.set_is_idempotent(true);
 
     let mut row_stream = session
         .query_iter(select_query, &[])
         .await?
-        .into_typed::<(i64, String)>();
+        .rows_stream::<(i64, String)>()?;
 
     while let Some(row) = row_stream.next().await {
         let (id, message) = row?;
