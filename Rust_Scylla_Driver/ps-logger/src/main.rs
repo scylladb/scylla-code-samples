@@ -35,7 +35,7 @@ async fn main() -> Result<()> {
         &session,
         Uuid::parse_str("72f6d49c-76ea-44b6-b1bb-9186704785db")?,
         DateTime::<Utc>::from_timestamp(1000000000000, 0).unwrap(),
-        DateTime::<Utc>::from_timestamp(10000000000009, 0).unwrap(),
+        DateTime::<Utc>::from_timestamp(1000000000009, 0).unwrap(),
     )
     .await?;
     println!("     >> Measurements: {:?}", measurements);
