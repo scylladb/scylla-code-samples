@@ -1,4 +1,4 @@
-use chrono::Utc;
+use chrono::{DateTime, Utc};
 use futures::stream::StreamExt;
 use scylla::client::session::Session;
 use scylla::client::session_builder::SessionBuilder;
@@ -43,7 +43,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     let mut lines_from_stdin = BufReader::new(stdin()).lines();
     while let Some(line) = lines_from_stdin.next_line().await? {
-        let id: i64 = Utc::now().timestamp_millis();
+        let id = Utc::now();
 
         session.execute_unpaged(&insert_message, (id, line)).await?;
     }
@@ -56,7 +56,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let mut row_stream = session
         .query_iter(select_query, &[])
         .await?
-        .rows_stream::<(i64, String)>()?;
+        .rows_stream::<(DateTime<Utc>, String)>()?;
 
     while let Some(row) = row_stream.next().await {
         let (id, message) = row?;
