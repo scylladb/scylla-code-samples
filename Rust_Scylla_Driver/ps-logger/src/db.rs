@@ -1,7 +1,10 @@
-use scylla::{IntoTypedRows, Session, SessionBuilder};
+use chrono::{DateTime, Utc};
+use futures::TryStreamExt;
+use scylla::client::session::Session;
+use scylla::client::session_builder::SessionBuilder;
 use uuid::Uuid;
 
-use crate::{Duration, Result, TemperatureMeasurement};
+use crate::{Result, TemperatureMeasurement};
 
 static CREATE_KEYSPACE_QUERY: &str = r#"
   CREATE KEYSPACE IF NOT EXISTS fast_logger
@@ -48,7 +51,7 @@ pub async fn initialize(session: &Session) -> Result<()> {
 
 async fn create_keyspace(session: &Session) -> Result<()> {
     session
-        .query(CREATE_KEYSPACE_QUERY, ())
+        .query_unpaged(CREATE_KEYSPACE_QUERY, ())
         .await
         .map(|_| ())
         .map_err(From::from)
@@ -56,7 +59,7 @@ async fn create_keyspace(session: &Session) -> Result<()> {
 
 async fn create_temperature_table(session: &Session) -> Result<()> {
     session
-        .query(CREATE_TEMPERATURE_TABLE_QUERY, ())
+        .query_unpaged(CREATE_TEMPERATURE_TABLE_QUERY, ())
         .await
         .map(|_| ())
         .map_err(From::from)
@@ -64,7 +67,7 @@ async fn create_temperature_table(session: &Session) -> Result<()> {
 
 pub async fn add_measurement(session: &Session, measurement: TemperatureMeasurement) -> Result<()> {
     session
-        .query(ADD_MEASUREMENT_QUERY, measurement)
+        .query_unpaged(ADD_MEASUREMENT_QUERY, measurement)
         .await
         .map(|_| ())
         .map_err(From::from)
@@ -73,15 +76,14 @@ pub async fn add_measurement(session: &Session, measurement: TemperatureMeasurem
 pub async fn select_measurements(
     session: &Session,
     device: Uuid,
-    time_from: Duration,
-    time_to: Duration,
+    time_from: DateTime<Utc>,
+    time_to: DateTime<Utc>,
 ) -> Result<Vec<TemperatureMeasurement>> {
     session
-        .query(SELECT_MEASUREMENTS_QUERY, (device, time_from, time_to))
+        .query_iter(SELECT_MEASUREMENTS_QUERY, (device, time_from, time_to))
         .await?
-        .rows
-        .unwrap_or_default()
-        .into_typed::<TemperatureMeasurement>()
-        .map(|v| v.map_err(From::from))
-        .collect()
+        .rows_stream::<TemperatureMeasurement>()?
+        .try_collect()
+        .await
+        .map_err(From::from)
 }

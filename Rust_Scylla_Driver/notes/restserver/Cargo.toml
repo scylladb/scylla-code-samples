@@ -18,11 +18,14 @@ tracing-subscriber = { version = "0.3.18", features = ["env-filter", "json"] }
 eyre = "0.6.12"
 color-eyre = "0.6.3"
 config = "0.14.0"
-scylla = "0.14.0"
+scylla = "1.0"
 dotenv = "0.15"
 num_cpus = "1.16.0"
 url = "2.5.2"
-tokio = {version = "1.40.0", features = ["rt-multi-thread", "macros"]  } #this has to match actix-web (actix-rt)
+tokio = { version = "1.40.0", features = [
+    "rt-multi-thread",
+    "macros",
+] } #this has to match actix-web (actix-rt)
 tokio-stream = "0.1.16"
 lazy_static = "1.5.0"
 rand = "0.9.0-alpha.2"

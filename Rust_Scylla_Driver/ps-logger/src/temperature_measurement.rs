@@ -1,13 +1,11 @@
 use uuid::Uuid;
 
-use scylla::FromRow;
-use scylla::ValueList;
+use chrono::{DateTime, Utc};
+use scylla::{DeserializeRow, SerializeRow};
 
-use crate::Duration;
-
-#[derive(Debug, FromRow, ValueList)]
+#[derive(Debug, SerializeRow, DeserializeRow)]
 pub struct TemperatureMeasurement {
     pub device: Uuid,
-    pub time: Duration,
+    pub time: DateTime<Utc>,
     pub temperature: i16,
 }

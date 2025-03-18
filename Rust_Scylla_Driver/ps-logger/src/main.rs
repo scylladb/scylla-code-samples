@@ -1,11 +1,10 @@
+use chrono::{DateTime, Utc};
 use uuid::Uuid;
 
-use crate::duration::Duration;
 use crate::result::Result;
 use crate::temperature_measurement::TemperatureMeasurement;
 
 mod db;
-mod duration;
 mod result;
 mod temperature_measurement;
 
@@ -19,14 +18,14 @@ async fn main() -> Result<()> {
     println!("Adding measurements");
     let measurement = TemperatureMeasurement {
         device: Uuid::parse_str("72f6d49c-76ea-44b6-b1bb-9186704785db")?,
-        time: Duration::seconds(1000000000001),
+        time: DateTime::<Utc>::from_timestamp(1000000000001, 0).unwrap(),
         temperature: 40,
     };
     db::add_measurement(&session, measurement).await?;
 
     let measurement = TemperatureMeasurement {
         device: Uuid::parse_str("72f6d49c-76ea-44b6-b1bb-9186704785db")?,
-        time: Duration::seconds(1000000000003),
+        time: DateTime::<Utc>::from_timestamp(1000000000003, 0).unwrap(),
         temperature: 60,
     };
     db::add_measurement(&session, measurement).await?;
@@ -35,8 +34,8 @@ async fn main() -> Result<()> {
     let measurements = db::select_measurements(
         &session,
         Uuid::parse_str("72f6d49c-76ea-44b6-b1bb-9186704785db")?,
-        Duration::seconds(1000000000000),
-        Duration::seconds(10000000000009),
+        DateTime::<Utc>::from_timestamp(1000000000000, 0).unwrap(),
+        DateTime::<Utc>::from_timestamp(1000000000009, 0).unwrap(),
     )
     .await?;
     println!("     >> Measurements: {:?}", measurements);

@@ -22,7 +22,7 @@ use tokio::task::JoinHandle;
 use tracing::{debug, error, info};
 
 use crate::db::model::DbNote;
-use scylla::transport::errors::QueryError;
+use scylla::errors::ExecutionError;
 use std::string::ToString;
 use uuid::Uuid;
 
@@ -92,7 +92,7 @@ async fn delete_by_id(
     }
 }
 
-async fn delete_note(db: &ScyllaDbService, id: &str) -> Result<Option<QueryError>, Error> {
+async fn delete_note(db: &ScyllaDbService, id: &str) -> Result<Option<ExecutionError>, Error> {
     let ret = db.delete_note(id).await.map_err(ErrorInternalServerError);
     ret
 }
