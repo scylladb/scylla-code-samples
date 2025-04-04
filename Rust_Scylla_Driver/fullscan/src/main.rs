@@ -4,18 +4,17 @@ use chrono::NaiveDate;
 use chrono::{DateTime, NaiveDateTime, TimeZone, Utc};
 use rand::Rng;
 use rand::seq::SliceRandom;
-use rand::thread_rng;
-use scylla::frame::value::CqlTimestamp;
-use scylla::frame::value::ValueList;
-use scylla::prepared_statement::PreparedStatement;
+use rand::rng;
+use scylla::value::{CqlTimestamp, Row};
+use scylla::statement::prepared::PreparedStatement;
 use scylla::statement::Consistency;
-use scylla::load_balancing::DefaultPolicy;
-use scylla::transport::ExecutionProfile;
-use scylla::transport::retry_policy::DefaultRetryPolicy;
-use scylla::transport::downgrading_consistency_retry_policy::DowngradingConsistencyRetryPolicy;
-use scylla::transport::Compression;
-use scylla::IntoTypedRows;
-use scylla::{Session, SessionBuilder};
+use scylla::policies::load_balancing::DefaultPolicy;
+use scylla::client::execution_profile::ExecutionProfile;
+use scylla::policies::retry::DefaultRetryPolicy;
+use scylla::policies::retry::DowngradingConsistencyRetryPolicy;
+use scylla::frame::Compression;
+use scylla::client::session::Session;
+use scylla::client::session_builder::SessionBuilder;
 use std::env;
 use std::error::Error;
 use std::process;
@@ -24,6 +23,7 @@ use std::time::Duration;
 use std::{thread, time};
 use std::sync::atomic::{AtomicU32, Ordering};
 use std::ops::{Deref, Range};
+use scylla::response::query_result::QueryResult;
 use tokio::sync::Semaphore;
 use uuid::Uuid;
 
@@ -188,7 +188,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     //below needs shuffling, so we don't create hot partitions
     let ranges = (min_token..max_token).step_by((chunk_size as usize));
     let mut vranges: Vec<i128> = ranges.collect();
-    let mut rng = thread_rng();
+    let mut rng = rng();
     //shuffled vector should do
     vranges.shuffle(&mut rng);
     for x in vranges { // TODO to distribute horizontally we need a way to split this list to multiple nodes, also with good distributed shuffling
@@ -203,34 +203,35 @@ async fn main() -> Result<(), Box<dyn Error>> {
         // println!("Querying: {} to {}", v[0], v[1]);
         let counter = Arc::clone(&mcounter);
         tokio::task::spawn(async move {
-            if let Some(query_result) = session.execute_unpaged(&ps, (&v[0], &v[1])).await.unwrap().rows {
-                for row in query_result {
-                    if row.columns[0] != None {
-                        // val filtered_dataset = dataset.filter(row =>
-                        //                                       row.getString(3) == filterValue //row.fieldIndex(compareFieldName)  // IF we have our subset of data found
-                        //                                           && row.get(4) == null // IF TTL is null (so old data before alter TTL was done, we can even check if TTL is too low, etc. )
-                        // )
-                        counter.fetch_add(1, Ordering::SeqCst);
-                        // process the row here - sample ETL
-                        //TTL or delete ?
-                        if delete {
-                            let typed_row = row.into_typed::<(Uuid, Uuid, Uuid)>();
-                            let (id, group_id, owner_id) = typed_row.unwrap();
-                            //TODO move this to separate execution group to avoid blocking
-                            let delete = session.execute_unpaged(&ps_delete, (&id, &group_id)).await.unwrap().warnings;
-                        }
+            if let query_result  = session.execute_unpaged(&ps, (&v[0], &v[1])).await.unwrap().into_rows_result() {
+                let rows: Vec<_> = query_result.unwrap()
+                    .rows::<(Uuid, Uuid, Uuid)>().unwrap().into_iter()
+                    .collect();
 
-                        if ttlUpdate {
-                            //TODO we need to read and then write WHOLE row so all cells get the TTL update
-                        }
-                        // (  id uuid,
-                        //                        group_id uuid,
-                        //                        owner_id uuid,
-                        //                        data blob,
-                        //                        changed_at timestamp,
-                        //                        PRIMARY KEY ((id, group_id)) )
-
+                for row in rows {
+                    // val filtered_dataset = dataset.filter(row =>
+                    //                                       row.getString(3) == filterValue //row.fieldIndex(compareFieldName)  // IF we have our subset of data found
+                    //                                           && row.get(4) == null // IF TTL is null (so old data before alter TTL was done, we can even check if TTL is too low, etc. )
+                    // )
+                    counter.fetch_add(1, Ordering::SeqCst);
+                    // process the row here - sample ETL
+                    //TTL or delete ?
+                    if delete {
+                        let (id, group_id, owner_id) = row.unwrap();
+                        //TODO move this to separate execution group to avoid blocking
+                        let delete = session.execute_unpaged(&ps_delete, (&id, &group_id)).await.unwrap();
+                            let deleteres = delete.warnings();
                     }
+
+                    if ttlUpdate {
+                        //TODO we need to read and then write WHOLE row so all cells get the TTL update
+                    }
+                    // (  id uuid,
+                    //                        group_id uuid,
+                    //                        owner_id uuid,
+                    //                        data blob,
+                    //                        changed_at timestamp,
+                    //                        PRIMARY KEY ((id, group_id)) )
 
                 }
             }
@@ -261,8 +262,16 @@ async fn main() -> Result<(), Box<dyn Error>> {
         metrics.get_latency_percentile_ms(95.0).unwrap()
     );
     println!(
+        "99 percentile latency: {}",
+        metrics.get_latency_percentile_ms(99.0).unwrap()
+    );
+    println!(
         "99.9 percentile latency: {}",
         metrics.get_latency_percentile_ms(99.9).unwrap()
+    );
+    println!(
+        "99.99 percentile latency: {}",
+        metrics.get_latency_percentile_ms(99.99).unwrap()
     );
 
     Ok(())
