@@ -18,6 +18,9 @@ class App:
 
 if __name__ == "__main__":
     app = App()
-    print(f"ScyllaDB session: {app.session}")
+    if app.session:
+        print("Successfully connected to ScyllaDB database!")
+    else:
+        print("Failed to connect to ScyllaDB database.")
     app.stop()
 
