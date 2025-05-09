@@ -32,6 +32,10 @@ class App:
 
 if __name__ == "__main__":
     app = App()
+    if app.session:
+        print("Successfully connected to ScyllaDB database!")
+    else:
+        print("Failed to connect to ScyllaDB database.")
     result = app.show_mutant_data()
     app.add_mutant(first_name='Peter', last_name='Parker',
                    address='1515 Main St', picture_location='http://www.facebook.com/Peter-Parker/')

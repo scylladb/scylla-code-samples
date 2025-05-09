@@ -34,6 +34,10 @@ class App:
 
 if __name__ == "__main__":
     app = App()
+    if app.session:
+        print("Successfully connected to ScyllaDB database!")
+    else:
+        print("Failed to connect to ScyllaDB database.")
     app.show_mutant_data()
     app.delete_mutant(first_name="Peter", last_name="Parker")
     app.show_mutant_data()
