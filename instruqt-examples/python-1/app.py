@@ -2,7 +2,6 @@
 from cassandra.cluster import Cluster
 from cassandra import ConsistencyLevel
 
-
 class App:
     def __init__(self):
         self.cluster = Cluster(contact_points=[
