@@ -40,4 +40,4 @@ if __name__ == "__main__":
     else:
         print("Failed to connect to ScyllaDB database.")
     result = app.show_mutant_data()
-    print(result)
+    app.stop()

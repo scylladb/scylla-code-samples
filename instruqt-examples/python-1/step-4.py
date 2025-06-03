@@ -26,6 +26,8 @@ class App:
     def show_mutant_data(self):
         print("Data that we have in the catalog".center(50, "="))
         result = self.session.execute(query="SELECT * FROM mutant_data")
+        for row in result:
+            print(row.first_name, row.last_name)
         return result
 
     def add_mutant(self, first_name, last_name, address, picture_location):
