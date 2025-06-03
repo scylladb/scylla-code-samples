@@ -1,17 +1,27 @@
 #!/bin/env python3
-from cassandra.cluster import Cluster
+from cassandra.cluster import Cluster, ExecutionProfile, EXEC_PROFILE_DEFAULT
 from cassandra import ConsistencyLevel
 
 
 class App:
     def __init__(self):
-        self.cluster = Cluster(contact_points=[
-            ("localhost", 9042),  # node1
-            ("localhost", 9043),  # node2
-            ("localhost", 9044)   # node3
-        ])
+        # Create an execution profile with QUORUM consistency level
+        profile = ExecutionProfile(
+            consistency_level=ConsistencyLevel.QUORUM
+        )
+        
+        # Create cluster with the execution profile
+        self.cluster = Cluster(
+            contact_points=[
+                ("localhost", 9042),  # node1
+                ("localhost", 9043),  # node2
+                ("localhost", 9044)   # node3
+            ],
+            execution_profiles={
+                EXEC_PROFILE_DEFAULT: profile
+            }
+        )
         self.session = self.cluster.connect(keyspace="catalog")
-        self.session.default_consistency_level = ConsistencyLevel.QUORUM
 
     def show_mutant_data(self):
         print("Data that we have in the catalog".center(50, "="))
