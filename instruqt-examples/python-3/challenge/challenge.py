@@ -27,7 +27,7 @@ class App:
         )
         self.delete_ps = self.session.prepare(query="DELETE FROM mutant_data WHERE first_name = ? and last_name = ?")
         self.get_pic_ps = self.session.prepare(
-            query="SELECT picture_file FROM mutant_data WHERE first_name = ? and last_name = ?"
+            query="SELECT picture_file FROM mutant_data" # TODO: Update the query with an appropriate WHERE clause
         )
 
     def show_mutant_data(self):

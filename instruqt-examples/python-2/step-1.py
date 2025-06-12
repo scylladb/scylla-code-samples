@@ -4,7 +4,7 @@ from cassandra import ConsistencyLevel
 
 class App:
     def __init__(self):
-        # Create an execution profile with QUORUM consistency
+        # Create an execution profile with QUORUM consistency level
         profile = ExecutionProfile(
             consistency_level=ConsistencyLevel.QUORUM
         )
