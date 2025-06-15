@@ -1,0 +1,182 @@
+{
+	"info": {
+		"_postman_id": "518abe48-6230-4951-a3fa-fd4e684aeecf",
+		"name": "Note rust app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create note 1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"52bdf6af-3a3b-4bd2-baef-023416b24b60\",\r\n    \"topic\": \"My Monday day\",\r\n    \"content\":\"Today was a nice day\"    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3001/note",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create note random ID",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"topic\": \"How to cook spaghetti\",\r\n    \"content\":\"Boil water, put in pasta.\\nClosely watch it cook to al dente.\\n Get rid of water. DONE!\"    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3001/note",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create note random ID 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"topic\": \"Linux kernel build\",\r\n    \"content\":\"Clone linux tree, configure, make.\"    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3001/note",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create note random ID 3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"topic\": \"Archeological research Trebic\",\r\n    \"content\": \"Medieval era findings(horse shoes, tips of arrows), ceramics for storing and cooking, religious items. Obsidian was imported from eastern Slovakia.\"    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3001/note",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete note 1",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3001/note/52bdf6af-3a3b-4bd2-baef-023416b24b60",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"note",
+						"52bdf6af-3a3b-4bd2-baef-023416b24b60"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get notes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3001/notes",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"notes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get note 1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3001/note/52bdf6af-3a3b-4bd2-baef-023416b24b60",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"note",
+						"52bdf6af-3a3b-4bd2-baef-023416b24b60"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
