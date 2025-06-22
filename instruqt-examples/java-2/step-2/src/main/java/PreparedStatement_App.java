@@ -18,7 +18,6 @@ static Cluster cluster = Cluster.builder()
 
 static Session session = cluster.connect("catalog");
 static PreparedStatement insert = session.prepare("INSERT INTO mutant_data (first_name,last_name,address,picture_location) VALUES (?,?,?,?)");
-static PreparedStatement delete = session.prepare("DELETE FROM mutant_data WHERE first_name = ? and last_name = ?");
 	
 public static void selectQuery() {
         System.out.print("\n\nDisplaying Results:");
@@ -33,12 +32,6 @@ public static void selectQuery() {
 public static void insertQuery(String first_name, String last_name, String address, String picture_location) {
         System.out.print("\n\nInserting " + first_name + "......");
         session.execute(insert.bind(first_name,last_name,address,picture_location));
-        selectQuery();
-}
-
-public static void deleteQuery(String first_name, String last_name) {
-        System.out.print("\n\nDeleting " + first_name + "......");
-        session.execute(delete.bind(first_name,last_name));
         selectQuery();
 }
 

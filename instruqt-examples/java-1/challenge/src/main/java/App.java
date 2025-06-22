@@ -38,10 +38,31 @@ public static void deleteQuery() {
         selectQuery();
 }
 
+// TODO: Implement this method to add Miles Morales to the database
+public static void addMilesMorales() {
+        // Your challenge: Add Miles Morales to the mutant_data table
+        // Use the following data:
+        // first_name: "Miles"
+        // last_name: "Morales"
+        // address: "123 Spider Street"
+        // picture_location: "http://www.marvel.com/miles-morales"
+        
+        System.out.print("\n\nAdding Miles Morales......");
+        // TODO: Write your INSERT statement here
+        // session.execute("INSERT INTO mutant_data (first_name,last_name,address,picture_location) VALUES (?,?,?,?)");
+        
+        selectQuery();
+}
+
 public static void main(String[] args) {
         selectQuery();
         insertQuery();
         deleteQuery();
+        
+        // Challenge: Add Miles Morales
+        addMilesMorales();
+        
+        System.out.println("\n\n🎉 Congratulations! You've successfully completed the ScyllaDB Java challenge!");
         cluster.close();
 }
 

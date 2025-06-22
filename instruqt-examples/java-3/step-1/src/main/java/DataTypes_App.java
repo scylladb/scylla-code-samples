@@ -17,8 +17,7 @@ public class DataTypes_App {
 static File FILE;
 // Add static PreparedStatement fields to avoid re-preparing
 static PreparedStatement insertDataStatement;
-static PreparedStatement insertConcurrentStatement;
-static PreparedStatement insertFromStatement;
+static PreparedStatement insertBlobStatement;  
 static PreparedStatement selectStatement;
 
 public static void main(String[] args) {
@@ -61,8 +60,7 @@ public static void main(String[] args) {
 // Add method to prepare all statements once
 private static void prepareStatements(Session session) {
         insertDataStatement = session.prepare("INSERT INTO catalog.mutant_data (first_name, last_name, b, m) VALUES (?, ?, ?, ?)");
-        insertConcurrentStatement = session.prepare("INSERT INTO catalog.mutant_data (first_name, last_name, b) VALUES (?, ?, ?)");
-        insertFromStatement = session.prepare("INSERT INTO catalog.mutant_data (first_name, last_name, b) VALUES (?, ?, ?)");
+        insertBlobStatement = session.prepare("INSERT INTO catalog.mutant_data (first_name, last_name, b) VALUES (?, ?, ?)");
         selectStatement = session.prepare("SELECT b FROM catalog.mutant_data WHERE first_name = ? AND last_name = ?");
 }
 
@@ -90,14 +88,14 @@ private static void allocateAndInsert(Session session, String first_name, String
 
 private static void insertConcurrent(Session session, String first_name, String last_name) {
         ByteBuffer buffer = Bytes.fromHexString("0xffffff");
-        session.execute(insertConcurrentStatement.bind(first_name,last_name,buffer));
+        session.execute(insertBlobStatement.bind(first_name,last_name,buffer));
         buffer.position(buffer.limit());
         buffer.flip();
 }
 
 private static void insertFromAndRetrieveToFile(Session session, String first_name, String last_name) throws IOException {
         ByteBuffer buffer = readAll(FILE);
-        session.execute(insertFromStatement.bind(first_name,last_name,buffer));
+        session.execute(insertBlobStatement.bind(first_name,last_name,buffer));
 
         File tmpFile = new File("/tmp/" + first_name + "_" + last_name + ".png");
         System.out.printf("\nWriting retrieved buffer to %s%n ", tmpFile.getAbsoluteFile());

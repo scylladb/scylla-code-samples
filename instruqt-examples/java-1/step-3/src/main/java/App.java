@@ -32,16 +32,9 @@ public static void insertQuery() {
         selectQuery();
 }
 
-public static void deleteQuery() {
-        System.out.print("\n\nDeleting Mike Tyson......");
-        session.execute("DELETE FROM mutant_data WHERE last_name = 'Tyson' and first_name = 'Mike'");
-        selectQuery();
-}
-
 public static void main(String[] args) {
         selectQuery();
         insertQuery();
-        deleteQuery();
         cluster.close();
 }
 

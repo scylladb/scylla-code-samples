@@ -19,10 +19,11 @@ static Cluster cluster = Cluster.builder()
 static Session session = cluster.connect("catalog");
 static PreparedStatement insert = session.prepare("INSERT INTO mutant_data (first_name,last_name,address,picture_location) VALUES (?,?,?,?)");
 static PreparedStatement delete = session.prepare("DELETE FROM mutant_data WHERE first_name = ? and last_name = ?");
+static PreparedStatement select_ps = // TODO: Complete the prepared statement declaration
 	
 public static void selectQuery() {
         System.out.print("\n\nDisplaying Results:");
-        ResultSet results = session.execute("SELECT * FROM catalog.mutant_data");
+        ResultSet results = session.execute(select_ps.bind());
         for (Row row : results) {
                 String first_name = row.getString("first_name");
                 String last_name = row.getString("last_name");
