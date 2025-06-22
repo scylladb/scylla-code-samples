@@ -26,22 +26,8 @@ public static void selectQuery() {
         }
 }
 
-public static void insertQuery() {
-        System.out.print("\n\nInserting Mike Tyson......");
-        session.execute("INSERT INTO mutant_data (first_name,last_name,address,picture_location) VALUES ('Mike','Tyson','1515 Main St', 'http://www.facebook.com/mtyson')");
-        selectQuery();
-}
-
-public static void deleteQuery() {
-        System.out.print("\n\nDeleting Mike Tyson......");
-        session.execute("DELETE FROM mutant_data WHERE last_name = 'Tyson' and first_name = 'Mike'");
-        selectQuery();
-}
-
 public static void main(String[] args) {
         selectQuery();
-        insertQuery();
-        deleteQuery();
         cluster.close();
 }
 

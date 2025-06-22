@@ -63,7 +63,7 @@ private static void prepareStatements(Session session) {
         insertDataStatement = session.prepare("INSERT INTO catalog.mutant_data (first_name, last_name, b, m) VALUES (?, ?, ?, ?)");
         insertConcurrentStatement = session.prepare("INSERT INTO catalog.mutant_data (first_name, last_name, b) VALUES (?, ?, ?)");
         insertFromStatement = session.prepare("INSERT INTO catalog.mutant_data (first_name, last_name, b) VALUES (?, ?, ?)");
-        selectStatement = session.prepare("SELECT b FROM catalog.mutant_data WHERE first_name = ? AND last_name = ?");
+        selectStatement = session.prepare("SELECT b FROM catalog.mutant_data"); // TODO: Complete the prepared statement declaration
 }
 
 private static void createSchema(Session session) {
