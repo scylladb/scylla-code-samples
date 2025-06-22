@@ -22,7 +22,14 @@ static PreparedStatement insertFromStatement;
 static PreparedStatement selectStatement;
 
 public static void main(String[] args) {
-        Cluster cluster = Cluster.builder().addContactPoints("scylla-node1", "scylla-node2", "scylla-node3").build();
+        Cluster cluster = Cluster.builder()
+                .addContactPoints("localhost")
+                .withPort(9042)
+                .addContactPoints("localhost")
+                .withPort(9043)
+                .addContactPoints("localhost")
+                .withPort(9044)
+                .build();
         Session session = cluster.connect("catalog");
         createSchema(session);
         
@@ -34,7 +41,7 @@ public static void main(String[] args) {
                 if(mutants[i] != null) {
                         String[] first_name = mutants[i].split(" ");
                         String last_name = first_name[1];
-                        FILE = new File("/opt/code/java-datatypes/" + first_name[0] + "_" + last_name + ".png");
+                        FILE = new File(first_name[0] + "_" + last_name + ".png");
                         System.out.print("\nProcessing image for: " + first_name[0] + " " + last_name);
                         allocateAndInsert(session, first_name[0], last_name);
                         insertConcurrent(session, first_name[0], last_name);
