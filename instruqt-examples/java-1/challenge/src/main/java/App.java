@@ -32,12 +32,6 @@ public static void insertQuery() {
         selectQuery();
 }
 
-public static void deleteQuery() {
-        System.out.print("\n\nDeleting Mike Tyson......");
-        session.execute("DELETE FROM mutant_data WHERE last_name = 'Tyson' and first_name = 'Mike'");
-        selectQuery();
-}
-
 // TODO: Implement this method to add Miles Morales to the database
 public static void addMilesMorales() {
         // Your challenge: Add Miles Morales to the mutant_data table
@@ -48,21 +42,21 @@ public static void addMilesMorales() {
         // picture_location: "http://www.marvel.com/miles-morales"
         
         System.out.print("\n\nAdding Miles Morales......");
-        // TODO: Write your INSERT statement here
-        // session.execute("INSERT INTO mutant_data (first_name,last_name,address,picture_location) VALUES (?,?,?,?)");
-        
+        // TODO: Implement the insert statement here
+        throw new UnsupportedOperationException("You need to implement the 'addMilesMorales' function");
         selectQuery();
 }
 
+
+
 public static void main(String[] args) {
         selectQuery();
-        insertQuery();
-        deleteQuery();
         
         // Challenge: Add Miles Morales
         addMilesMorales();
-        
-        System.out.println("\n\n🎉 Congratulations! You've successfully completed the ScyllaDB Java challenge!");
+
+        selectQuery();
+
         cluster.close();
 }
 
