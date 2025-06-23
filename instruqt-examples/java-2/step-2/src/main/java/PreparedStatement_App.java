@@ -39,8 +39,6 @@ public static void main(String[] args) {
         selectQuery();
         insertQuery("Mike", "Tyson", "12345 Foo Lane", "http://www.facebook.com/mtyson");
         insertQuery("Alex", "Jones", "56789 Hickory St", "http://www.facebook.com/ajones");
-        deleteQuery("Mike", "Tyson");
-        deleteQuery("Alex", "Jones");
         cluster.close();
 }
 
