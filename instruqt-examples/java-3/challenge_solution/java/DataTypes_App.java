@@ -61,9 +61,7 @@ public static void main(String[] args) {
 private static void prepareStatements(Session session) {
         insertDataStatement = session.prepare("INSERT INTO catalog.mutant_data (first_name, last_name, b, m) VALUES (?, ?, ?, ?)");
         insertBlobStatement = session.prepare("INSERT INTO catalog.mutant_data (first_name, last_name, b) VALUES (?, ?, ?)");
-
-        // TODO: Complete the prepared statement declaration by adding the appropriate WHERE clause
-        selectStatement = session.prepare("SELECT b FROM catalog.mutant_data"); 
+        selectStatement = session.prepare("SELECT b FROM catalog.mutant_data WHERE first_name = ? AND last_name = ?");
 }
 
 private static void createSchema(Session session) {
