@@ -18,7 +18,7 @@ static Session session = cluster.connect("catalog");
 
 public static void selectQuery() {
         System.out.print("\n\nDisplaying Results:");
-        ResultSet results = session.execute(""); // TODO: Write the SELECT query for the mutant_data table
+        ResultSet results = session.execute("SELECT * FROM mutant_data");
         for (Row row : results) {
                 String first_name = row.getString("first_name");
                 String last_name = row.getString("last_name");
