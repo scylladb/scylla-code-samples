@@ -1,5 +1,5 @@
 # Build the manager binary
-FROM golang:1.13 as builder
+FROM golang:1.24 as builder
 
 COPY . /build
 WORKDIR /build
@@ -8,7 +8,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o /build/goappp ./cmd/goa
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o /build/godatatypes ./cmd/godatatypes
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o /build/gocqlxapp ./cmd/gocqlxapp
 
-FROM alpine:3.10
+FROM alpine:3.20
 
 COPY --from=builder /build/goapp /usr/local/bin/goapp
 RUN chmod +x /usr/local/bin/goapp
