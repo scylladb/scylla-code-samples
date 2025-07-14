@@ -11,8 +11,9 @@ import scala.util.Success
 
 object App {
   def main(args: Array[String]): Unit = {
-    val connection: CassandraConnection = ContactPoints(Seq("localhost"))
-      .keySpace("catalog")
+    val connection: CassandraConnection =
+      ContactPoints(List("localhost"))
+        .keySpace("catalog")
     val db = new MutantsDatabase(connection)
     val svc = new MutantsService(db)
 
@@ -20,36 +21,24 @@ object App {
       for {
         _ <- svc.getAll().andThen {
           case Success(mutants) =>
-            println(s"Initial Mutants: ${mutants.mkString(", ")}")
+            println(s"Mutants: ${mutants.mkString(", ")}")
         }
         _ <- svc.insertMutant(
           Mutant(
-            "Miles",   // Fixed: first_name
-            "Morales", // Fixed: last_name
-            "42 Brooklyn St",
-            "https://www.facebook.com/miles-morales"
+            "Mike",
+            "Tyson",
+            "1515 Main St.",
+            "https://www.facebook.com/mtyson"
           )
         )
-        _ <- svc.getAll().andThen {
-          case Success(mutants) =>
-            println(s"Mutants after INSERT: ${mutants.mkString(", ")}")
-        }
-        _ <- checkForMutant(svc, "Miles", "Morales").andThen {
-          case Success(exists) =>
-            if (exists) {
-              println("Congratulations! You've successfully added Miles in the mutant database and have passed the challenge!")
-            } else {
-              println("Miles Morales was not found in the database. Check your INSERT parameters!")
-            }
+        _ <- svc.getByName("Mike", "Tyson").andThen {
+          case Success(mutant) =>
+            println(s"Found mutant: ${mutant}")
         }
       } yield (),
       30.seconds
     )
 
     db.shutdown()
-  }
-
-  def checkForMutant(svc: MutantsService, firstName: String, lastName: String) = {
-    svc.getByName(firstName, lastName).map(_.isDefined)
   }
 }
