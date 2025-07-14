@@ -11,7 +11,7 @@ import scala.util.Success
 
 /**
  * Main application for the Mutant Management System
- * Step 3: Insert operations - add new mutant data
+ * Step 4: Insert and Delete operations - add and remove mutant data
  */
 object App {
   def main(args: Array[String]): Unit = {
@@ -32,7 +32,7 @@ object App {
         // Show existing data
         _ <- svc.getAll().andThen {
           case Success(mutants) =>
-            println("Data that we have in the catalog".center(50, "="))
+            println("=" * 25 + " Data that we have in the catalog " + "=" * 25)
             mutants.foreach(mutant => println(s"${mutant.firstName} ${mutant.lastName}"))
         }
         // Add new mutant
@@ -48,10 +48,22 @@ object App {
             println("\nAdding Peter Parker...")
             println("Added.\n")
         }
-        // Show data again
+        // Show data after insertion
         _ <- svc.getAll().andThen {
           case Success(mutants) =>
-            println("Data that we have in the catalog".center(50, "="))
+            println("=" * 25 + " Data after adding Peter Parker " + "=" * 25)
+            mutants.foreach(mutant => println(s"${mutant.firstName} ${mutant.lastName}"))
+        }
+        // Delete Peter Parker
+        _ <- svc.deleteMutant("Peter", "Parker").andThen {
+          case Success(_) =>
+            println("\nDeleting Peter Parker...")
+            println("Deleted.\n")
+        }
+        // Show data after deletion
+        _ <- svc.getAll().andThen {
+          case Success(mutants) =>
+            println("=" * 25 + " Data after deleting Peter Parker " + "=" * 25)
             mutants.foreach(mutant => println(s"${mutant.firstName} ${mutant.lastName}"))
         }
       } yield (),
