@@ -1,0 +1,22 @@
+{
+  "name": "nodejs-scylla-university-lesson1",
+  "version": "1.0.0",
+  "description": "nodejs lesson scylla university lesson one",
+  "author": "Guy Shtub",
+  "license": "Apache-2.0",
+  "main": "app.js",
+  "keywords": [
+    "nodejs",
+    "nosql",
+    "scylla",
+    "scylladb"
+  ],
+  "dependencies": {
+    "cassandra-driver": "^4.6.0",
+    "async": "^3.2.0"
+  },
+  "repository": {
+  "type" : "git",
+  "url" : "https://github.com/scylladb/scylla-code-samples"
+  }
+}
