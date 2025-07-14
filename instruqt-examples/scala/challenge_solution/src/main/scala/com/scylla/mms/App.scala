@@ -9,6 +9,10 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.util.Success
 
+/**
+ * Main application for the Mutant Management System
+ * Step 4: Insert and Delete operations - add and remove mutant data
+ */
 object App {
   def main(args: Array[String]): Unit = {
     val connection: CassandraConnection =
@@ -17,23 +21,50 @@ object App {
     val db = new MutantsDatabase(connection)
     val svc = new MutantsService(db)
 
+    if (db.session != null) {
+      println("Successfully connected to ScyllaDB database!")
+    } else {
+      println("Failed to connect to ScyllaDB database.")
+    }
+
     Await.result(
       for {
+        // Show existing data
         _ <- svc.getAll().andThen {
           case Success(mutants) =>
-            println(s"Mutants: ${mutants.mkString(", ")}")
+            println("=" * 25 + " Data that we have in the catalog " + "=" * 25)
+            mutants.foreach(mutant => println(s"${mutant.firstName} ${mutant.lastName}"))
         }
+        // Add new mutant
         _ <- svc.insertMutant(
           Mutant(
-            "Mike",
-            "Tyson",
-            "1515 Main St.",
-            "https://www.facebook.com/mtyson"
+            "Peter",
+            "Parker",
+            "1515 Main St",
+            "http://www.facebook.com/Peter-Parker/"
           )
-        )
-        _ <- svc.getByName("Mike", "Tyson").andThen {
-          case Success(mutant) =>
-            println(s"Found mutant: ${mutant}")
+        ).andThen {
+          case Success(_) =>
+            println("\nAdding Peter Parker...")
+            println("Added.\n")
+        }
+        // Show data after insertion
+        _ <- svc.getAll().andThen {
+          case Success(mutants) =>
+            println("=" * 25 + " Data after adding Peter Parker " + "=" * 25)
+            mutants.foreach(mutant => println(s"${mutant.firstName} ${mutant.lastName}"))
+        }
+        // Delete Peter Parker
+        _ <- svc.deleteMutant("Peter", "Parker").andThen {
+          case Success(_) =>
+            println("\nDeleting Peter Parker...")
+            println("Deleted.\n")
+        }
+        // Show data after deletion
+        _ <- svc.getAll().andThen {
+          case Success(mutants) =>
+            println("=" * 25 + " Data after deleting Peter Parker " + "=" * 25)
+            mutants.foreach(mutant => println(s"${mutant.firstName} ${mutant.lastName}"))
         }
       } yield (),
       30.seconds

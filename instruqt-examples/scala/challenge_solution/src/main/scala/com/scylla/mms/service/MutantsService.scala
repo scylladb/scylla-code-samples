@@ -6,6 +6,10 @@ import com.scylla.mms.model.Mutant
 
 import scala.concurrent.Future
 
+/**
+ * Service class for managing mutant data operations
+ * Step 4: Read, Insert, and Delete operations
+ */
 class MutantsService(db: MutantsDatabase) {
   import db.{session, space}
 
@@ -21,13 +25,9 @@ class MutantsService(db: MutantsDatabase) {
   def insertMutant(mutant: Mutant): Future[ResultSet] =
     db.mutants.store(mutant).future()
 
-  def deleteMutantByName(
-      firstName: String,
-      lastName: String
-  ): Future[ResultSet] =
-    db.mutants
-      .delete()
-      .where(_.firstName.eqs(firstName))
-      .and(_.lastName.eqs(lastName))
+  def deleteMutant(firstName: String, lastName: String): Future[ResultSet] =
+    db.mutants.delete
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
       .future()
 }

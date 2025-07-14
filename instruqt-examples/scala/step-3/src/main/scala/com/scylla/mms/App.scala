@@ -32,7 +32,7 @@ object App {
         // Show existing data
         _ <- svc.getAll().andThen {
           case Success(mutants) =>
-            println("Data that we have in the catalog".center(50, "="))
+            println("=" * 25 + " Data that we have in the catalog " + "=" * 25)
             mutants.foreach(mutant => println(s"${mutant.firstName} ${mutant.lastName}"))
         }
         // Add new mutant
@@ -51,7 +51,7 @@ object App {
         // Show data again
         _ <- svc.getAll().andThen {
           case Success(mutants) =>
-            println("Data that we have in the catalog".center(50, "="))
+            println("=" * 25 + " Data that we have in the catalog " + "=" * 25)
             mutants.foreach(mutant => println(s"${mutant.firstName} ${mutant.lastName}"))
         }
       } yield (),
