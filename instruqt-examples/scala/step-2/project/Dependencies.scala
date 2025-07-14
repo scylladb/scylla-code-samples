@@ -1,0 +1,6816 @@
+import sbt._
+
+object Dependencies {
+  lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.2.0"
+  lazy val phantom = "com.outworkers" %% "phantom-dsl" % "2.59.0"
+  lazy val scalaReflect = "org.scala-lang" % "scala-reflect" % "2.13.6"
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/MutantsService.scala
+package com.scylla.mms.service
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.cql.MutantsDatabase
+import com.scylla.mms.model.Mutant
+
+import scala.concurrent.Future
+
+class MutantsService(db: MutantsDatabase) {
+  import db.{session, space}
+
+  def getAll(): Future[List[Mutant]] =
+    db.mutants.select.all().fetch()
+
+  def getByName(firstName: String, lastName: String): Future[Option[Mutant]] =
+    db.mutants.select
+      .where(_.firstName eqs firstName)
+      .and(_.lastName eqs lastName)
+      .one()
+
+  def insertMutant(mutant: Mutant): Future[ResultSet] =
+    db.mutants.store(mutant).future()
+
+  def deleteMutantByName(
+      firstName: String,
+      lastName: String
+  ): Future[ResultSet] =
+    db.mutants
+      .delete()
+      .where(_.firstName.eqs(firstName))
+      .and(_.lastName.eqs(lastName))
+      .future()
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/Mutants.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+import com.scylla.mms.model.Mutant
+
+abstract class Mutants extends Table[Mutants, Mutant] {
+  override def tableName: String = "mutant_data"
+
+  object firstName extends StringColumn with PartitionKey {
+    override def name = "first_name"
+  }
+
+  object lastName extends StringColumn with PartitionKey {
+    override def name = "last_name"
+  }
+
+  object address extends StringColumn
+
+  object pictureLocation extends StringColumn {
+    override def name = "picture_location"
+  }
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/cql/MutantsDatabase.scala
+package com.scylla.mms.cql
+
+import com.outworkers.phantom.dsl._
+
+class MutantsDatabase(override val connector: CassandraConnection)
+    extends Database[MutantsDatabase](connector) {
+  object mutants extends Mutants with Connector
+}
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/model/Mutant.scala
+package com.scylla.mms.model
+
+case class Mutant(
+    firstName: String,
+    lastName: String,
+    address: String,
+    pictureLocation: String
+)
+```
+
+```scala:instruqt-examples/scala/step-2/src/main/scala/com/scylla/mms/service/Mut
