@@ -1,5 +1,5 @@
-// Compile with: g++ param_simple.cpp [-L <dir_containing_libscylla-cpp-driver.so> -Wl,-rpath,<dir_containing_libscylla-cpp-driver.so> -I <path_to_cassandra.h>] -lscylla-cpp-driver -o param_simple
-// Example of parametrized simple query. DB is expected to have some data in `ks.mutant_data`!
+// Compile with: g++ challenge.cpp [-L <dir_containing_libscylla-cpp-driver.so> -Wl,-rpath,<dir_containing_libscylla-cpp-driver.so> -I <path_to_cassandra.h>] -lscylla-cpp-driver -o challenge
+// Challenge: Complete the parameterized query to find Bob Zemuda's address
 #include <cassandra.h>
 #include <iostream>
 
@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
   CassSession* session = cass_session_new();
 
   // Add the contact points. These can be either IPs or domain names.
-  // You can specify more than one, comma-separated, but you don’t have to - driver will discover other nodes by itself. You should do it if you expect some of your contact points to be down.
+  // You can specify more than one, comma-separated, but you don't have to - driver will discover other nodes by itself. You should do it if you expect some of your contact points to be down.
   cass_cluster_set_contact_points(cluster, "localhost"); // set the IP according to your setup
 
   // Connect. `cass_session_connect` returns a pointer to "future"
@@ -21,13 +21,11 @@ int main(int argc, char* argv[]) {
   if (cass_future_error_code(connect_future) == CASS_OK) {
     std::cout << "Connected" << std::endl;
     
-    // Fetch data sample from ScyllaDB after the connection is established
-    const char* query = "SELECT first_name, last_name, address, picture_location FROM catalog.mutant_data";
-    // Parameterized simple statement, not to be confused with prepared statements!
-    CassStatement* statement = cass_statement_new("SELECT * FROM catalog.mutant_data WHERE first_name=? and last_name=?", 2); // `2` is the number of parameters
+    // TODO: Create a parameterized statement to find Bob Zemuda's address
+    CassStatement* statement = cass_statement_new("", 2);
     
     cass_statement_bind_string(statement, 0, "Bob");
-    cass_statement_bind_string(statement, 1, "Loblaw");
+    cass_statement_bind_string(statement, 1, "Zemuda"); 
     
     // Proceed with `statement` as usual
     CassFuture* result_future = cass_session_execute(session, statement);
@@ -42,15 +40,18 @@ int main(int argc, char* argv[]) {
         const char* address;
         size_t address_length;
         cass_value_get_string(value, &address, &address_length);
-	std::cout << "Address for Bob Loblaw is: "; 
+	std::cout << "Address for Bob Zemuda is: "; 
 	std::cout.write(address, address_length);
 	std::cout << std::endl;
 
+      } else {
+        std::cout << "No data found for Bob Zemuda" << std::endl;
       }
     
       cass_result_free(result);
     } else {
       // Handle error - omitted for brevity
+      std::cout << "Query execution failed" << std::endl;
     }
     
     cass_statement_free(statement);
