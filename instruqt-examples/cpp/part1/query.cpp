@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
     std::cout << "Connected" << std::endl;
     
     // Fetch data sample from ScyllaDB after the connection is established
-    const char* query = "SELECT first_name, last_name, address, picture_location FROM ks.mutant_data";
+    const char* query = "SELECT first_name, last_name, address, picture_location FROM catalog.mutant_data";
     CassStatement* statement = cass_statement_new(query, 0); // the 2nd argument (zero) is be explained in section “Prepared Statements”
     
     CassFuture* result_future = cass_session_execute(session, statement);
