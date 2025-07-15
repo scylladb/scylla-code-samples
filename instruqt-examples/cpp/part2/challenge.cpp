@@ -21,11 +21,11 @@ int main(int argc, char* argv[]) {
   if (cass_future_error_code(connect_future) == CASS_OK) {
     std::cout << "Connected" << std::endl;
     
-    // TODO: Create a parameterized statement to find Bob Zemuda's address
-    CassStatement* statement = cass_statement_new("", 2);
+    // TODO: Update the query to include WHERE clause and bind the parameters. Searches by first_name and last_name
+    CassStatement* statement = cass_statement_new("SELECT * FROM catalog.mutant_data", 2); 
     
-    cass_statement_bind_string(statement, 0, "Bob");
-    cass_statement_bind_string(statement, 1, "Zemuda"); 
+    cass_statement_bind_string(statement, 0, "Bob"); // first_name
+    cass_statement_bind_string(statement, 1, "Zemuda"); // last_name
     
     // Proceed with `statement` as usual
     CassFuture* result_future = cass_session_execute(session, statement);

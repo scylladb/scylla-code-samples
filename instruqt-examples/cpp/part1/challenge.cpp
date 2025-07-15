@@ -32,13 +32,6 @@ public:
         }
     }
 
-    // TODO: Implement this function to display all mutants with all their columns
-    // The function should iterate through the result and display:
-    // - first_name
-    // - last_name  
-    // - address
-    // - picture_location
-    // Format: "Name: [first_name] [last_name], Address: [address], Picture: [picture_location]"
     void display_all_mutants() {
         // TODO: Your implementation here
         // 1. Create a query to SELECT all columns from ks.mutant_data
