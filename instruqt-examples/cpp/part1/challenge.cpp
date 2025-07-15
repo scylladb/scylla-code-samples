@@ -13,13 +13,22 @@ int main(int argc, char* argv[]) {
     std::cout << "Connected" << std::endl;
     
     const char* query = ""; // TODO: write the select query here
+
+    // if query is empty, print error message
+    if (query == NULL) {
+      std::cout << "Error: query is empty, you need to write the query" << std::endl;
+      return 1;
+    }
+
     CassStatement* statement = cass_statement_new(query, 0);
     
     CassFuture* result_future = cass_session_execute(session, statement);
-    
+
     if (cass_future_error_code(result_future) == CASS_OK) {
       const CassResult* result = cass_future_get_result(result_future);
       CassIterator* iterator = cass_iterator_from_result(result);
+
+
       while (cass_iterator_next(iterator)) {
         const CassRow* row = cass_iterator_get_row(iterator);
       
