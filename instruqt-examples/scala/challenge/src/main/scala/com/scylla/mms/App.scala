@@ -38,7 +38,7 @@ object App {
             "Peter",
             "Parker",
             "1515 Main St",
-            "http://www.facebook.com/Peter-Parker/"
+            "https://tinyurl.com/peterparker123"
           )
         ).andThen {
           case Success(_) =>

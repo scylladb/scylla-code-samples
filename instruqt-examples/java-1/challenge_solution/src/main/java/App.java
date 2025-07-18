@@ -28,7 +28,7 @@ public static void selectQuery() {
 
 public static void insertQuery() {
         System.out.print("\n\nInserting Mike Tyson......");
-        session.execute("INSERT INTO mutant_data (first_name,last_name,address,picture_location) VALUES ('Mike','Tyson','1515 Main St', 'http://www.facebook.com/mtyson')");
+        session.execute("INSERT INTO mutant_data (first_name,last_name,address,picture_location) VALUES ('Mike','Tyson','1515 Main St', 'https://tinyurl.com/miketyson123')");
         selectQuery();
 }
 

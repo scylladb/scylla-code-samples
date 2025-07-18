@@ -1,5 +1,5 @@
 // Compile with: g++ param_simple.cpp [-L <dir_containing_libscylla-cpp-driver.so> -Wl,-rpath,<dir_containing_libscylla-cpp-driver.so> -I <path_to_cassandra.h>] -lscylla-cpp-driver -o param_simple
-// Example of parametrized simple query. DB is expected to have some data in `ks.mutant_data`!
+// Example of parametrized simple query. DB is expected to have some data in `catalog.mutant_data`!
 #include <cassandra.h>
 #include <iostream>
 

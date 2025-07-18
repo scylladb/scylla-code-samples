@@ -55,7 +55,7 @@ func selectQuery(session *gocql.Session, logger *zap.Logger) {
 
 func insertQuery(session *gocql.Session, logger *zap.Logger) {
 	logger.Info("Inserting Mike")
-	if err := session.Query("INSERT INTO mutant_data (first_name,last_name,address,picture_location) VALUES ('Mike','Tyson','1515 Main St', 'http://www.facebook.com/mtyson')").Exec(); err != nil {
+	if err := session.Query("INSERT INTO mutant_data (first_name,last_name,address,picture_location) VALUES ('Mike','Tyson','1515 Main St', 'https://tinyurl.com/miketyson123')").Exec(); err != nil {
 		logger.Error("insert catalog.mutant_data", zap.Error(err))
 	}
 }

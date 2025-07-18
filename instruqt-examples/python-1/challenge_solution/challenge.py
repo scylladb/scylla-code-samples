@@ -50,7 +50,7 @@ class App:
 
 if __name__ == "__main__":
     app = App()
-    app.add_mutant(first_name="Miles", last_name="Morales", address="42 Brooklyn St", picture_location="https://www.facebook.com/miles-morales")
+    app.add_mutant(first_name="Miles", last_name="Morales", address="42 Brooklyn St", picture_location="https://tinyurl.com/milesmorales123")
     app.show_mutant_data()
     if app.check_for_mutant(first_name="Miles", last_name="Morales"):
         print("Congratulations! You've successully added Miles in the mutant database and have passed the challenge!")

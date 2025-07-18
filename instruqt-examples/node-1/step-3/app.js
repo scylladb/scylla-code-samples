@@ -31,7 +31,7 @@ async function main() {
     try {
         await client.connect();
         await showMutantData();
-        await addMutant('Peter', 'Parker', '1515 Main St', 'http://www.facebook.com/Peter-Parker/');
+        await addMutant('Peter', 'Parker', '1515 Main St', 'https://tinyurl.com/peterparker123');
         await showMutantData();
     } catch (err) {
         console.error('Error:', err.message);

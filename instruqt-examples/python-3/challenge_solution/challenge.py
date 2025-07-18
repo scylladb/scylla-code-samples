@@ -68,7 +68,7 @@ class App:
 if __name__ == "__main__":
     app = App()
     app.add_mutant(first_name='Peter', last_name='Parker', address='1515 Main St',
-                   website='http://www.facebook.com/Peter-Parker/', picture_file="peter_parker.jpg")
+                   website='https://tinyurl.com/peterparker123', picture_file="peter_parker.jpg")
     app.add_mutant(first_name='Maximus', last_name='Lobo', address='New York, Lobo Technologies',
                    website='https://en.wikipedia.org/wiki/Maximus_Lobo', picture_file="maximus_lobo.png")
     app.show_mutant_data()

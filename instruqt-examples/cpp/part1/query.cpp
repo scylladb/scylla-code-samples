@@ -1,5 +1,5 @@
 // Compile with: g++ query.cpp [-L <dir_containing_libscylla-cpp-driver.so> -Wl,-rpath,<dir_containing_libscylla-cpp-driver.so> -I <path_to_cassandra.h>] -lscylla-cpp-driver -o query
-// Simple "SELECT" query from a C++ program. DB is expected to have some data in `ks.mutant_data`!
+// Simple "SELECT" query from a C++ program. DB is expected to have some data in `catalog.mutant_data`!
 #include <cassandra.h>
 #include <iostream>
 

@@ -36,7 +36,7 @@ async.series([
 function insert(next) {
   console.log('Adding Rick Sanchez');
  const query = 'INSERT INTO mutant_data (first_name,last_name,address,picture_location) VALUES (?, ?, ?, ?)';
-    const params = ['Rick', 'Sanchez', '615 East St', 'http://www.facebook.com/rsanchez'];
+    const params = ['Rick', 'Sanchez', '615 East St', 'https://tinyurl.com/ricksanchez123'];
  client.execute(query, params, next);
   },
 //Display data after insert	

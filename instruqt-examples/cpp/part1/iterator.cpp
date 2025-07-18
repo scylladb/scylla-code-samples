@@ -1,5 +1,5 @@
 // Compile with: g++ iter.cpp [-L <dir_containing_libscylla-cpp-driver.so> -Wl,-rpath,<dir_containing_libscylla-cpp-driver.so> -I <path_to_cassandra.h>] -lscylla-cpp-driver -o iter
-// Demonstration of iterating through results. DB is expected to have some data in `ks.mutant_data`!
+// Demonstration of iterating through results. DB is expected to have some data in `catalog.mutant_data`!
 #include <cassandra.h>
 #include <iostream>
 
