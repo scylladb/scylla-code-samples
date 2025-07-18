@@ -26,14 +26,14 @@ or
 docker exec -it mms_scylla-node1_1 cqlsh
 CREATE KEYSPACE ks WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy','DC1' : 3};
 use ks;
-CREATE TABLE IF NOT EXISTS ks.mutant_data (
+CREATE TABLE IF NOT EXISTS catalog.mutant_data (
    first_name text,
    last_name text,
    address text,
    picture_location text,
    PRIMARY KEY((first_name, last_name)));
-INSERT INTO ks.mutant_data ("first_name","last_name","address","picture_location") VALUES ('Bob','Loblaw','1313 Mockingbird Lane', 'http://www.facebook.com/bobloblaw');
-INSERT INTO ks.mutant_data ("first_name","last_name","address","picture_location") VALUES ('Bob','Zemuda','1202 Coffman Lane', 'http://www.facebook.com/bzemuda');
+INSERT INTO catalog.mutant_data ("first_name","last_name","address","picture_location") VALUES ('Bob','Loblaw','1313 Mockingbird Lane', 'https://tinyurl.com/bobloblaw123');
+INSERT INTO catalog.mutant_data ("first_name","last_name","address","picture_location") VALUES ('Bob','Zemuda','1202 Coffman Lane', 'https://tinyurl.com/bobzemuda');
 
 
 ### Running the CPP Example

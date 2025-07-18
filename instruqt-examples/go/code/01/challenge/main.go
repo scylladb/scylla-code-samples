@@ -102,7 +102,7 @@ func main() {
 	app := NewApp()
 	defer app.stop()
 	
-	app.addMutant("Miles", "Morales", "42 Brooklyn St", "https://www.facebook.com/miles-morales")
+	app.addMutant("Miles", "Morales", "42 Brooklyn St", "https://tinyurl.com/milesmorales123")
 	app.showMutantData()
 	if app.checkForMutant("Miles", "Morales") {
 		app.logger.Info("Congratulations! You've successfully added Miles in the mutant database and have passed the challenge!")

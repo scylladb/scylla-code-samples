@@ -43,7 +43,7 @@ async function addMutant(first_name, last_name, address, picture_location) {
 async function main() {
     try {
         await client.connect();
-        await addMutant("Miles", "Morales", "42 Brooklyn St", "https://www.facebook.com/miles-morales");
+        await addMutant("Miles", "Morales", "42 Brooklyn St", "https://tinyurl.com/milesmorales123");
         await showMutantData();
         if (await checkForMutant("Miles", "Morales")) {
             console.log("Congratulations! You've successfully added Miles in the mutant database and have passed the challenge!");

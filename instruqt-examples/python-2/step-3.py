@@ -49,7 +49,7 @@ if __name__ == "__main__":
     app = App()
     app.show_mutant_data()
     app.add_mutant(first_name='Peter', last_name='Parker',
-                   address='1515 Main St', picture_location='http://www.facebook.com/Peter-Parker/')
+                   address='1515 Main St', picture_location='https://tinyurl.com/peterparker123')
     app.add_mutant(first_name='Maximus', last_name='Lobo',
                    address='New York, Lobo Technologies', picture_location='https://en.wikipedia.org/wiki/Maximus_Lobo')
     app.show_mutant_data()

@@ -143,8 +143,8 @@ func main() {
 	defer session.Close()
 
 	selectQuery(session, logger)
-	insertQuery(session, "Mike", "Tyson", "12345 Foo Lane", "http://www.facebook.com/mtyson", logger)
-	insertQuery(session, "Alex", "Jones", "56789 Hickory St", "http://www.facebook.com/ajones", logger)
+	insertQuery(session, "Mike", "Tyson", "12345 Foo Lane", "https://tinyurl.com/miketyson123", logger)
+	insertQuery(session, "Alex", "Jones", "56789 Hickory St", "https://tinyurl.com/alexjones123", logger)
 	selectQuery(session, logger)
 	deleteQuery(session, "Mike", "Tyson", logger)
 	selectQuery(session, logger)
