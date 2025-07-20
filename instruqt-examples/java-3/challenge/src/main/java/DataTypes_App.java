@@ -24,10 +24,6 @@ public static void main(String[] args) {
         Cluster cluster = Cluster.builder()
                 .addContactPoints("localhost")
                 .withPort(9042)
-                .addContactPoints("localhost")
-                .withPort(9043)
-                .addContactPoints("localhost")
-                .withPort(9044)
                 .build();
         Session session = cluster.connect("catalog");
         createSchema(session);

@@ -22,12 +22,8 @@ static PreparedStatement selectStatement;
 
 public static void main(String[] args) {
         Cluster cluster = Cluster.builder()
-                .addContactPoints("localhost")
+                .addContactPoints("127.0.0.1")
                 .withPort(9042)
-                .addContactPoints("localhost")
-                .withPort(9043)
-                .addContactPoints("localhost")
-                .withPort(9044)
                 .build();
         Session session = cluster.connect("catalog");
         createSchema(session);
