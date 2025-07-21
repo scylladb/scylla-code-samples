@@ -8,10 +8,6 @@ public class App {
 static Cluster cluster = Cluster.builder()
         .addContactPoints("localhost")
         .withPort(9042)
-        .addContactPoints("localhost")
-        .withPort(9043)
-        .addContactPoints("localhost")
-        .withPort(9044)
         .build();
 
 static Session session = cluster.connect("catalog");
