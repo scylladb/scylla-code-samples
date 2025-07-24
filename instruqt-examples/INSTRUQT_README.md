@@ -35,6 +35,7 @@ Instruqt VM
 5. Wait for few minutes for terminal appear on the "Step 2"
 6. Run `cd eduard-scylla-code-samples/scylla-code-samples`
 7. Run `git pull`
+8. Press "Save" button (in the top right corner)
 
 ### Important note
 
