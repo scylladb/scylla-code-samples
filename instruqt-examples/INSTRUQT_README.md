@@ -36,6 +36,7 @@ Instruqt VM
 6. Run `cd eduard-scylla-code-samples/scylla-code-samples`
 7. Run `git pull`
 8. Press "Save" button (in the top right corner)
+9. Wait for a few minutes, once done the code will be updated for Instruqt tracks
 
 ### Important note
 
