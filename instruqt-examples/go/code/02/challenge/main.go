@@ -6,6 +6,7 @@ import (
 	"goapp/internal/log"
 	"goapp/internal/scylla"
 	"io/ioutil"
+	"os"
 	"strings"
 
 	"github.com/gocql/gocql"
@@ -40,10 +41,20 @@ func main() {
 	mutants := []string{"Jim Jefferies", "Bob Loblaw", "Bob Zemuda"}
 	for _, mutant := range mutants {
 		names := strings.SplitN(mutant, " ", 2)
+		if len(names) < 2 {
+			logger.Error("invalid name format", zap.String("mutant", mutant))
+			continue
+		}
+
 		firstName := names[0]
 		lastName := names[1]
+
 		logger.Info("Processing file for " + firstName + "_" + lastName)
-		insertFile(session, firstName, lastName, logger)
+
+		if !insertFile(session, firstName, lastName, logger) {
+			continue // skip reading if insert failed
+		}
+
 		readFile(session, firstName, lastName, logger)
 	}
 }
@@ -53,43 +64,58 @@ func readFile(session *gocql.Session, firstName string, lastName string, logger 
 		m map[string][]byte
 		b []byte
 	)
-	// TODO: Add WHERE clause to filter by first_name and last_name
-	if err := session.Query("SELECT m,b from mutant_data").Scan(&m, &b); err != nil {
+
+	if err := session.Query("SELECT m, b FROM mutant_data" /* <- Update this query with WHERE clause */ , firstName, lastName).Scan(&m, &b); err != nil {
 		logger.Fatal("unable to read image", zap.String("first_name", firstName), zap.String("last_name", lastName), zap.Error(err))
 	}
+
 	logger.Info("file metadata", zap.Any("properties", m))
-	if err := ioutil.WriteFile("/tmp/"+firstName+"_"+lastName+".jpg", b, 0644); err != nil {
-		logger.Fatal("unable to write image", zap.String("name", "/tmp/"+firstName+"_"+lastName+".jpg"), zap.Error(err))
+
+	outputPath := "/tmp/" + firstName + "_" + lastName + ".jpg"
+	if err := ioutil.WriteFile(outputPath, b, 0644); err != nil {
+		logger.Fatal("unable to write image", zap.String("name", outputPath), zap.Error(err))
 	}
+
 	convertOptions := convert.DefaultOptions
 	convertOptions.FixedWidth = 100
 	convertOptions.FixedHeight = 40
 
 	converter := convert.NewImageConverter()
-	fmt.Print(converter.ImageFile2ASCIIString("/tmp/"+firstName+"_"+lastName+".jpg", &convertOptions))
+	fmt.Print(converter.ImageFile2ASCIIString(outputPath, &convertOptions))
 }
 
 func alterSchema(session *gocql.Session, logger *zap.Logger) {
-	if err := session.Query("ALTER table catalog.mutant_data ADD m map<text, blob>").Exec(); err != nil {
-		logger.Fatal("altering table failed, forgot the '-alter=false' program argument?", zap.Error(err))
+	if err := session.Query("ALTER TABLE catalog.mutant_data ADD m map<text, blob>").Exec(); err != nil {
+		logger.Fatal("altering table failed (column 'm')", zap.Error(err))
 	}
-	if err := session.Query("ALTER table catalog.mutant_data ADD b blob").Exec(); err != nil {
-		logger.Fatal("altering table failed, forgot the '-alter=false' program argument?", zap.Error(err))
+	if err := session.Query("ALTER TABLE catalog.mutant_data ADD b blob").Exec(); err != nil {
+		logger.Fatal("altering table failed (column 'b')", zap.Error(err))
 	}
 }
 
-func insertFile(session *gocql.Session, firstName, lastName string, logger *zap.Logger) {
+func insertFile(session *gocql.Session, firstName, lastName string, logger *zap.Logger) bool {
 	fName := "images/" + firstName + "_" + lastName + ".jpg"
+
+	if _, err := os.Stat(fName); os.IsNotExist(err) {
+		logger.Error("file does not exist", zap.String("file_name", fName))
+		return false
+	}
+
 	b, err := ioutil.ReadFile(fName)
 	if err != nil {
 		logger.Fatal("unable to read file", zap.String("file_name", fName), zap.Error(err))
+		return false
 	}
 
 	m := readMetaFromFile(firstName+"_"+lastName, b)
 
-	if err := session.Query("INSERT INTO mutant_data (first_name,last_name,b,m) VALUES (?,?,?,?)", firstName, lastName, b, m).Exec(); err != nil {
+	if err := session.Query("INSERT INTO mutant_data (first_name, last_name, b, m) VALUES (?, ?, ?, ?)",
+		firstName, lastName, b, m).Exec(); err != nil {
 		logger.Error("insert catalog.mutant_data", zap.Error(err))
+		return false
 	}
+
+	return true
 }
 
 func readMetaFromFile(name string, bytes []byte) map[string][]byte {
