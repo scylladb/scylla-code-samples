@@ -13,7 +13,7 @@ static Cluster cluster = Cluster.builder()
 static Session session = cluster.connect("catalog");
 
 public static void main(String[] args) {
-        System.out.println("Successfully connected to ScyllaDB database!");
+        System.out.println("Successfully connected to the ScyllaDB database!");
         cluster.close();
 }
 

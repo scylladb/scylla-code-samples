@@ -13,7 +13,7 @@ const client = new cassandra.Client({
 console.log('Connecting to Scylla cluster');
 client.connect()
     .then(() => {
-        console.log('Successfully connected to ScyllaDB database!');
+        console.log('Successfully connected to the ScyllaDB databasebase!');
         return client.shutdown();
     })
     .catch((err) => {

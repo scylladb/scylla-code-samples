@@ -19,7 +19,7 @@ object App {
     
     // Test connection
     if (db.session != null) {
-      println("Successfully connected to ScyllaDB database!")
+      println("Successfully connected to the ScyllaDB databasebase!")
     } else {
       println("Failed to connect to ScyllaDB database.")
     }
