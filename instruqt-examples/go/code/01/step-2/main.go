@@ -63,6 +63,6 @@ func main() {
 	}
 	defer session.Close()
 
-	logger.Info("Successfully connected to ScyllaDB database!")
+	logger.Info("Successfully connected to the ScyllaDB databasebase!")
 	selectQuery(session, logger)
 } 

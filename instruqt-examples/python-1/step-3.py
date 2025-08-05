@@ -43,7 +43,7 @@ class App:
 if __name__ == "__main__":
     app = App()
     if app.session:
-        print("Successfully connected to ScyllaDB database!")
+        print("Successfully connected to the ScyllaDB databasebase!")
     else:
         print("Failed to connect to ScyllaDB database.")
     result = app.show_mutant_data()
