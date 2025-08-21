@@ -1,0 +1,14 @@
+project: repo
+# By default, the registry is a file (but can be turned into a more scalable SQL-backed registry)
+registry: data/registry.db
+# The provider primarily specifies default offline / online stores & storing the registry in a given cloud
+provider: local
+online_store:
+    type: cassandra
+    hosts:
+        - node1
+        - node2
+        - node3
+    port: 9042
+    keyspace: feast
+entity_key_serialization_version: 3

@@ -1,0 +1,6 @@
+feast[cassandra]
+pandas
+scikit-learn
+streamlit
+shap
+matplotlib
