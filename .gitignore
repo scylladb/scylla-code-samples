@@ -14,6 +14,10 @@ buildNumber.properties
 presto/resources/etc/node.properties
 presto/.docker
 
+*/venv
+**/venv/
+**/venv/**
+
 */node_modules
 
 !java-testcontainers/gradle/wrapper/*
