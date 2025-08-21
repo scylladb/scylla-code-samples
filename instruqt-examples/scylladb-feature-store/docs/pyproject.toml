@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "sphinx-docs"
+description = "ScyllaDB Documentation"
+version = "0.1.0"
+authors = ["ScyllaDB Documentation Contributors"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pygments = "^2.18.0"
+recommonmark = "0.7.1"
+sphinx-scylladb-theme = "^1.8.7"
+sphinx-autobuild = "^2024.4.19"
+Sphinx = "^7.3.7"
+sphinx-multiversion-scylla = "^0.3.1"
+sphinx-sitemap = "^2.6.0"
+redirects_cli ="^0.1.3"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
