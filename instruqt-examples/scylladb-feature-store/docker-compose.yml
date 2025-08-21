@@ -8,7 +8,7 @@ networks:
 services:
   # ScyllaDB Node 1 (seed node)
   node1:
-    image: scylladb/scylla:6.6.1
+    image: scylladb/scylla:5.4
     container_name: scylla-node1
     networks:
       - scylla
