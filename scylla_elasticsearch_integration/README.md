@@ -24,7 +24,7 @@ Instructions
 First, spin a fresh ScyllaDB and ElasticSearch Cluster:
 
 ```sh
-docker run -d --name scylla-elastic --publish '9042:9042' --rm -d scylladb/scylla:6.0.1 --overprovisioned 1 --smp 1
+docker run -d --name scylla-elastic --publish '9042:9042' --rm -d scylladb/scylla:2025.3 --overprovisioned 1 --smp 1
 
 docker run -d --name elasticsearch -p 9200:9200 -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:8.14.3
 ```
