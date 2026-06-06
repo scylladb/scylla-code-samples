@@ -2,7 +2,7 @@ version: '3'
 
 services:
   scylla:
-    image: scylladb/scylla:3.0.10
+    image: scylladb/scylla:2025.3
     networks:
       - scylla
     volumes:

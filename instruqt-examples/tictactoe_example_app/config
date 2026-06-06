@@ -1,0 +1,22 @@
+[dynamodb]
+region=<region_name>
+endpoint=<endpoint_name>
+
+# If deploying to EC2, it is recommended that you leave these blank, and instead deploy credentials through an 
+# IAM Role for EC2: http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html
+#
+# aws_secret_access_key=<secret_key>
+# aws_access_key_id=<key_id>
+
+[flask]
+# This configures flask's secret key, used for encrypting cookies.  If you are running only one flask process / server,
+# You can leave this blank and one will be generated randomly at start up.  When you restart, all existing sessions
+# will be lost.  Or instead, generate a secret key by running python:
+#
+# from uuid import uuid4
+# print(str(uuid4()))
+# 
+# secret_key=<random uuid>
+#
+# Optionally specify the port for flask to listen on
+# serverPort=5000

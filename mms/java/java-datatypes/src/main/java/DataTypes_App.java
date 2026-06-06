@@ -15,11 +15,19 @@ import java.util.Map;
 public class DataTypes_App {
 
 static File FILE;
+// Add static PreparedStatement fields to avoid re-preparing
+static PreparedStatement insertDataStatement;
+static PreparedStatement insertConcurrentStatement;
+static PreparedStatement insertFromStatement;
+static PreparedStatement selectStatement;
 
 public static void main(String[] args) {
         Cluster cluster = Cluster.builder().addContactPoints("scylla-node1", "scylla-node2", "scylla-node3").build();
         Session session = cluster.connect("catalog");
         createSchema(session);
+        
+        // Prepare all statements once at the beginning
+        prepareStatements(session);
 
         String[] mutants = new String[] {"Jim Jefferies", "Bob Loblaw", "Bob Zemuda"};
         for (int i=0; i != mutants.length; i++) {
@@ -42,6 +50,15 @@ public static void main(String[] args) {
         cluster.close();
 
 }
+
+// Add method to prepare all statements once
+private static void prepareStatements(Session session) {
+        insertDataStatement = session.prepare("INSERT INTO catalog.mutant_data (first_name, last_name, b, m) VALUES (?, ?, ?, ?)");
+        insertConcurrentStatement = session.prepare("INSERT INTO catalog.mutant_data (first_name, last_name, b) VALUES (?, ?, ?)");
+        insertFromStatement = session.prepare("INSERT INTO catalog.mutant_data (first_name, last_name, b) VALUES (?, ?, ?)");
+        selectStatement = session.prepare("SELECT b FROM catalog.mutant_data WHERE first_name = ? AND last_name = ?");
+}
+
 private static void createSchema(Session session) {
         try {
                 session.execute("ALTER table catalog.mutant_data ADD b blob");
@@ -52,8 +69,6 @@ private static void createSchema(Session session) {
 }
 
 private static void allocateAndInsert(Session session, String first_name, String last_name) {
-        PreparedStatement insertData = session.prepare("INSERT INTO catalog.mutant_data (first_name, last_name, b, m) VALUES (?, ?, ?, ?)");
-
         ByteBuffer buffer = ByteBuffer.allocate(16);
         while (buffer.hasRemaining()) buffer.put((byte) 0xFF);
         assert buffer.limit() - buffer.position() == 0;
@@ -63,27 +78,24 @@ private static void allocateAndInsert(Session session, String first_name, String
 
         Map<String, ByteBuffer> map = new HashMap<String, ByteBuffer>();
         map.put(first_name + "_" + last_name + ".png", buffer);
-        session.execute(insertData.bind(first_name,last_name,buffer,map));
+        session.execute(insertDataStatement.bind(first_name,last_name,buffer,map));
 }
 
 private static void insertConcurrent(Session session, String first_name, String last_name) {
-        PreparedStatement preparedStatement = session.prepare("INSERT INTO catalog.mutant_data (first_name, last_name, b) VALUES (?, ?, ?)");
         ByteBuffer buffer = Bytes.fromHexString("0xffffff");
-        session.execute(preparedStatement.bind(first_name,last_name,buffer));
+        session.execute(insertConcurrentStatement.bind(first_name,last_name,buffer));
         buffer.position(buffer.limit());
         buffer.flip();
 }
 
 private static void insertFromAndRetrieveToFile(Session session, String first_name, String last_name) throws IOException {
         ByteBuffer buffer = readAll(FILE);
-        PreparedStatement insertFrom = session.prepare("INSERT INTO catalog.mutant_data (first_name, last_name, b) VALUES (?, ?, ?)");
-        session.execute(insertFrom.bind(first_name,last_name,buffer));
+        session.execute(insertFromStatement.bind(first_name,last_name,buffer));
 
         File tmpFile = new File("/tmp/" + first_name + "_" + last_name + ".png");
         System.out.printf("\nWriting retrieved buffer to %s%n ", tmpFile.getAbsoluteFile());
 
-        PreparedStatement get = session.prepare("SELECT b FROM catalog.mutant_data WHERE first_name = ? AND last_name = ?");
-        Row row = session.execute(get.bind(first_name,last_name)).one();
+        Row row = session.execute(selectStatement.bind(first_name,last_name)).one();
         writeAll(row.getBytes("b"), tmpFile);
 }
 

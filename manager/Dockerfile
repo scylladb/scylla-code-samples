@@ -1,5 +1,5 @@
 FROM scylladb/scylla-manager-agent:2.6.3 as agent
-FROM scylladb/scylla:4.6.3
+FROM scylladb/scylla:2025.3
 
 COPY --from=agent /usr/bin/scylla-manager-agent /usr/bin/
 RUN echo "[program:scylla-manager-agent]\n\

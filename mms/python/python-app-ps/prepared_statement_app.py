@@ -1,13 +1,19 @@
 #!/bin/env python3
-from cassandra.cluster import Cluster
+from cassandra.cluster import Cluster, ExecutionProfile, EXEC_PROFILE_DEFAULT
 from cassandra import ConsistencyLevel
-
 
 class App:
     def __init__(self):
-        self.cluster = Cluster(contact_points=["scylla-node1", "scylla-node2", "scylla-node3"])
+        # Create an execution profile with QUORUM consistency
+        profile = ExecutionProfile(
+            consistency_level=ConsistencyLevel.QUORUM
+        )
+        # Use the profile when creating the cluster
+        self.cluster = Cluster(
+            contact_points=["scylla-node1", "scylla-node2", "scylla-node3"],
+            execution_profiles={EXEC_PROFILE_DEFAULT: profile}
+        )
         self.session = self.cluster.connect(keyspace="catalog")
-        self.session.default_consistency_level = ConsistencyLevel.QUORUM
         self.insert_ps = self.session.prepare(
             query="INSERT INTO mutant_data (first_name,last_name,address,picture_location) VALUES (?,?,?,?)"
         )

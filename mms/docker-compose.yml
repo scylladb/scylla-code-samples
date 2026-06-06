@@ -1,35 +1,50 @@
-version: "3"
 
 services:
-
   scylla-node1:
     container_name: scylla-node1
-    image: scylladb/scylla:5.2.0
+    image: scylladb/scylla
     restart: always
-    command: --seeds=scylla-node1,scylla-node2 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+    ports:
+      - "9042:9042"
+    command: --seeds=scylla-node1 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0 
     volumes:
       - "./scylla/scylla.yaml:/etc/scylla/scylla.yaml"
       - "./scylla/cassandra-rackdc.properties.dc1:/etc/scylla/cassandra-rackdc.properties"
       - "./scylla/mutant-data.txt:/mutant-data.txt"
     networks:
       web:
+    healthcheck:
+      test: ["CMD-SHELL", "nodetool status | grep -q '^UN'"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
 
   scylla-node2:
     container_name: scylla-node2
-    image: scylladb/scylla:5.2.0
+    image: scylladb/scylla
     restart: always
-    command: --seeds=scylla-node1,scylla-node2 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+    ports:
+      - "9043:9042"
+    command: --seeds=scylla-node1 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
     volumes:
       - "./scylla/scylla.yaml:/etc/scylla/scylla.yaml"
       - "./scylla/cassandra-rackdc.properties.dc1:/etc/scylla/cassandra-rackdc.properties"
+    depends_on:
+      scylla-node1:
+        condition: service_healthy
     networks:
       web:
 
   scylla-node3:
     container_name: scylla-node3
-    image: scylladb/scylla:5.2.0
+    image: scylladb/scylla
     restart: always
-    command: --seeds=scylla-node1,scylla-node2 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+    ports:
+      - "9044:9042"
+    command: --seeds=scylla-node1 --smp 1 --memory 750M --overprovisioned 1 --api-address 0.0.0.0
+    depends_on:
+      scylla-node1:
+        condition: service_healthy
     volumes:
       - "./scylla/scylla.yaml:/etc/scylla/scylla.yaml"
       - "./scylla/cassandra-rackdc.properties.dc1:/etc/scylla/cassandra-rackdc.properties"

@@ -1,2 +1,2 @@
-cassandra-driver==3.13
+scylla-driver==3.29.3
 

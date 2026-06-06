@@ -1,0 +1,70 @@
+{% extends "board.html" %}
+{% block addon %}
+<script lang="text/javascript">
+var gameRaw = '{{gameJson|safe}}';
+var game = JSON.parse(gameRaw);
+var gameString = JSON.stringify(game);
+var gameId = '{{gameId}}';
+var loadDate = new Date();
+var interval;
+if (game.status != "FINISHED") {
+  interval = window.setInterval(checkChanged, 1000);
+}
+var xmlHttp;
+
+function checkChanged() {
+  window.clearInterval(interval);
+  xmlHttp = new XMLHttpRequest();  
+  xmlHttp.onreadystatechange = isChanged;
+  xmlHttp.open('GET', '/gameData=' + gameId, true);
+  xmlHttp.send(null);
+}
+
+function isChanged() {
+  if (xmlHttp.readyState === 4) {
+    if (xmlHttp.status === 200) {
+      var latest = JSON.stringify(JSON.parse(xmlHttp.responseText));
+      var loaded = gameString;
+      if (latest != loaded) {
+        location.reload();
+      }
+    }
+    var currentDate = new Date();
+    var elapsedMs = currentDate.getTime() - loadDate.getTime();
+    if (elapsedMs < (5 * 60 * 1000)) {
+        interval = window.setInterval(checkChanged, 1000);
+    } else {
+        console.log('Stopping refresh after ' + elapsedMs + ' ms');
+    }
+  }
+}
+
+</script>
+        <div style="padding-top:10px">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="alert alert-info">
+                    <center>
+                      {{ msg }}
+                    </center>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    <div>
+        <p> GameId: {{gameId}} </p>
+        <p> Opponent:   {{opponent}}   </p>
+        <p> Status: {{status}} </p>
+        <p> Turn:   {{turn}}   </p>
+    </div>
+    {% if status == 'FINISHED' %}
+    <div>
+        <form class="test" action="/play" method="post">
+            <input type="hidden" name="invitee" value="{{opponent}}" />
+            <button type="submit" class="customizedInput">Play Again!</button>
+        </form>
+    </div>
+    {% endif %}
+{% endblock %}
+

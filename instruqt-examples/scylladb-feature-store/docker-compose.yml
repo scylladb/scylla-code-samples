@@ -1,0 +1,106 @@
+version: '3.8'
+
+networks:
+  scylla:
+    name: scylla
+    driver: bridge
+
+services:
+  # ScyllaDB Node 1 (seed node)
+  node1:
+    image: scylladb/scylla:5.4
+    container_name: scylla-node1
+    networks:
+      - scylla
+    ports:
+      - "9042:9042"  # CQL port
+      - "9180:9180"  # Prometheus metrics port
+    command: 
+      - --overprovisioned=1
+      - --smp=1
+      - --memory=2G
+      - --developer-mode=1
+    healthcheck:
+      test: ["CMD", "nodetool", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # ScyllaDB Node 2
+  node2:
+    image: scylladb/scylla:5.4
+    container_name: scylla-node2
+    networks:
+      - scylla
+    ports:
+      - "9043:9042"  # Different external port
+      - "9181:9180"  # Different metrics port
+    command:
+      - --overprovisioned=1
+      - --smp=1
+      - --memory=2G
+      - --developer-mode=1
+      - --seeds=node1
+    depends_on:
+      node1:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "nodetool", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+
+  # ScyllaDB Node 3
+  node3:
+    image: scylladb/scylla:5.4
+    container_name: scylla-node3
+    networks:
+      - scylla
+    ports:
+      - "9044:9042"  # Different external port
+      - "9182:9180"  # Different metrics port
+    command:
+      - --overprovisioned=1
+      - --smp=1
+      - --memory=2G
+      - --developer-mode=1
+      - --seeds=node1
+    depends_on:
+      node1:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "nodetool", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+
+  # Feature Store Application (Streamlit)
+  feature-store-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: feature-store-app
+    networks:
+      - scylla
+    ports:
+      - "8501:8501"
+    environment:
+      - PYTHONPATH=/app
+    volumes:
+      # - .:/app
+      - ./feature_repo/data:/app/feature_repo/data
+    working_dir: /app
+    depends_on:
+      node1:
+        condition: service_healthy
+      node2:
+        condition: service_healthy
+      node3:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  scylla_data:
