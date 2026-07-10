@@ -4,7 +4,7 @@
 
 ```
 cd mms
-docker-compose up -d
+docker compose up -d
 ```
 
 Run bash in the node:
@@ -59,8 +59,8 @@ INSERT INTO tracking.tracking_data ("first_name","last_name","timestamp","locati
 ### Destroying the Scylla Cluster 
 ```
 cd mms
-docker-compose kill
-docker-compose rm -f
+docker compose kill
+docker compose rm -f
 ```
 ### Importing the MMS keyspaces and data automatically 
 
