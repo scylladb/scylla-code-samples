@@ -1,4 +1,4 @@
-FROM node:10-alpine
+FROM node:22-alpine
 COPY nodejs-app/ /app
 WORKDIR /app
 RUN npm install cassandra-driver

@@ -2,7 +2,7 @@ version: "3"
 
 services:
   janusgraph:
-    image: docker.io/janusgraph/janusgraph:latest
+    image: docker.io/janusgraph/janusgraph:1.1.0
     container_name: janusgraph-server
     environment:
       JANUS_PROPS_TEMPLATE: cql
