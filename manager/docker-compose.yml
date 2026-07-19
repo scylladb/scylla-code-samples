@@ -2,7 +2,8 @@ version: "3.7"
 
 services:
   scylla-manager:
-    image: scylladb/scylla-manager:2.6.3
+    image: scylladb/scylla-manager:3.11.2
+    restart: on-failure
     networks:
       public:
     depends_on:
@@ -14,7 +15,7 @@ services:
       - scylla_manager_db_data:/var/lib/scylla
     networks:
       public:
-    command: --smp 1 --memory 100M
+    command: --smp 1 --memory 512M --overprovisioned 1
 
   scylla-node1:
     container_name: scylla-node1
@@ -41,7 +42,7 @@ services:
       public:
 
   minio:
-    image: minio/minio
+    image: docker.io/minio/minio
     volumes:
       - minio_data:/data
     networks:
@@ -49,8 +50,8 @@ services:
     ports:
       - "9001:9000"
     environment:
-      MINIO_ACCESS_KEY: minio
-      MINIO_SECRET_KEY: minio123
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
     command: server /data
 
 volumes:

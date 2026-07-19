@@ -14,8 +14,8 @@ metadata:
   namespace: scylla
 spec:
   # Disabling IO on startup is supported from 4.3
-  version: 4.4.2
-  agentVersion: 2.3.0
+  version: 2026.2.1
+  agentVersion: 3.11.2
   cpuset: true
   sysctls:
     - "fs.aio-max-nr=2097152"

@@ -1,16 +1,16 @@
-# Scylla CPP Driver  
-Instructions for setting up a three node Scylla cluster in Docker and running an example CPP application that interacts with the cluster and performs simple queries. This example uses the [CPP Driver](https://github.com/scylladb/cpp-driver)
-More info in the Scylla University Course [Using Scylla Drivers](https://university.scylladb.com/courses/using-scylla-drivers/). 
+# ScyllaDB CPP Driver  
+Instructions for setting up a three node ScyllaDB cluster in Docker and running an example CPP application that interacts with the cluster and performs simple queries. This example uses the [CPP Driver](https://github.com/scylladb/cpp-driver)
+More info in the ScyllaDB University Course [Using ScyllaDB Drivers](https://university.scylladb.com/courses/using-scylla-drivers/). 
 
-### ### Instructions for setting up a Scylla Cluster from this repo.
+### Instructions for setting up a ScyllaDB Cluster from this repo.
 ```
 cd mms
-docker-compose up -d
+docker compose up -d
 ```
 
 Run bash in the node:
 ```
-docker exec -it mms_scylla-node1_1 bash
+docker exec -it scylla-node1 bash
 ```
 
 Followed by scylla commands, like
@@ -23,7 +23,7 @@ or
 ```
 
 ### To manually add the tracking keyspace and data
-docker exec -it mms_scylla-node1_1 cqlsh
+docker exec -it scylla-node1 cqlsh
 CREATE KEYSPACE ks WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy','DC1' : 3};
 use ks;
 CREATE TABLE IF NOT EXISTS ks.mutant_data (
@@ -50,11 +50,10 @@ g++ query.cpp -lscylla-cpp-driver -o query
 ./query
 ```
 
-### Destroying the Scylla Cluster 
+### Destroying the ScyllaDB Cluster 
 ```
 cd mms
-docker-compose kill
-docker-compose rm -f
+docker compose down
 ```
 
 
