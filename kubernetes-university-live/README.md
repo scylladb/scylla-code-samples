@@ -57,21 +57,21 @@
     helm install monitoring prometheus-community/kube-prometheus-stack --values monitoring/values.yaml --values monitoring.yaml --create-namespace --namespace scylla-monitoring
     ```
 
-1. Install Scylla Monitoring dashboards
+1. Install ScyllaDB Monitoring dashboards
     ```
-    # Download and extract 3.6.0 Scylla Monitoring dashboards
+    # Download and extract the latest ScyllaDB Monitoring dashboards
    
-    wget https://github.com/scylladb/scylla-monitoring/archive/scylla-monitoring-3.6.0.tar.gz
-    tar -xvf scylla-monitoring-3.6.0.tar.gz
+    wget https://github.com/scylladb/scylla-monitoring/archive/scylla-monitoring-4.15.1.tar.gz
+    tar -xvf scylla-monitoring-4.15.1.tar.gz
     
-    # Import Scylla dashboards to Grafana
+    # Import ScyllaDB dashboards to Grafana
    
-    kubectl -n scylla-monitoring create configmap scylla-dashboards --from-file=scylla-monitoring-scylla-monitoring-3.6.0/grafana/build/ver_4.3
+    kubectl -n scylla-monitoring create configmap scylla-dashboards --from-file=scylla-monitoring-scylla-monitoring-4.15.1/grafana/build/ver_2026.2
     kubectl -n scylla-monitoring patch configmap scylla-dashboards  -p '{"metadata":{"labels":{"grafana_dashboard": "1"}}}'
     
-    # Import Scylla Manager dashboard to Grafana
+    # Import ScyllaDB Manager dashboard to Grafana
    
-    kubectl -n scylla-monitoring create configmap scylla-manager-dashboards --from-file=scylla-monitoring-scylla-monitoring-3.6.0/grafana/build/manager_2.2
+    kubectl -n scylla-monitoring create configmap scylla-manager-dashboards --from-file=scylla-monitoring-scylla-monitoring-4.15.1/grafana/build/manager_3.3
     kubectl -n scylla-monitoring patch configmap scylla-manager-dashboards  -p '{"metadata":{"labels":{"grafana_dashboard": "1"}}}'
     ```
 

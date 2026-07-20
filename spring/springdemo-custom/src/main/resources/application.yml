@@ -25,9 +25,9 @@ server:
 # ProgrammaticDriverConfigLoaderBuilder. See DriverConfiguration class
 # for an example of how to achieve this.
 driver: # below can come out of application.properties, if you won't use config object DriverConfiguration
-  contactPoints: 172.18.0.2
+  contactPoints: 10.89.3.4
 #  port: 9042
-  localdc: DC1
+  localdc: datacenter1
   username: cassandra
   password: cassandra
   keyspace: springdemo

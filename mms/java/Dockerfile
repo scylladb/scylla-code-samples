@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine:3.22
 RUN apk update;apk add shadow bash openjdk8 maven
 WORKDIR /opt/code
 COPY . /opt/code/
