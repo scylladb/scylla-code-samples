@@ -93,7 +93,12 @@ curl -s http://localhost:8083/connectors/ScyllaConnector/status | python3 -m jso
 
 The connector task should show `"state": "RUNNING"`. A topic named `MyScyllaCluster.ks.my_table` will be created automatically.
 
-Verify CDC events are captured by reading from the topic:
+Now that the connector is running, insert another row, so there's a change it captures live:
+```
+docker exec -it scylla-node1 cqlsh -e "INSERT INTO ks.my_table(pk, ck, v) VALUES (2, 2, 30);"
+```
+
+Verify CDC events are captured by reading from the topic. You should see the row with `pk` 2, and usually also the row with `pk` 1 that you inserted before starting the connector:
 ```
 docker exec broker kafka-console-consumer \
   --bootstrap-server broker:29092 \
