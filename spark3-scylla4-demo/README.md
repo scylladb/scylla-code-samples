@@ -1,4 +1,4 @@
-This demo shows how to run a simple spark 3 job to enrich a simple scylla 4.4 table
+This demo shows how to run a simple Spark 3.5 job to enrich a simple ScyllaDB table
 
 Prerequisites:
 ---------------
@@ -13,44 +13,39 @@ start a scylla container:
 ./start-scylla-container.sh
 ```
 
-Now you should have scylla 4.4.3 listening on port 9044
+Now you should have ScyllaDB 2026.2.1 listening on port 9044
 verify using `docker ps`
 
-Make sure you have OpenJDK 11 installed in /usr/lib/jvm/java-11
-If it's elsewhere, fix paths in *.sh scripts !!!
+Make sure you have a JDK 17 installed (Spark 3.5 supports Java 8, 11 and 17).
+The *.sh scripts use your JAVA_HOME if it's set, and otherwise the JDK of the `java` on your PATH, so set JAVA_HOME if your default `java` is a newer version.
 
 ```
-sudo dnf -y install java-11-openjdk-devel
+sudo dnf -y install java-17-openjdk-devel
 ```
 
-Get Spark 3.1:
-https://spark.apache.org/downloads.html
+Get Spark 3.5 from https://spark.apache.org/downloads.html (select Spark 3.5.x, package type "Pre-built for Apache Hadoop 3.3 and later"):
 
 ```
-wget https://apache.miloslavbrada.cz/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz
+wget https://archive.apache.org/dist/spark/spark-3.5.5/spark-3.5.5-bin-hadoop3.tgz
 ```
 
 unzip it locally and symlink spark3 dir to it, e.g.
 
 ```
-tar xzvf spark-3.1.2-bin-hadoop3.2.tgz
-ln -s spark-3.1.2-bin-hadoop3.2 spark3
+tar xzvf spark-3.5.5-bin-hadoop3.tgz
+ln -s spark-3.5.5-bin-hadoop3 spark3
 ```
 
-Get local cqlsh
+Install cqlsh to connect to ScyllaDB on port 9044:
 
 ```
-sudo dnf -y install git
-
-git clone https://github.com/scylladb/scylla-tools-java.git
-
+pip3 install scylla-cqlsh
 ```
 
-Make sure you have python2 at least installed.
-Check if scylla container really runs after checkout of above:
+Check if scylla container really runs:
 
 ```
-./scylla-tools-java/bin/cqlsh $HOSTNAME 9044
+cqlsh $HOSTNAME 9044
 ```
 
 Make sure you have latest sbt:
@@ -63,7 +58,7 @@ Running the demo:
 Populate the DB:
 
 ```
-./scylla-tools-java/bin/cqlsh $HOSTNAME 9044 -f samplespark3.cql
+cqlsh $HOSTNAME 9044 -f samplespark3.cql
 ```
 (check extra commands for showing the contents after data load, note null values in "lettersinname")
 
@@ -73,7 +68,7 @@ Build the project:
 java --version
 ```
 
-should say OpenJDK 11
+should say OpenJDK 11 or 17
 then build:
 
 ```
@@ -117,12 +112,12 @@ Extra commands:
 
 to trash the keyspace easily do:
 ```
-./scylla-tools-java/bin/cqlsh $HOSTNAME 9044 -e "drop keyspace myOwnKeyspace"
+cqlsh $HOSTNAME 9044 -e "drop keyspace myOwnKeyspace"
 ```
 
 to show current rows:
 ```
-./scylla-tools-java/bin/cqlsh $HOSTNAME 9044 -e "select * from myOwnKeyspace.sparseTable"
+cqlsh $HOSTNAME 9044 -e "select * from myOwnKeyspace.sparseTable"
 ```
 
 If you want to run the commands from the app interactively, use Spark REPL:

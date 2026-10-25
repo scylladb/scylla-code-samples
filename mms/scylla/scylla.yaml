@@ -801,3 +801,9 @@ commitlog_total_space_in_mb: -1
 #
 # Keep at 12 for new clusters.
 murmur3_partitioner_ignore_msb_bits: 12
+
+# Same as the scylla.yaml shipped in the ScyllaDB 2026.x image. This file
+# replaces that one, so without these lines new keyspaces would use vnodes
+# instead of tablets, the default since ScyllaDB 2025.1.
+tablets_mode_for_new_keyspaces: enabled
+rf_rack_valid_keyspaces: false

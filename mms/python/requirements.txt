@@ -1,2 +1,2 @@
-cassandra-driver==3.13
+cassandra-driver==3.30.0
 
