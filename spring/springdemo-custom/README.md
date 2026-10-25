@@ -28,7 +28,7 @@ localhost : 9042
 ev. with cassandra/cassandra auth
 AND with schema loaded from `./schema.cql`
 
-Make sure to adjust src/resources/application.yml , if you will use a different Scylla cluster
+The app connects to 127.0.0.1:9042 by default. To use a different Scylla cluster, set the `SCYLLA_CONTACT_POINT` environment variable (for example `SCYLLA_CONTACT_POINT=10.0.0.5 ./gradlew bootRun`) or adjust src/main/resources/application.yml
 
 Check `./start-scylla-container.sh` script that can help you run a ScyllaDB single VM
 
