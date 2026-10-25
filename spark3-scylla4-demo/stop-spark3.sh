@@ -4,7 +4,9 @@ set -x
 export HOSTIP=$HOSTNAME
 export SPARK_LOCAL_IP=$HOSTIP
 
-export JAVA_HOME=${JAVA_HOME:-/usr/lib/jvm/java-17}
+# Use JAVA_HOME if set, otherwise the JDK of the `java` on your PATH.
+# Spark 3.5 needs Java 8, 11 or 17.
+export JAVA_HOME=${JAVA_HOME:-$(dirname "$(dirname "$(readlink -f "$(command -v java)")")")}
 export PATH=$JAVA_HOME/bin:$PATH
 
 cd spark3/sbin 

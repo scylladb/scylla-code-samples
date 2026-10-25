@@ -17,7 +17,7 @@ Now you should have ScyllaDB 2026.2.1 listening on port 9044
 verify using `docker ps`
 
 Make sure you have a JDK 17 installed (Spark 3.5 supports Java 8, 11 and 17).
-The *.sh scripts use your JAVA_HOME if it's set, and otherwise /usr/lib/jvm/java-17.
+The *.sh scripts use your JAVA_HOME if it's set, and otherwise the JDK of the `java` on your PATH, so set JAVA_HOME if your default `java` is a newer version.
 
 ```
 sudo dnf -y install java-17-openjdk-devel
@@ -39,7 +39,7 @@ ln -s spark-3.5.5-bin-hadoop3 spark3
 Install cqlsh to connect to ScyllaDB on port 9044:
 
 ```
-pip3 install cqlsh
+pip3 install scylla-cqlsh
 ```
 
 Check if scylla container really runs:
