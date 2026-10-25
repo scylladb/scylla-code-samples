@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
       - name: cassandra-stress
-        image: scylladb/scylla:2026.2.1
+        image: scylladb/cassandra-stress:3.21.1
         command:
           - "/bin/bash"
           - "-c"
