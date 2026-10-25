@@ -4,7 +4,7 @@ set -x
 export HOSTIP=$HOSTNAME
 export SPARK_LOCAL_IP=$HOSTIP
 
-export JAVA_HOME=/usr/lib/jvm/java-11
+export JAVA_HOME=${JAVA_HOME:-/usr/lib/jvm/java-17}
 export PATH=$JAVA_HOME/bin:$PATH
 
 cd spark3/sbin 

@@ -2,7 +2,7 @@
 
 set -x
 
-export JAVA_HOME=/usr/lib/jvm/java-11/
+export JAVA_HOME=${JAVA_HOME:-/usr/lib/jvm/java-17}
 export PATH=$JAVA_HOME/bin:$PATH
 
 mkdir /tmp/savepoints

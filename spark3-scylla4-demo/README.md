@@ -16,8 +16,8 @@ start a scylla container:
 Now you should have ScyllaDB 2026.2.1 listening on port 9044
 verify using `docker ps`
 
-Make sure you have OpenJDK 11 or 17 installed in /usr/lib/jvm/java-11 (or java-17).
-If it's elsewhere, fix the JAVA_HOME paths in *.sh scripts.
+Make sure you have a JDK 17 installed (Spark 3.5 supports Java 8, 11 and 17).
+The *.sh scripts use your JAVA_HOME if it's set, and otherwise /usr/lib/jvm/java-17.
 
 ```
 sudo dnf -y install java-17-openjdk-devel
@@ -26,7 +26,7 @@ sudo dnf -y install java-17-openjdk-devel
 Get Spark 3.5 from https://spark.apache.org/downloads.html (select Spark 3.5.x, package type "Pre-built for Apache Hadoop 3.3 and later"):
 
 ```
-wget https://dlcdn.apache.org/spark/spark-3.5.5/spark-3.5.5-bin-hadoop3.tgz
+wget https://archive.apache.org/dist/spark/spark-3.5.5/spark-3.5.5-bin-hadoop3.tgz
 ```
 
 unzip it locally and symlink spark3 dir to it, e.g.
